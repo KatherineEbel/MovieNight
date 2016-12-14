@@ -9,12 +9,12 @@
 import ReactiveCocoa
 
 
-public protocol SearchTableViewCellModeling {
+public protocol SearchResultsTableViewCellModeling {
   var id: Int { get }
   var name: String { get }
 }
 
-public final class SearchTableViewCellModel: SearchTableViewCellModeling {
+public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
   public let id: Int
   public let name: String
   

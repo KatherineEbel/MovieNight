@@ -8,23 +8,24 @@
 
 import SwinjectStoryboard
 
+// register all dependencies for injection
 extension SwinjectStoryboard {
   class func setup() {
     // Models
     defaultContainer.register(MovieNightNetworking.self) { _ in MovieNightNetworking() }
-    defaultContainer.register(TMDBSearchController.self) { r in
-      TMDBSearchController(network: r.resolve(MovieNightNetworking.self)!)
+    defaultContainer.register(TMDBClient.self) { resolver in
+      TMDBClient(network: resolver.resolve(MovieNightNetworking.self)!)
     }
-    // View models
-    defaultContainer.register(SearchTableViewModeling.self) { r in
-      MovieNightTableViewModel(searchController: r.resolve(TMDBSearchController.self)!)
+    // View model dependencies
+    defaultContainer.register(SearchResultsTableViewModeling.self) { resolver in
+      SearchResultsTableViewModel(client: resolver.resolve(TMDBClient.self)!)
     }
     
-    // Views
+    // registers all of the controllers
     defaultContainer.storyboardInitCompleted(UINavigationController.self) { _,_ in }
     defaultContainer.storyboardInitCompleted(HomeViewController.self) { _, _ in }
-    defaultContainer.storyboardInitCompleted(SearchTableViewController.self) { r, c in
-      c.viewModel = r.resolve(SearchTableViewModeling.self)!
+    defaultContainer.storyboardInitCompleted(SearchResultsController.self) { resolver, controller in
+      controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
     }
   }
 }

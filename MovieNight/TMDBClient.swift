@@ -17,7 +17,7 @@ import ReactiveSwift
 import Result
 
 protocol Searching {
-  func searchPopularPeople(pageNumber: Int) -> SignalProducer<PopularPeopleResponseEntity, TMDBRouterError>
+  func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBEntity.PopularPeople, TMDBRouterError>
 }
 
 enum TMDBRouterError: Error {
@@ -81,21 +81,21 @@ public final class MovieNightNetworking {
   }
 }
 
-enum TMDBSearchClientError: Error {
+enum TMDBClientError: Error {
   case invalidJson(Error)
 }
 
-public final class TMDBSearchController: Searching {
+public final class TMDBClient: Searching {
   private let network: MovieNightNetworking
   private let language: String
   public init(network: MovieNightNetworking) {
     self.network = network
     self.language = "en-US"
   }
-  func searchPopularPeople(pageNumber: Int) -> SignalProducer<PopularPeopleResponseEntity, TMDBRouterError> {
+  func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBEntity.PopularPeople, TMDBRouterError> {
     return network.requestJSON(search: .popularPeople(language: language, page: pageNumber))
       .attemptMap { json in
-          let result: Decoded<PopularPeopleResponseEntity> = decode(json)
+          let result: Decoded<TMDBEntity.PopularPeople> = decode(json)
           switch result {
             case .success(let value):
               return Result(value: value)

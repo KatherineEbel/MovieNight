@@ -1,5 +1,5 @@
 //
-//  SearchController.swift
+//  SearchResultsController.swift
 //  MovieNight
 //
 //  Created by Katherine Ebel on 12/13/16.
@@ -8,10 +8,10 @@
 
 import UIKit
 
-class SearchTableViewController: UITableViewController {
+class SearchResultsController: UITableViewController {
   private var autoSearchStarted = false
   
-  public var viewModel: SearchTableViewModeling? {
+  public var viewModel: SearchResultsTableViewModeling? {
     didSet {
       if let viewModel = viewModel {
         viewModel.cellModels.producer

@@ -17,11 +17,12 @@
 		27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB981DFE362B0060E98F /* TMDBClient.swift */; };
 		27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */; };
 		2FDB5991AD474002E570CB96 /* Pods_MovieNight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */; };
-		44796BAF1E006DB80002CF6F /* MovieNightTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44796BAE1E006DB80002CF6F /* MovieNightTableViewModel.swift */; };
+		44796BAF1E006DB80002CF6F /* SearchResultsTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */; };
 		44B1EFE91E0020EE00B8485D /* TableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */; };
 		44B1EFEB1E0027EA00B8485D /* DefaultSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFEA1E0027EA00B8485D /* DefaultSearchCell.swift */; };
-		44B1EFED1E002E1F00B8485D /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFEC1E002E1F00B8485D /* SearchTableViewController.swift */; };
+		44B1EFED1E002E1F00B8485D /* SearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFEC1E002E1F00B8485D /* SearchResultsController.swift */; };
 		44C57A491E0094C20023417D /* SwinjectStoryboard+Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C57A481E0094C20023417D /* SwinjectStoryboard+Setup.swift */; };
+		44C57A4B1E01A9460023417D /* TMDBEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C57A4A1E01A9460023417D /* TMDBEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,11 +38,12 @@
 		279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightPreference.swift; sourceTree = "<group>"; };
 		27D6BB981DFE362B0060E98F /* TMDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utitlites.swift; sourceTree = "<group>"; };
-		44796BAE1E006DB80002CF6F /* MovieNightTableViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightTableViewModel.swift; sourceTree = "<group>"; };
+		44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsTableViewModel.swift; sourceTree = "<group>"; };
 		44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellModel.swift; sourceTree = "<group>"; };
 		44B1EFEA1E0027EA00B8485D /* DefaultSearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSearchCell.swift; sourceTree = "<group>"; };
-		44B1EFEC1E002E1F00B8485D /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		44B1EFEC1E002E1F00B8485D /* SearchResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsController.swift; sourceTree = "<group>"; };
 		44C57A481E0094C20023417D /* SwinjectStoryboard+Setup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwinjectStoryboard+Setup.swift"; sourceTree = "<group>"; };
+		44C57A4A1E01A9460023417D /* TMDBEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBEntity.swift; sourceTree = "<group>"; };
 		63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieNight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC4E9B5B10356CE3858E2F8F /* Pods-MovieNight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieNight.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieNight/Pods-MovieNight.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -89,13 +91,14 @@
 			children = (
 				2717F7551DFB237600FFEA5F /* AppDelegate.swift */,
 				2717F7571DFB237600FFEA5F /* HomeViewController.swift */,
-				44B1EFEC1E002E1F00B8485D /* SearchTableViewController.swift */,
+				44B1EFEC1E002E1F00B8485D /* SearchResultsController.swift */,
 				44C57A481E0094C20023417D /* SwinjectStoryboard+Setup.swift */,
 				2717F7591DFB237600FFEA5F /* Main.storyboard */,
 				2717F75C1DFB237600FFEA5F /* Assets.xcassets */,
 				2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */,
 				2717F7611DFB237600FFEA5F /* Info.plist */,
 				2717F7671DFB3AD600FFEA5F /* KMNDiscovery.swift */,
+				44C57A4A1E01A9460023417D /* TMDBEntity.swift */,
 				279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */,
 				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
 				27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */,
@@ -108,7 +111,7 @@
 		44796BB01E00825E0002CF6F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				44796BAE1E006DB80002CF6F /* MovieNightTableViewModel.swift */,
+				44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */,
 				44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */,
 			);
 			name = ViewModel;
@@ -261,10 +264,11 @@
 				2717F7681DFB3AD600FFEA5F /* KMNDiscovery.swift in Sources */,
 				44B1EFEB1E0027EA00B8485D /* DefaultSearchCell.swift in Sources */,
 				44C57A491E0094C20023417D /* SwinjectStoryboard+Setup.swift in Sources */,
-				44796BAF1E006DB80002CF6F /* MovieNightTableViewModel.swift in Sources */,
+				44796BAF1E006DB80002CF6F /* SearchResultsTableViewModel.swift in Sources */,
 				2717F7561DFB237600FFEA5F /* AppDelegate.swift in Sources */,
+				44C57A4B1E01A9460023417D /* TMDBEntity.swift in Sources */,
 				279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */,
-				44B1EFED1E002E1F00B8485D /* SearchTableViewController.swift in Sources */,
+				44B1EFED1E002E1F00B8485D /* SearchResultsController.swift in Sources */,
 				44B1EFE91E0020EE00B8485D /* TableViewCellModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

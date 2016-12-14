@@ -11,7 +11,7 @@ import ReactiveSwift
 import ReactiveCocoa
 
 class DefaultSearchCell: UITableViewCell {
-  internal var viewModel: SearchTableViewCellModeling? {
+  internal var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
       nameLabel.text? = viewModel!.name
     }

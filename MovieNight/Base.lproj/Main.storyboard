@@ -56,10 +56,10 @@
             </objects>
             <point key="canvasLocation" x="1028" y="779"/>
         </scene>
-        <!--Search Table View Controller-->
+        <!--Search Results Controller-->
         <scene sceneID="e4l-Ly-Pit">
             <objects>
-                <tableViewController id="rrw-fF-gdb" customClass="SearchTableViewController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="rrw-fF-gdb" customClass="SearchResultsController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="hbp-dF-pzZ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -69,7 +69,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SoU-lD-j6W" id="OUo-rz-yX3">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a8m-PJ-mrZ">
