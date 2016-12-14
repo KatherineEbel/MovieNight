@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2709C85D1E01CB1F00F21D60 /* MovieNightWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */; };
+		2709C85F1E01CEF900F21D60 /* WatcherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */; };
+		2709C8611E01CFFB00F21D60 /* WatcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709C8601E01CFFB00F21D60 /* WatcherView.swift */; };
 		2717F7561DFB237600FFEA5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7551DFB237600FFEA5F /* AppDelegate.swift */; };
 		2717F7581DFB237600FFEA5F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7571DFB237600FFEA5F /* HomeViewController.swift */; };
 		2717F75B1DFB237600FFEA5F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2717F7591DFB237600FFEA5F /* Main.storyboard */; };
@@ -27,6 +30,9 @@
 
 /* Begin PBXFileReference section */
 		1A26BE1B7AD4D04562017F53 /* Pods-MovieNight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieNight.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieNight/Pods-MovieNight.release.xcconfig"; sourceTree = "<group>"; };
+		2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightWatcher.swift; sourceTree = "<group>"; };
+		2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatcherViewModel.swift; sourceTree = "<group>"; };
+		2709C8601E01CFFB00F21D60 /* WatcherView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatcherView.swift; sourceTree = "<group>"; };
 		2717F7521DFB237600FFEA5F /* MovieNight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieNight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2717F7551DFB237600FFEA5F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2717F7571DFB237600FFEA5F /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +105,7 @@
 				2717F7611DFB237600FFEA5F /* Info.plist */,
 				2717F7671DFB3AD600FFEA5F /* KMNDiscovery.swift */,
 				44C57A4A1E01A9460023417D /* TMDBEntity.swift */,
+				2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */,
 				279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */,
 				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
 				27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */,
@@ -113,6 +120,7 @@
 			children = (
 				44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */,
 				44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */,
+				2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */,
 			);
 			name = ViewModel;
 			sourceTree = "<group>";
@@ -121,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				44B1EFEA1E0027EA00B8485D /* DefaultSearchCell.swift */,
+				2709C8601E01CFFB00F21D60 /* WatcherView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -258,14 +267,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2709C85D1E01CB1F00F21D60 /* MovieNightWatcher.swift in Sources */,
 				27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */,
 				27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */,
+				2709C85F1E01CEF900F21D60 /* WatcherViewModel.swift in Sources */,
 				2717F7581DFB237600FFEA5F /* HomeViewController.swift in Sources */,
 				2717F7681DFB3AD600FFEA5F /* KMNDiscovery.swift in Sources */,
 				44B1EFEB1E0027EA00B8485D /* DefaultSearchCell.swift in Sources */,
 				44C57A491E0094C20023417D /* SwinjectStoryboard+Setup.swift in Sources */,
 				44796BAF1E006DB80002CF6F /* SearchResultsTableViewModel.swift in Sources */,
 				2717F7561DFB237600FFEA5F /* AppDelegate.swift in Sources */,
+				2709C8611E01CFFB00F21D60 /* WatcherView.swift in Sources */,
 				44C57A4B1E01A9460023417D /* TMDBEntity.swift in Sources */,
 				279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */,
 				44B1EFED1E002E1F00B8485D /* SearchResultsController.swift in Sources */,

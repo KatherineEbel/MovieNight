@@ -12,7 +12,7 @@ import Runes
 import Curry
 
 
-struct MovieNightPreference {
+public struct MovieNightPreference {
   var actorChoices: [TMDBEntity.Actor]
   var genreChoices: [TMDBEntity.MovieGenre]
   var maxRating: TMDBEntity.Certification
