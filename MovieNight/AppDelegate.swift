@@ -7,16 +7,14 @@
 //
 
 import UIKit
-import Keys
+import Swinject
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
-  var keys: MovienightKeys!
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-    keys = MovienightKeys()
     return true
   }
 

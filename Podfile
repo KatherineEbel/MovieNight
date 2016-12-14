@@ -17,4 +17,6 @@ target 'MovieNight' do
   pod 'ReactiveCocoa', '5.0.0-alpha.3'
   pod 'ReactiveSwift', '1.0.0-alpha.4'
   pod 'Curry'
+  pod 'Swinject', '2.0.0-beta.3'
+  pod 'SwinjectStoryboard', '1.0.0-beta.3'
 end
