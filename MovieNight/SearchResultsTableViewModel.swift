@@ -11,9 +11,8 @@ import Argo
 import Result
 
 public protocol SearchResultsTableViewModeling {
-  var currentPage: Int { get set }
   var cellModels: Property<[SearchResultsTableViewCellModeling]> { get }
-  func startSearch()
+  func getNextPage()
 }
 
 public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
@@ -22,16 +21,16 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   }
   
   private let _cellModels = MutableProperty<[SearchResultsTableViewCellModeling]>([])
-  private let client: TMDBClient
-  public var currentPage: Int
+  private let client: TMDBSearching
+  private var nextPage: Int
   
-  public init(client: TMDBClient) {
-    currentPage = 1
+  public init(client: TMDBSearching) {
+    nextPage = 1
     self.client = client
   }
 
-  public func startSearch() {
-    client.searchPopularPeople(pageNumber: currentPage)
+  public func getNextPage() {
+    client.searchPopularPeople(pageNumber: nextPage)
      .map { response in
         let cellModels = response.results.flatMap { SearchResultsTableViewCellModel(actor: $0) as SearchResultsTableViewCellModeling }
         return cellModels
@@ -41,5 +40,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
         self._cellModels.value = cellModels
       }
       .start()
+    nextPage += 1
   }
 }

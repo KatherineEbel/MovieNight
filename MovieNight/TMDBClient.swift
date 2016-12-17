@@ -16,11 +16,11 @@ import Keys
 import ReactiveSwift
 import Result
 
-protocol Searching {
+public protocol TMDBSearching {
   func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBEntity.PopularPeople, TMDBRouterError>
 }
 
-enum TMDBRouterError: Error {
+public enum TMDBRouterError: Error {
   case incorrectURLString(Error)
   case parsingError(Error)
   case none
@@ -46,7 +46,7 @@ enum TMDBRouter: URLRequestConvertible {
     }
   }
   
-  func asURLRequest() throws -> URLRequest {
+  public func asURLRequest() throws -> URLRequest {
     let result: (path: String, parameters: Parameters) = {
       switch self {
         case .popularPeople:
@@ -60,13 +60,14 @@ enum TMDBRouter: URLRequestConvertible {
   
 }
 
-struct GenresResponseEntity {
-  let genres: [JSON]
-}
+//struct GenresResponseEntity {
+//  let genres: [JSON]
+//}
 
 public final class MovieNightNetworking {
   private let queue = DispatchQueue(label: "MovieNight.MovieNightNetworking.Queue")
-  func requestJSON(search: TMDBRouter) -> SignalProducer<Any, TMDBRouterError> {
+  public init() { }
+   func requestJSON(search: TMDBRouter) -> SignalProducer<Any, TMDBRouterError> {
     return SignalProducer { observer, disposable in
       Alamofire.request(search).responseJSON(queue: self.queue, options: JSONSerialization.ReadingOptions.mutableContainers) { response in
         switch response.result {
@@ -85,14 +86,14 @@ enum TMDBClientError: Error {
   case invalidJson(Error)
 }
 
-public final class TMDBClient: Searching {
+public final class TMDBClient: TMDBSearching {
   private let network: MovieNightNetworking
-  private let language: String
+  public let language: String
   public init(network: MovieNightNetworking) {
     self.network = network
     self.language = "en-US"
   }
-  func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBEntity.PopularPeople, TMDBRouterError> {
+  public func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBEntity.PopularPeople, TMDBRouterError> {
     return network.requestJSON(search: .popularPeople(language: language, page: pageNumber))
       .attemptMap { json in
           let result: Decoded<TMDBEntity.PopularPeople> = decode(json)

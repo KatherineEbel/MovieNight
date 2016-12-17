@@ -8,9 +8,9 @@
 
 import UIKit
 
-class SearchResultsController: UITableViewController {
+class PeoplePickerController: UITableViewController {
   private var autoSearchStarted = false
-  
+  public var movieWatcherViewModel: WatcherViewModeling!
   public var viewModel: SearchResultsTableViewModeling? {
     didSet {
       if let viewModel = viewModel {
@@ -36,7 +36,7 @@ class SearchResultsController: UITableViewController {
     super.viewWillAppear(animated)
     if !autoSearchStarted {
       autoSearchStarted = true
-      viewModel?.startSearch()
+      viewModel?.getNextPage()
     }
   }
 

@@ -10,8 +10,7 @@ import Argo
 import Runes
 import Curry
 
-
-struct TMDBEntity {
+public struct TMDBEntity {
   let entity: Entity
   enum Entity {
     case actor
@@ -32,7 +31,7 @@ struct TMDBEntity {
     let order: Int
   }
   
-  struct Actor: Decodable {
+   struct Actor: Decodable {
     let name: String
     let popularity: Double
     let profile_path: String
@@ -41,7 +40,7 @@ struct TMDBEntity {
     let adult: Bool
   }
   
-  struct PopularPeople: Decodable {
+  public struct PopularPeople: Decodable {
     let page: Int
     let results: [TMDBEntity.Actor]
     let totalResults: Int
@@ -50,7 +49,7 @@ struct TMDBEntity {
 }
 
 extension TMDBEntity.PopularPeople {
-  static func decode(_ json: JSON) -> Decoded<TMDBEntity.PopularPeople> {
+  public static func decode(_ json: JSON) -> Decoded<TMDBEntity.PopularPeople> {
     return curry(TMDBEntity.PopularPeople.init)
       <^> json <| "page"
       <*> json <|| "results"

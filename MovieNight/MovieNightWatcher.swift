@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol MovieWatcherType {
-  var name: String { get }
+public protocol MovieWatcherType {
+  var name: String { get set }
   var moviePreference: MovieNightPreference? { get }
 }
-struct MovieNightWatcher: MovieWatcherType {
-  var name: String
-  let moviePreference: MovieNightPreference?
+public struct MovieNightWatcher: MovieWatcherType {
+  public var name: String
+  public let moviePreference: MovieNightPreference?
 }

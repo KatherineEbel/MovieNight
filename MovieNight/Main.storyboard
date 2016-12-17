@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qJQ-mk-d2d">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="e0u-lv-MId">
+            <objects>
+                <navigationController id="qJQ-mk-d2d" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="iOR-UR-kW7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="fdR-h3-PA3" kind="relationship" relationship="rootViewController" id="158-Zh-gdg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q0Y-ZG-iOQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-919" y="111"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="H8q-if-5Pd">
+            <objects>
+                <viewController id="fdR-h3-PA3" customClass="HomeViewController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XwO-cH-ASW"/>
+                        <viewControllerLayoutGuide type="bottom" id="PSb-cF-5J6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nh5-yf-HcR">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg-iphone6plus" translatesAutoresizingMaskIntoConstraints="NO" id="4WA-bL-C3r">
+                                <rect key="frame" x="16" y="64" width="343" height="603"/>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ueq-a6-6Vd" userLabel="Watchers Stack View">
+                                <rect key="frame" x="16" y="164" width="343" height="181"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="oVn-NB-XxT" userLabel="Watcher 1 Stack View">
+                                        <rect key="frame" x="0.0" y="0.0" width="171.5" height="181"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V1p-qs-iRR">
+                                                <rect key="frame" x="24.5" y="0.0" width="123" height="97"/>
+                                                <state key="normal" backgroundImage="bubble-empty"/>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watcher 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fie-6S-Xjc">
+                                                <rect key="frame" x="45" y="117" width="82" height="20.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ready !" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlA-Pg-Uw9">
+                                                <rect key="frame" x="52" y="157.5" width="68" height="23.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Dz3-FV-GeZ" userLabel="Watcher 2 Stack View">
+                                        <rect key="frame" x="171.5" y="0.0" width="171.5" height="181"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L0j-Sl-aRG">
+                                                <rect key="frame" x="24.5" y="0.0" width="123" height="97"/>
+                                                <state key="normal" backgroundImage="bubble-empty"/>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watcher 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Kv-B8-JPp">
+                                                <rect key="frame" x="45" y="117" width="82" height="20.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Undecided" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fb8-FD-xsW">
+                                                <rect key="frame" x="37" y="157.5" width="98" height="23.5"/>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aZg-ws-2cX">
+                                <rect key="frame" x="16" y="587" width="343" height="60"/>
+                                <color key="backgroundColor" red="0.79957622289999997" green="0.37377208470000001" blue="0.35509386659999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="3cb-oF-kjU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Ready for Results"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="aZg-ws-2cX" secondAttribute="trailing" id="8qN-6V-fZQ"/>
+                            <constraint firstItem="4WA-bL-C3r" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" id="9yn-NO-WRf"/>
+                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="aZg-ws-2cX" secondAttribute="bottom" constant="20" id="GVS-cj-wWN"/>
+                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="4WA-bL-C3r" secondAttribute="bottom" id="GbG-80-IPp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="4WA-bL-C3r" secondAttribute="trailing" id="Ibx-Ff-ISR"/>
+                            <constraint firstItem="ueq-a6-6Vd" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" constant="100" id="McC-rf-xqy"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ueq-a6-6Vd" secondAttribute="trailing" id="WaK-Po-M3n"/>
+                            <constraint firstItem="ueq-a6-6Vd" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" id="Wo0-eH-vUW"/>
+                            <constraint firstItem="aZg-ws-2cX" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" id="YFy-pQ-WyO"/>
+                            <constraint firstItem="4WA-bL-C3r" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" id="aIx-tT-Ta8"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="VDa-Od-Dmx"/>
+                    <connections>
+                        <outlet property="viewResultsButton" destination="aZg-ws-2cX" id="Pur-J4-2tq"/>
+                        <outlet property="watcher1Button" destination="V1p-qs-iRR" id="gvH-Fm-2b6"/>
+                        <outlet property="watcher1NameLabel" destination="Fie-6S-Xjc" id="iW1-vd-CBX"/>
+                        <outlet property="watcher1ReadyLabel" destination="TlA-Pg-Uw9" id="7Tx-Va-wsC"/>
+                        <outlet property="watcher2Button" destination="L0j-Sl-aRG" id="5yt-9K-suP"/>
+                        <outlet property="watcher2NameLabel" destination="9Kv-B8-JPp" id="Niz-BK-zyw"/>
+                        <outlet property="watcher2ReadyLabel" destination="Fb8-FD-xsW" id="lje-kd-5Re"/>
+                        <outlet property="watcher2StackView" destination="Dz3-FV-GeZ" id="Nnc-I8-LTe"/>
+                        <segue destination="YLI-Qm-gUo" kind="show" identifier="choosePreferences" id="xBP-z9-A6n"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pVT-vA-jcv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-95.200000000000003" y="109.29535232383809"/>
+        </scene>
+        <!--People Picker Controller-->
+        <scene sceneID="Iqu-T6-khk">
+            <objects>
+                <tableViewController id="YLI-Qm-gUo" customClass="PeoplePickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="defaultSearchCell" id="NMh-9k-8aW" customClass="DefaultSearchCell" customModule="MovieNight" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NMh-9k-8aW" id="ksI-FL-XNU">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="EZ1-8o-7za">
+                                            <rect key="frame" x="8" y="8" width="359" height="27.5"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" image="empty-circle" translatesAutoresizingMaskIntoConstraints="NO" id="RZS-ZA-sBO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="27.5" height="27.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="RZS-ZA-sBO" secondAttribute="height" multiplier="1:1" id="kMY-Ci-DQn"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xke-gT-z6i">
+                                                    <rect key="frame" x="57.5" y="0.0" width="301.5" height="27.5"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="EZ1-8o-7za" secondAttribute="trailing" id="KEC-c3-OZu"/>
+                                        <constraint firstItem="EZ1-8o-7za" firstAttribute="centerY" secondItem="ksI-FL-XNU" secondAttribute="centerY" id="PgM-iM-tgQ"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="EZ1-8o-7za" secondAttribute="bottom" id="VHC-cO-uIp"/>
+                                        <constraint firstItem="EZ1-8o-7za" firstAttribute="top" secondItem="ksI-FL-XNU" secondAttribute="topMargin" id="nKu-Ph-Bqh"/>
+                                        <constraint firstItem="EZ1-8o-7za" firstAttribute="leading" secondItem="ksI-FL-XNU" secondAttribute="leadingMargin" id="zL0-47-qhy"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="xke-gT-z6i" id="n4N-ST-wY6"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="YLI-Qm-gUo" id="qgG-y3-Ihg"/>
+                            <outlet property="delegate" destination="YLI-Qm-gUo" id="454-8Z-pE6"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="687" y="110"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="bg-iphone6plus" width="1241" height="2209"/>
+        <image name="bubble-empty" width="123" height="97"/>
+        <image name="empty-circle" width="64" height="64"/>
+    </resources>
+</document>
