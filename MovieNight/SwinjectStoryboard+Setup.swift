@@ -10,6 +10,7 @@ import SwinjectStoryboard
 
 extension SwinjectStoryboard {
   class func setup() {
+    defaultContainer.storyboardInitCompleted(UINavigationController.self){ _, _ in }
     defaultContainer.register(MovieNightNetworking.self) { _ in MovieNightNetworking() }
     defaultContainer.register(TMDBSearching.self) { resolver in
       TMDBClient(network: resolver.resolve(MovieNightNetworking.self)!)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qJQ-mk-d2d">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="rF8-BV-dn8">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -11,23 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="e0u-lv-MId">
-            <objects>
-                <navigationController id="qJQ-mk-d2d" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="iOR-UR-kW7">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="fdR-h3-PA3" kind="relationship" relationship="rootViewController" id="158-Zh-gdg"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Q0Y-ZG-iOQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-919" y="111"/>
-        </scene>
-        <!--Home View Controller-->
+        <!--Movie Night-->
         <scene sceneID="H8q-if-5Pd">
             <objects>
                 <viewController id="fdR-h3-PA3" customClass="HomeViewController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
@@ -36,14 +20,14 @@
                         <viewControllerLayoutGuide type="bottom" id="PSb-cF-5J6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nh5-yf-HcR">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg-iphone6plus" translatesAutoresizingMaskIntoConstraints="NO" id="4WA-bL-C3r">
-                                <rect key="frame" x="16" y="64" width="343" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ueq-a6-6Vd" userLabel="Watchers Stack View">
-                                <rect key="frame" x="16" y="164" width="343" height="181"/>
+                                <rect key="frame" x="16" y="100" width="343" height="181"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="oVn-NB-XxT" userLabel="Watcher 1 Stack View">
                                         <rect key="frame" x="0.0" y="0.0" width="171.5" height="181"/>
@@ -90,10 +74,10 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aZg-ws-2cX">
-                                <rect key="frame" x="16" y="587" width="343" height="60"/>
+                                <rect key="frame" x="0.0" y="543" width="375" height="60"/>
                                 <color key="backgroundColor" red="0.79957622289999997" green="0.37377208470000001" blue="0.35509386659999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="3cb-oF-kjU"/>
+                                    <constraint firstAttribute="height" constant="60" id="1xC-qs-orz"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -102,19 +86,19 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="aZg-ws-2cX" secondAttribute="trailing" id="8qN-6V-fZQ"/>
-                            <constraint firstItem="4WA-bL-C3r" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" id="9yn-NO-WRf"/>
-                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="aZg-ws-2cX" secondAttribute="bottom" constant="20" id="GVS-cj-wWN"/>
-                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="4WA-bL-C3r" secondAttribute="bottom" id="GbG-80-IPp"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="4WA-bL-C3r" secondAttribute="trailing" id="Ibx-Ff-ISR"/>
+                            <constraint firstItem="4WA-bL-C3r" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" id="1oX-VR-1K2"/>
                             <constraint firstItem="ueq-a6-6Vd" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" constant="100" id="McC-rf-xqy"/>
+                            <constraint firstAttribute="trailing" secondItem="aZg-ws-2cX" secondAttribute="trailing" id="OVl-XO-gZI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ueq-a6-6Vd" secondAttribute="trailing" id="WaK-Po-M3n"/>
                             <constraint firstItem="ueq-a6-6Vd" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" id="Wo0-eH-vUW"/>
-                            <constraint firstItem="aZg-ws-2cX" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" id="YFy-pQ-WyO"/>
-                            <constraint firstItem="4WA-bL-C3r" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" id="aIx-tT-Ta8"/>
+                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="aZg-ws-2cX" secondAttribute="bottom" id="ZiP-9C-dqL"/>
+                            <constraint firstAttribute="trailing" secondItem="4WA-bL-C3r" secondAttribute="trailing" id="bbb-NJ-Bgu"/>
+                            <constraint firstItem="aZg-ws-2cX" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="tyk-ze-GN6"/>
+                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="4WA-bL-C3r" secondAttribute="bottom" id="v8y-Kb-NBJ"/>
+                            <constraint firstItem="4WA-bL-C3r" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="zTr-tT-Etv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="VDa-Od-Dmx"/>
+                    <navigationItem key="navigationItem" title="Movie Night" id="VDa-Od-Dmx"/>
                     <connections>
                         <outlet property="viewResultsButton" destination="aZg-ws-2cX" id="Pur-J4-2tq"/>
                         <outlet property="watcher1Button" destination="V1p-qs-iRR" id="gvH-Fm-2b6"/>
@@ -129,14 +113,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVT-vA-jcv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-95.200000000000003" y="109.29535232383809"/>
+            <point key="canvasLocation" x="689" y="109"/>
         </scene>
-        <!--People Picker Controller-->
+        <!--Actor Preferences-->
         <scene sceneID="Iqu-T6-khk">
             <objects>
                 <tableViewController id="YLI-Qm-gUo" customClass="PeoplePickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -150,7 +134,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="EZ1-8o-7za">
                                             <rect key="frame" x="8" y="8" width="359" height="27.5"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" image="empty-circle" translatesAutoresizingMaskIntoConstraints="NO" id="RZS-ZA-sBO">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" image="empty-circle" highlightedImage="checked-circle" translatesAutoresizingMaskIntoConstraints="NO" id="RZS-ZA-sBO">
                                                     <rect key="frame" x="0.0" y="0.0" width="27.5" height="27.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="RZS-ZA-sBO" secondAttribute="height" multiplier="1:1" id="kMY-Ci-DQn"/>
@@ -183,15 +167,40 @@
                             <outlet property="delegate" destination="YLI-Qm-gUo" id="454-8Z-pE6"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Actor Preferences" id="4V3-15-Lvj"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="687" y="110"/>
+            <point key="canvasLocation" x="1479" y="109"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="tdT-s0-3dQ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rF8-BV-dn8" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" translucent="NO" id="SFr-US-NbX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.79957622289999997" green="0.37377208470000001" blue="0.35509386659999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="fdR-h3-PA3" kind="relationship" relationship="rootViewController" id="ZC3-EN-Cz7"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P4D-LV-evE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-135.19999999999999" y="109.29535232383809"/>
         </scene>
     </scenes>
     <resources>
         <image name="bg-iphone6plus" width="1241" height="2209"/>
         <image name="bubble-empty" width="123" height="97"/>
+        <image name="checked-circle" width="60" height="60"/>
         <image name="empty-circle" width="64" height="64"/>
     </resources>
 </document>
