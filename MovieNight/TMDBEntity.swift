@@ -33,7 +33,6 @@ public struct TMDBEntity {
     let known_for: [JSON]
     let adult: Bool
   }
-  
 }
 
 // MARK: Conform to Decodable Protocol

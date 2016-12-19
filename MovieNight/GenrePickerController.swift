@@ -61,9 +61,15 @@ class GenrePickerController: UITableViewController {
       return cell
     }
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.genreChoices.count < 5 else {
+      return
+    }
+    let preference = viewModel?.genreCollection.value[indexPath.row]
+    _ = movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher)
+    print(movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].moviePreference.genreChoices ?? "No values")
   }
   
   override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-    return movieWatcherViewModel.watchers.value![0].moviePreference.genreChoices.count < 5
+    return movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.genreChoices.count < 5
   }
 }

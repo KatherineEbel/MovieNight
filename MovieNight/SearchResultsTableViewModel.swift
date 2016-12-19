@@ -12,16 +12,21 @@ import Result
 
 public protocol SearchResultsTableViewModeling {
   var cellModels: Property<[SearchResultsTableViewCellModeling]> { get }
+  var genreCollection: MutableProperty<[TMDBEntity.MovieGenre]> { get }
+  var actorCollection: MutableProperty<[TMDBEntity.Actor]> { get }
+  var ratingCollection: MutableProperty<[TMDBEntity.Rating]> { get }
   func getNextPage()
   func getGenres()
 }
 
 public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
+  private let _cellModels = MutableProperty<[SearchResultsTableViewCellModeling]>([])
   public var cellModels: Property<[SearchResultsTableViewCellModeling]> {
     return Property(_cellModels)
   }
-  
-  private let _cellModels = MutableProperty<[SearchResultsTableViewCellModeling]>([])
+  public var genreCollection = MutableProperty<[TMDBEntity.MovieGenre]>([]) 
+  public var actorCollection = MutableProperty<[TMDBEntity.Actor]>([])
+  public var ratingCollection = MutableProperty<[TMDBEntity.Rating]>([])
   private let client: TMDBSearching
   private var nextPage: Int
   private let maxPages = 5
@@ -48,12 +53,14 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   public func getGenres() {
     client.searchMovieGenres()
       .map { response in
-        let cellModels = response.genres.flatMap { SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling }
-        return cellModels
+        return response.genres
       }
     .observe(on: UIScheduler())
-    .on { cellModels in
-      self._cellModels.value = cellModels
+    .on { genres in
+      self.genreCollection.value = genres
+      self._cellModels.value = genres.flatMap {
+        SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling
+      }
     }
     .start()
   }

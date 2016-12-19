@@ -27,6 +27,3 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
     return actorChoices.count > 0 && genreChoices.count > 0
   }
 }
-
-extension MovieNightPreference {
-}

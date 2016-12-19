@@ -6,13 +6,13 @@
 //  Copyright © 2016 Katherine Ebel. All rights reserved.
 //
 
-
+import Argo
 public protocol SearchResultsTableViewCellModeling {
   var title: String { get }
 }
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
-  public let title: String
+  public var title: String
   
   internal init(title: String ) {
     self.title = title

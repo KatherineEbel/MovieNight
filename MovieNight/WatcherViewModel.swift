@@ -24,9 +24,10 @@ enum Preference {
 protocol WatcherViewModelProtocol {
   var watchers: Property<[MovieWatcherProtocol]?> { get }
   var watchersReady: SignalProducer<Bool,NoError>? { get }
+  var activeWatcher: Int { get }
   func setNameForWatcher(at index: Int, with name: String) -> Bool
   func addWalker(watcher: MovieWatcherProtocol) -> Bool
-  func add<T: Decodable>(movie preference: T, toWatcher index: Int) -> Bool
+  func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
   func watcher1Ready() -> Bool
   func watcher2Ready() -> Bool
 }
@@ -34,6 +35,7 @@ protocol WatcherViewModelProtocol {
 public class WatcherViewModel: WatcherViewModelProtocol {
   private var _watchers: MutableProperty<[MovieWatcherProtocol]?> {
     didSet {
+      print("Set watchers")
       watchersReady = SignalProducer<Bool, NoError> { observer, disposable in
         observer.send(value: self.watcher1Ready() && self.watcher2Ready())
       }
@@ -43,6 +45,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return Property(_watchers)
   }
   var watchersReady: SignalProducer<Bool, NoError>?
+  var activeWatcher: Int = 0
   
   init(watchers: [MovieWatcherProtocol]?) {
     self._watchers = MutableProperty(watchers)
@@ -52,7 +55,12 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     guard let watcher1 = watchers.value?[0] else {
       return false
     }
-    return watcher1.isReady
+    if watcher1.isReady {
+      activeWatcher = 1
+      return true
+    } else {
+      return false
+    }
   }
   
   func watcher2Ready() -> Bool {
@@ -78,7 +86,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return true
   }
   
-  func add<T: Decodable>(movie preference: T, toWatcher index: Int) -> Bool {
+  func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool {
     guard (watchers.value != nil) else {
       return false
     }
