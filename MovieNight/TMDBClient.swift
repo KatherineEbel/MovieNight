@@ -16,9 +16,6 @@ import Keys
 import ReactiveSwift
 import Result
 
-public protocol TMDBSearching {
-  func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBEntity.PopularPeople, TMDBRouterError>
-}
 
 public enum TMDBRouterError: Error {
   case incorrectURLString(Error)
@@ -27,6 +24,7 @@ public enum TMDBRouterError: Error {
 }
 enum TMDBRouter: URLRequestConvertible {
   case popularPeople(language: String, page: Int)
+  case movieGenres(language: String)
   
   static let baseURLString = "https://api.themoviedb.org/3/"
   static let api_key = MovienightKeys().api_key()!
@@ -39,10 +37,13 @@ enum TMDBRouter: URLRequestConvertible {
   
   var params: [String: Any] {
     switch self {
-    case .popularPeople(language: let language, page: let page):
-      return [ParamKeys.api_key.rawValue: TMDBRouter.api_key,
-              ParamKeys.language.rawValue: language,
-              ParamKeys.page.rawValue: page]
+      case .popularPeople(language: let language, page: let page):
+        return [ParamKeys.api_key.rawValue: TMDBRouter.api_key,
+                ParamKeys.language.rawValue: language,
+                ParamKeys.page.rawValue: page]
+      case .movieGenres(language: let language):
+        return [ParamKeys.api_key.rawValue: TMDBRouter.api_key,
+                ParamKeys.language.rawValue: language]
     }
   }
   
@@ -51,6 +52,8 @@ enum TMDBRouter: URLRequestConvertible {
       switch self {
         case .popularPeople:
           return ("person/popular", params)
+        case .movieGenres:
+          return ("genre/movie/list", params)
       }
     }()
     let url = try TMDBRouter.baseURLString.asURL()
@@ -60,9 +63,6 @@ enum TMDBRouter: URLRequestConvertible {
   
 }
 
-//struct GenresResponseEntity {
-//  let genres: [JSON]
-//}
 
 public final class MovieNightNetworking {
   private let queue = DispatchQueue(label: "MovieNight.MovieNightNetworking.Queue")
@@ -86,6 +86,12 @@ enum TMDBClientError: Error {
   case invalidJson(Error)
 }
 
+
+public protocol TMDBSearching {
+  func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBResponseEntity.PopularPeople, TMDBRouterError>
+  func searchMovieGenres() -> SignalProducer<TMDBResponseEntity.MovieGenreResponse, TMDBRouterError>
+}
+
 public final class TMDBClient: TMDBSearching {
   private let network: MovieNightNetworking
   public let language: String
@@ -93,10 +99,10 @@ public final class TMDBClient: TMDBSearching {
     self.network = network
     self.language = "en-US"
   }
-  public func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBEntity.PopularPeople, TMDBRouterError> {
+  public func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBResponseEntity.PopularPeople, TMDBRouterError> {
     return network.requestJSON(search: .popularPeople(language: language, page: pageNumber))
       .attemptMap { json in
-          let result: Decoded<TMDBEntity.PopularPeople> = decode(json)
+          let result: Decoded<TMDBResponseEntity.PopularPeople> = decode(json)
           switch result {
             case .success(let value):
               return Result(value: value)
@@ -104,5 +110,16 @@ public final class TMDBClient: TMDBSearching {
               return Result(error: .parsingError(error))
           }
       }
+  }
+  
+  public func searchMovieGenres() -> SignalProducer<TMDBResponseEntity.MovieGenreResponse, TMDBRouterError> {
+    return network.requestJSON(search: .movieGenres(language: language))
+      .attemptMap { json in
+        let result: Decoded<TMDBResponseEntity.MovieGenreResponse> = decode(json)
+        switch result {
+          case .success(let value): return Result(value: value)
+          case .failure(let error): return Result(error: .parsingError(error))
+        }
+    }
   }
 }

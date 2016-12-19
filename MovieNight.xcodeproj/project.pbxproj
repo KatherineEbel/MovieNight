@@ -13,7 +13,6 @@
 		2717F7581DFB237600FFEA5F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7571DFB237600FFEA5F /* HomeViewController.swift */; };
 		2717F75D1DFB237600FFEA5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2717F75C1DFB237600FFEA5F /* Assets.xcassets */; };
 		2717F7601DFB237600FFEA5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */; };
-		2717F7681DFB3AD600FFEA5F /* KMNDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7671DFB3AD600FFEA5F /* KMNDiscovery.swift */; };
 		279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */; };
 		27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB981DFE362B0060E98F /* TMDBClient.swift */; };
 		27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */; };
@@ -22,9 +21,14 @@
 		44B1EFE91E0020EE00B8485D /* TableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */; };
 		44B1EFEB1E0027EA00B8485D /* DefaultSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFEA1E0027EA00B8485D /* DefaultSearchCell.swift */; };
 		44B1EFED1E002E1F00B8485D /* PeoplePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFEC1E002E1F00B8485D /* PeoplePickerController.swift */; };
-		44C57A4B1E01A9460023417D /* TMDBEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C57A4A1E01A9460023417D /* TMDBEntity.swift */; };
+		44C57A4B1E01A9460023417D /* TMDBResponseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C57A4A1E01A9460023417D /* TMDBResponseEntity.swift */; };
 		44E2E20D1E0582030072BB77 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44E2E20C1E0582030072BB77 /* Main.storyboard */; };
 		44E2E20F1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E20E1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift */; };
+		44E2E2111E06459E0072BB77 /* GenrePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E2101E06459E0072BB77 /* GenrePickerController.swift */; };
+		44E2E2131E0645BF0072BB77 /* RatingPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E2121E0645BF0072BB77 /* RatingPickerController.swift */; };
+		44E2E2151E06CBD10072BB77 /* TMDBEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */; };
+		44E2E21A1E0809E70072BB77 /* PreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E2181E0809E70072BB77 /* PreferenceCell.swift */; };
+		44E2E21B1E0809E70072BB77 /* PreferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44E2E2191E0809E70072BB77 /* PreferenceCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +41,6 @@
 		2717F75C1DFB237600FFEA5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2717F75F1DFB237600FFEA5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2717F7611DFB237600FFEA5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2717F7671DFB3AD600FFEA5F /* KMNDiscovery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMNDiscovery.swift; sourceTree = "<group>"; };
 		279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightPreference.swift; sourceTree = "<group>"; };
 		27D6BB981DFE362B0060E98F /* TMDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utitlites.swift; sourceTree = "<group>"; };
@@ -45,9 +48,14 @@
 		44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellModel.swift; sourceTree = "<group>"; };
 		44B1EFEA1E0027EA00B8485D /* DefaultSearchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSearchCell.swift; sourceTree = "<group>"; };
 		44B1EFEC1E002E1F00B8485D /* PeoplePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeoplePickerController.swift; sourceTree = "<group>"; };
-		44C57A4A1E01A9460023417D /* TMDBEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBEntity.swift; sourceTree = "<group>"; };
+		44C57A4A1E01A9460023417D /* TMDBResponseEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBResponseEntity.swift; sourceTree = "<group>"; };
 		44E2E20C1E0582030072BB77 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		44E2E20E1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwinjectStoryboard+Setup.swift"; sourceTree = "<group>"; };
+		44E2E2101E06459E0072BB77 /* GenrePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenrePickerController.swift; sourceTree = "<group>"; };
+		44E2E2121E0645BF0072BB77 /* RatingPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingPickerController.swift; sourceTree = "<group>"; };
+		44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBEntity.swift; sourceTree = "<group>"; };
+		44E2E2181E0809E70072BB77 /* PreferenceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceCell.swift; sourceTree = "<group>"; };
+		44E2E2191E0809E70072BB77 /* PreferenceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceCell.xib; sourceTree = "<group>"; };
 		63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieNight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC4E9B5B10356CE3858E2F8F /* Pods-MovieNight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieNight.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieNight/Pods-MovieNight.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,6 +83,8 @@
 		2717F7491DFB237600FFEA5F = {
 			isa = PBXGroup;
 			children = (
+				44E2E2181E0809E70072BB77 /* PreferenceCell.swift */,
+				44E2E2191E0809E70072BB77 /* PreferenceCell.xib */,
 				2717F7541DFB237600FFEA5F /* MovieNight */,
 				2717F7531DFB237600FFEA5F /* Products */,
 				8C4589B3B742DB44BA39E0B4 /* Pods */,
@@ -98,8 +108,8 @@
 				2717F75C1DFB237600FFEA5F /* Assets.xcassets */,
 				2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */,
 				2717F7611DFB237600FFEA5F /* Info.plist */,
-				2717F7671DFB3AD600FFEA5F /* KMNDiscovery.swift */,
-				44C57A4A1E01A9460023417D /* TMDBEntity.swift */,
+				44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */,
+				44C57A4A1E01A9460023417D /* TMDBResponseEntity.swift */,
 				2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */,
 				279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */,
 				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
@@ -135,6 +145,8 @@
 			children = (
 				2717F7571DFB237600FFEA5F /* HomeViewController.swift */,
 				44B1EFEC1E002E1F00B8485D /* PeoplePickerController.swift */,
+				44E2E2101E06459E0072BB77 /* GenrePickerController.swift */,
+				44E2E2121E0645BF0072BB77 /* RatingPickerController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -213,6 +225,7 @@
 			files = (
 				2717F7601DFB237600FFEA5F /* LaunchScreen.storyboard in Resources */,
 				2717F75D1DFB237600FFEA5F /* Assets.xcassets in Resources */,
+				44E2E21B1E0809E70072BB77 /* PreferenceCell.xib in Resources */,
 				44E2E20D1E0582030072BB77 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -272,19 +285,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44E2E21A1E0809E70072BB77 /* PreferenceCell.swift in Sources */,
 				2709C85D1E01CB1F00F21D60 /* MovieNightWatcher.swift in Sources */,
 				27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */,
 				27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */,
 				2709C85F1E01CEF900F21D60 /* WatcherViewModel.swift in Sources */,
 				2717F7581DFB237600FFEA5F /* HomeViewController.swift in Sources */,
-				2717F7681DFB3AD600FFEA5F /* KMNDiscovery.swift in Sources */,
 				44B1EFEB1E0027EA00B8485D /* DefaultSearchCell.swift in Sources */,
 				44796BAF1E006DB80002CF6F /* SearchResultsTableViewModel.swift in Sources */,
+				44E2E2151E06CBD10072BB77 /* TMDBEntity.swift in Sources */,
 				2717F7561DFB237600FFEA5F /* AppDelegate.swift in Sources */,
-				44C57A4B1E01A9460023417D /* TMDBEntity.swift in Sources */,
+				44C57A4B1E01A9460023417D /* TMDBResponseEntity.swift in Sources */,
+				44E2E2111E06459E0072BB77 /* GenrePickerController.swift in Sources */,
 				279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */,
 				44E2E20F1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift in Sources */,
 				44B1EFED1E002E1F00B8485D /* PeoplePickerController.swift in Sources */,
+				44E2E2131E0645BF0072BB77 /* RatingPickerController.swift in Sources */,
 				44B1EFE91E0020EE00B8485D /* TableViewCellModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -6,20 +6,15 @@
 //  Copyright © 2016 Katherine Ebel. All rights reserved.
 //
 
-import ReactiveCocoa
-
 
 public protocol SearchResultsTableViewCellModeling {
-  var id: Int { get }
-  var name: String { get }
+  var title: String { get }
 }
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
-  public let id: Int
-  public let name: String
+  public let title: String
   
-  internal init(actor: TMDBEntity.Actor) {
-    id = actor.id
-    name = actor.name
+  internal init(title: String ) {
+    self.title = title
   }
 }

@@ -13,7 +13,7 @@ import ReactiveCocoa
 class DefaultSearchCell: UITableViewCell {
   internal var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
-      nameLabel.text? = viewModel!.name
+      nameLabel.text = viewModel?.title
     }
   }
   @IBOutlet weak var nameLabel: UILabel!

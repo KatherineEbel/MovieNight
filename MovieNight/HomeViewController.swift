@@ -21,7 +21,10 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var viewResultsButton: UIButton!
   @IBOutlet weak var watcher2StackView: UIStackView!
   var updateWatcherNameAction: Action<Int,Bool,NoError>!
-  var viewModel: WatcherViewModeling!
+  var viewModel: WatcherViewModelProtocol! {
+    didSet {
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -31,14 +34,14 @@ class HomeViewController: UIViewController {
   func configureBindings() {
     updateWatcherNameAction = Action { input in
       return SignalProducer { observer, disposable in
-      let watcherToUpdate = self.viewModel.watchers.value[input].name
+        let watcherToUpdate: String = self.viewModel.watchers.value![input].name
         let alert = UIAlertController(title: "\(watcherToUpdate.capitalized)'s Name", message: "Update your name?", preferredStyle: .alert)
         alert.addTextField { textField in
           textField.placeholder = "Name"
         }
         let updateNameAction = UIAlertAction(title: "Update Name", style: .default) { _ in
           let prospectiveName = alert.textFields?[0].text ?? watcherToUpdate
-          let success = self.viewModel.updateWatcher(at: input, with: prospectiveName)
+          let success = self.viewModel.setNameForWatcher(at: input, with: prospectiveName)
           DispatchQueue.main.async {
             observer.send(value: success)
             observer.sendCompleted()
@@ -77,10 +80,12 @@ class HomeViewController: UIViewController {
   }
   
   func configureWatcherLabels() {
+    self.watcher1ReadyLabel.reactive.text <~ MutableProperty((viewModel.watcher1Ready()) ? "Ready!" : "Undecided")
+    self.watcher2ReadyLabel.reactive.text <~ MutableProperty(viewModel.watcher2Ready() ? "Ready!" : "Undecided")
     if let viewModel = viewModel {
       viewModel.watchers.signal.observeValues { value in
-        self.watcher1NameLabel.reactive.text <~ MutableProperty(value.first?.name)
-        self.watcher2NameLabel.reactive.text <~ MutableProperty(value.last!.name)
+        self.watcher1NameLabel.reactive.text <~ MutableProperty(value?.first?.name)
+        self.watcher2NameLabel.reactive.text <~ MutableProperty(value?.last!.name)
         self.watcher1ReadyLabel.reactive.text <~ MutableProperty((viewModel.watcher1Ready()) ? "Ready!" : "Undecided")
         self.watcher2ReadyLabel.reactive.text <~ MutableProperty(viewModel.watcher2Ready() ? "Ready!" : "Undecided")
       }
@@ -95,11 +100,5 @@ class HomeViewController: UIViewController {
     }
   }
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "choosePreferences" {
-      let searchResultsController = segue.destination as! PeoplePickerController
-      searchResultsController.movieWatcherViewModel = self.viewModel
-    }
-  }
 }
 
