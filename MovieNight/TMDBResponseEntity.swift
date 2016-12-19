@@ -38,7 +38,7 @@ public enum TMDBResponseEntity {
 extension TMDBResponseEntity.USCertifications {
   public static func decode(_ json: JSON) -> Decoded<TMDBResponseEntity.USCertifications> {
     return curry(TMDBResponseEntity.USCertifications.init)
-      <^> json <|| "US"
+      <^> json <|| ["certifications", "US"]
   }
 }
 

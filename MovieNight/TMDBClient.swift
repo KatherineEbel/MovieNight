@@ -25,6 +25,7 @@ public enum TMDBRouterError: Error {
 enum TMDBRouter: URLRequestConvertible {
   case popularPeople(language: String, page: Int)
   case movieGenres(language: String)
+  case ratings
   
   static let baseURLString = "https://api.themoviedb.org/3/"
   static let api_key = MovienightKeys().api_key()!
@@ -44,6 +45,8 @@ enum TMDBRouter: URLRequestConvertible {
       case .movieGenres(language: let language):
         return [ParamKeys.api_key.rawValue: TMDBRouter.api_key,
                 ParamKeys.language.rawValue: language]
+      case .ratings:
+        return [ParamKeys.api_key.rawValue: TMDBRouter.api_key]
     }
   }
   
@@ -54,6 +57,8 @@ enum TMDBRouter: URLRequestConvertible {
           return ("person/popular", params)
         case .movieGenres:
           return ("genre/movie/list", params)
+        case .ratings:
+          return ("certification/movie/list", params)
       }
     }()
     let url = try TMDBRouter.baseURLString.asURL()
@@ -90,6 +95,7 @@ enum TMDBClientError: Error {
 public protocol TMDBSearching {
   func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBResponseEntity.PopularPeople, TMDBRouterError>
   func searchMovieGenres() -> SignalProducer<TMDBResponseEntity.MovieGenreResponse, TMDBRouterError>
+  func searchUSRatings() -> SignalProducer<TMDBResponseEntity.USCertifications, TMDBRouterError>
 }
 
 public final class TMDBClient: TMDBSearching {
@@ -116,6 +122,17 @@ public final class TMDBClient: TMDBSearching {
     return network.requestJSON(search: .movieGenres(language: language))
       .attemptMap { json in
         let result: Decoded<TMDBResponseEntity.MovieGenreResponse> = decode(json)
+        switch result {
+          case .success(let value): return Result(value: value)
+          case .failure(let error): return Result(error: .parsingError(error))
+        }
+    }
+  }
+  
+  public func searchUSRatings() -> SignalProducer<TMDBResponseEntity.USCertifications, TMDBRouterError> {
+    return network.requestJSON(search: .movieGenres(language: language))
+      .attemptMap { json in
+        let result: Decoded<TMDBResponseEntity.USCertifications> = decode(json)
         switch result {
           case .success(let value): return Result(value: value)
           case .failure(let error): return Result(error: .parsingError(error))

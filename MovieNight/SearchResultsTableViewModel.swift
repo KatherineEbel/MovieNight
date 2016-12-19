@@ -55,13 +55,22 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .map { response in
         return response.genres
       }
-    .observe(on: UIScheduler())
-    .on { genres in
-      self.genreCollection.value = genres
-      self._cellModels.value = genres.flatMap {
-        SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling
+      .observe(on: UIScheduler())
+      .on { genres in
+        self.genreCollection.value = genres
+        self._cellModels.value = genres.flatMap {
+          SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling
+        }
       }
-    }
     .start()
+  }
+  
+  public func getRatings() {
+    client.searchUSRatings()
+      .map { response in
+          return response
+      }
+      .observe(on: UIScheduler())
+      .start()
   }
 }
