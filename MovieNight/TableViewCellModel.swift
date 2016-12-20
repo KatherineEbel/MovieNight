@@ -6,7 +6,6 @@
 //  Copyright © 2016 Katherine Ebel. All rights reserved.
 //
 
-import Argo
 public protocol SearchResultsTableViewCellModeling {
   var title: String { get }
 }
