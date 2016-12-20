@@ -42,7 +42,6 @@ extension SwinjectStoryboard {
       // FIXME: Remove debug statements
       print("Home Nav")
     }
-    defaultContainer.storyboardInitCompleted(UITableViewController.self) { _, _ in }
     defaultContainer.storyboardInitCompleted(HomeViewController.self) { resolver, controller in
       print("Home Controller")
       controller.viewModel = resolver.resolve(WatcherViewModelProtocol.self)!
@@ -53,8 +52,7 @@ extension SwinjectStoryboard {
     }
     defaultContainer.storyboardInitCompleted(RatingPickerController.self) { resolver, controller in
       print("Rating controller")
-      // FIXME: Uncomment when implementing RatingPicker
-//      controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
+      controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "GenreNav"){ _, _ in

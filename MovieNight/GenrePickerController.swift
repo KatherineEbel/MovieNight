@@ -37,6 +37,10 @@ class GenrePickerController: UITableViewController {
         viewModel?.getGenres()
       }
     }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    autoSearchStarted = false
+  }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -61,12 +65,17 @@ class GenrePickerController: UITableViewController {
       return cell
     }
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    guard movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.genreChoices.count < 5 else {
+    var count = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.genreChoices.count
+    guard count < 5 else {
+      self.navigationController?.tabBarItem.badgeColor = UIColor.red
       return
     }
     let preference = viewModel?.genreCollection.value[indexPath.row]
-    _ = movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher)
-    print(movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].moviePreference.genreChoices ?? "No values")
+    if  movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
+      count += 1
+    }
+    self.navigationController?.tabBarItem.badgeColor = count == 5 ?  UIColor.green : UIColor.red
+    self.navigationController?.tabBarItem.badgeValue = "\(count)"
   }
   
   override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {

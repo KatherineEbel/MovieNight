@@ -130,7 +130,7 @@ public final class TMDBClient: TMDBSearching {
   }
   
   public func searchUSRatings() -> SignalProducer<TMDBResponseEntity.USCertifications, TMDBRouterError> {
-    return network.requestJSON(search: .movieGenres(language: language))
+    return network.requestJSON(search: .ratings)
       .attemptMap { json in
         let result: Decoded<TMDBResponseEntity.USCertifications> = decode(json)
         switch result {

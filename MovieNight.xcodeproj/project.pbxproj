@@ -28,6 +28,7 @@
 		44E2E2151E06CBD10072BB77 /* TMDBEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */; };
 		44E2E21A1E0809E70072BB77 /* PreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E2181E0809E70072BB77 /* PreferenceCell.swift */; };
 		44E2E21B1E0809E70072BB77 /* PreferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44E2E2191E0809E70072BB77 /* PreferenceCell.xib */; };
+		44E2E21D1E08EB630072BB77 /* MoviePreferenceTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E21C1E08EB630072BB77 /* MoviePreferenceTabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBEntity.swift; sourceTree = "<group>"; };
 		44E2E2181E0809E70072BB77 /* PreferenceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferenceCell.swift; path = ../PreferenceCell.swift; sourceTree = "<group>"; };
 		44E2E2191E0809E70072BB77 /* PreferenceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceCell.xib; sourceTree = "<group>"; };
+		44E2E21C1E08EB630072BB77 /* MoviePreferenceTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviePreferenceTabBarController.swift; sourceTree = "<group>"; };
 		63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieNight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC4E9B5B10356CE3858E2F8F /* Pods-MovieNight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieNight.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieNight/Pods-MovieNight.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,6 +146,7 @@
 				44B1EFEC1E002E1F00B8485D /* PeoplePickerController.swift */,
 				44E2E2101E06459E0072BB77 /* GenrePickerController.swift */,
 				44E2E2121E0645BF0072BB77 /* RatingPickerController.swift */,
+				44E2E21C1E08EB630072BB77 /* MoviePreferenceTabBarController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */,
 				27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */,
 				2709C85F1E01CEF900F21D60 /* WatcherViewModel.swift in Sources */,
+				44E2E21D1E08EB630072BB77 /* MoviePreferenceTabBarController.swift in Sources */,
 				2717F7581DFB237600FFEA5F /* HomeViewController.swift in Sources */,
 				44796BAF1E006DB80002CF6F /* SearchResultsTableViewModel.swift in Sources */,
 				44E2E2151E06CBD10072BB77 /* TMDBEntity.swift in Sources */,

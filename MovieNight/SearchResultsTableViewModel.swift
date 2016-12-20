@@ -17,6 +17,7 @@ public protocol SearchResultsTableViewModeling {
   var ratingCollection: MutableProperty<[TMDBEntity.Rating]> { get }
   func getNextPage()
   func getGenres()
+  func getRatings()
 }
 
 public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
@@ -71,6 +72,13 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
           return response
       }
       .observe(on: UIScheduler())
+      .on { ratings in
+        self.ratingCollection.value = ratings.certifications
+        self._cellModels.value = ratings.certifications.flatMap {
+          print($0)
+          return SearchResultsTableViewCellModel(title: $0.certification) as SearchResultsTableViewCellModeling
+        }
+      }
       .start()
   }
 }

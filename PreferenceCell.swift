@@ -28,6 +28,5 @@ class PreferenceCell: UITableViewCell {
     let backgroundView = UIView()
     backgroundView.backgroundColor = UIColor.clear
     self.selectedBackgroundView = backgroundView
-    
   }
 }
