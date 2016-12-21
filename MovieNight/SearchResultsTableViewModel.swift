@@ -44,8 +44,9 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
     .observe(on: UIScheduler())
     .on { actors in
-      self.actorCollection.value = actors
-      self._cellModels.value = actors.flatMap { SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling }
+      self.actorCollection.value.append(contentsOf: actors)
+      let cellModels =  actors.flatMap { SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling }
+      self._cellModels.value.append(contentsOf: cellModels)
     }
     .start()
     nextPage += 1
@@ -75,7 +76,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .on { ratings in
         self.ratingCollection.value = ratings.certifications
         self._cellModels.value = ratings.certifications.flatMap {
-          print($0)
           return SearchResultsTableViewCellModel(title: $0.certification) as SearchResultsTableViewCellModeling
         }
       }

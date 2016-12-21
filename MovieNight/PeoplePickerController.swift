@@ -7,24 +7,22 @@
 //
 
 import UIKit
+import ReactiveSwift
+import Result
 
 class PeoplePickerController: UITableViewController {
   private var autoSearchStarted = false
   public var movieWatcherViewModel: WatcherViewModelProtocol!
   public var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
+  private var watcherSignal: Signal<[MovieWatcherProtocol]?, NoError>!
 
   override func viewDidLoad() {
     super.viewDidLoad()
     if let viewModel = viewModel {
       tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: viewModel.cellModels.producer)
-      movieWatcherViewModel.watchers.signal.observeValues { watchers in
-        let activeWatcher = watchers![self.movieWatcherViewModel.activeWatcher]
-        let count = activeWatcher.moviePreference.actorChoices.count
-        self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? UIColor.green : UIColor.red
-        self.navigationController?.tabBarItem.badgeValue = "\(count)/5"
-        
-      }
+      watcherSignal = movieWatcherViewModel.watchers.signal
+      configureTabBar()
     }
   }
   
@@ -35,14 +33,30 @@ class PeoplePickerController: UITableViewController {
       viewModel?.getNextPage()
     }
   }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    autoSearchStarted = false
+  }
 
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
       // Dispose of any resources that can be recreated.
   }
 
+  
+  func configureTabBar() {
+    watcherSignal.observeValues { watchers in
+      if let watchers = watchers {
+        let activeWatcher = watchers[self.movieWatcherViewModel.activeWatcher]
+        let count = activeWatcher.actorChoices.count
+        self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? UIColor.green : UIColor.red
+        self.navigationController?.tabBarItem.badgeValue = "\(count)/5"
+      }
+    }
+  }
+  
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    var count = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.actorChoices.count
+    var count = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].actorChoices.count
     guard count < 5 else {
       return
     }
@@ -59,8 +73,8 @@ class PeoplePickerController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-    let notSet = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.actorChoices.count < 5
-    let isactiveWatcherChoice = movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].moviePreference.actorChoices.contains(where: { actor in
+    let notSet = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].actorChoices.count < 5
+    let isactiveWatcherChoice = movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].actorChoices.contains(where: { actor in
       actor.name == viewModel?.actorCollection.value[indexPath.row].name
     })
     return notSet || isactiveWatcherChoice!

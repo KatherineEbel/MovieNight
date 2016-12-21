@@ -88,11 +88,21 @@ public class WatcherViewModel: WatcherViewModelProtocol {
   }
   
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool {
-    return _watchers.value?[activeWatcher].moviePreference.add(preference) ?? false
+    switch preference {
+      case let actor as TMDBEntity.Actor: return _watchers.value![index].addActor(choice: actor)
+      case let genre as TMDBEntity.MovieGenre: return _watchers.value![index].addGenre(choice: genre)
+      case let rating as TMDBEntity.Rating: return _watchers.value![index].setMaxRating(choice: rating)
+      default: return false
+    }
   }
   
   func remove<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool{
-    return _watchers.value?[activeWatcher].moviePreference.remove(preference) ?? false
+    switch preference {
+      case let actor as TMDBEntity.Actor: return _watchers.value![index].removeActor(choice: actor)
+      case let genre as TMDBEntity.MovieGenre: return _watchers.value![index].removeGenre(choice: genre)
+      case let rating as TMDBEntity.Rating: return _watchers.value![index].setMaxRating(choice: rating)
+      default: return false
+    }
   }
   
 }

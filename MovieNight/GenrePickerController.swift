@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import Argo
+import ReactiveSwift
+import Result
 
 class GenrePickerController: UITableViewController {
 
@@ -15,12 +16,15 @@ class GenrePickerController: UITableViewController {
   public var movieWatcherViewModel: WatcherViewModelProtocol!
   private var tableViewDataSource: MNightTableviewDataSource!
   public var viewModel: SearchResultsTableViewModeling?
+  private var watcherSignal: Signal<[MovieWatcherProtocol]?, NoError>!
   
     override func viewDidLoad() {
       super.viewDidLoad()
       self.clearsSelectionOnViewWillAppear = false
       if let viewModel = viewModel {
         tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: viewModel.cellModels.producer)
+        watcherSignal = movieWatcherViewModel.watchers.signal
+        configureTabBar()
       }
     }
   
@@ -34,6 +38,17 @@ class GenrePickerController: UITableViewController {
       }
     }
   
+  func configureTabBar() {
+    watcherSignal.observeValues { watchers in
+      if let watchers = watchers {
+        let activeWatcher = watchers[self.movieWatcherViewModel.activeWatcher]
+        let count = activeWatcher.genreChoices.count
+        self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? UIColor.green : UIColor.red
+        self.navigationController?.tabBarItem.badgeValue = "\(count)/5"
+      }
+    }
+  }
+  
   override func viewWillDisappear(_ animated: Bool) {
     autoSearchStarted = false
   }
@@ -44,22 +59,27 @@ class GenrePickerController: UITableViewController {
     }
 
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    var count = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.genreChoices.count
+    let count = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].genreChoices.count
     guard count < 5 else {
-      self.navigationController?.tabBarItem.badgeColor = UIColor.red
       return
     }
     let preference = viewModel?.genreCollection.value[indexPath.row]
     if  movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
-      count += 1
+      print("Success")
+//      count += 1
     }
-    self.navigationController?.tabBarItem.badgeColor = count == 5 ?  UIColor.green : UIColor.red
-    self.navigationController?.tabBarItem.badgeValue = "\(count)"
+  }
+  
+  override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    let preference = viewModel!.genreCollection.value[indexPath.row]
+    if movieWatcherViewModel.remove(preference: preference, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
+      print("Removed")
+    }
   }
   
   override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-    let notSet = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.genreChoices.count < 5
-    let isactiveWatcherChoice = movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].moviePreference.genreChoices.contains(where: { genre in
+    let notSet = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].genreChoices.count < 5
+    let isactiveWatcherChoice = movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].genreChoices.contains(where: { genre in
       genre.name == viewModel?.genreCollection.value[indexPath.row].name
     })
     return notSet || isactiveWatcherChoice!

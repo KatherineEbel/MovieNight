@@ -10,7 +10,7 @@ import UIKit
 import ReactiveSwift
 import Result
 
-//protocol MovieNightTableviewBindingProtocol: UITableViewDataSource {
+//protocol MNightTableviewDataSource: UITableViewDataSource {
 //  
 //}
 

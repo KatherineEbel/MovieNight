@@ -14,8 +14,8 @@ public protocol MoviePreferenceProtocol {
   var actorChoices: [TMDBEntity.Actor] { get set }
   var genreChoices: [TMDBEntity.MovieGenre] { get set }
   var maxRating: TMDBEntity.Rating? { get set }
-  mutating func add<T: Decodable>(_ preference: T) -> Bool
-  mutating func remove<T:Decodable>(_ preference: T) -> Bool
+//  mutating func add<T: Decodable>(_ preference: T) -> Bool
+//  mutating func remove<T:Decodable>(_ preference: T) -> Bool
   var isSet: Bool { get }
 }
 
@@ -36,8 +36,7 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
         maxRating = nil
       case _ where preference is TMDBEntity.Actor:
         let actor = preference as! TMDBEntity.Actor
-        if let index =
-          actorChoices.index(where: { (prospectiveMatch) -> Bool in
+        if let index = actorChoices.index(where: { (prospectiveMatch) -> Bool in
             actor.name == prospectiveMatch.name
            })
         {

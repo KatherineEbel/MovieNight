@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import ReactiveSwift
+import Result
 
 class RatingPickerController: UITableViewController {
 
@@ -14,11 +16,14 @@ class RatingPickerController: UITableViewController {
   public var movieWatcherViewModel: WatcherViewModelProtocol!
   public var viewModel: SearchResultsTableViewModeling?
   public var tableViewDataSource: MNightTableviewDataSource!
+  private var watcherSignal: Signal<[MovieWatcherProtocol]?, NoError>!
   
   override func viewDidLoad() {
     super.viewDidLoad()
     if let viewModel = viewModel {
       tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: viewModel.cellModels.producer)
+      watcherSignal = movieWatcherViewModel.watchers.signal
+      configureTabBar()
     }
   }
 
@@ -34,10 +39,21 @@ class RatingPickerController: UITableViewController {
     autoSearchStarted = false
   }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+  override func didReceiveMemoryWarning() {
+      super.didReceiveMemoryWarning()
+      // Dispose of any resources that can be recreated.
+  }
+
+  func configureTabBar() {
+    watcherSignal.observeValues { watchers in
+      if let watchers = watchers {
+        let activeWatcher = watchers[self.movieWatcherViewModel.activeWatcher]
+        let ratingChoice = activeWatcher.maxRatingChoice
+        self.navigationController?.tabBarItem.badgeColor = ratingChoice != nil ? UIColor.green : UIColor.red
+        self.navigationController?.tabBarItem.badgeValue = ratingChoice != nil ? "Set" : "!"
+      }
     }
+  }
 
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let preference = viewModel?.ratingCollection.value[indexPath.row] {
