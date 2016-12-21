@@ -12,7 +12,7 @@ class MoviePreferenceTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.tabBar.unselectedItemTintColor = UIColor(red: 255/255.0, green: 142/255.0, blue: 138/255.0, alpha: 0.3) 
         // Do any additional setup after loading the view.
     }
 

@@ -15,37 +15,23 @@ enum WatcherViewModelError: Error {
   case notReadyToUpdate(message: String)
 }
 
-enum Preference {
-  case actors
-  case genres
-  case maxRating
-}
-
 protocol WatcherViewModelProtocol {
   var watchers: Property<[MovieWatcherProtocol]?> { get }
-  var watchersReady: SignalProducer<Bool,NoError>? { get }
   var activeWatcher: Int { get }
   func setNameForWatcher(at index: Int, with name: String) -> Bool
   func addWalker(watcher: MovieWatcherProtocol) -> Bool
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
   func remove<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
+  func updateActiveWatcher()
   func watcher1Ready() -> Bool
   func watcher2Ready() -> Bool
 }
 
 public class WatcherViewModel: WatcherViewModelProtocol {
-  private var _watchers: MutableProperty<[MovieWatcherProtocol]?> {
-    didSet {
-      print("Set watchers")
-      watchersReady = SignalProducer<Bool, NoError> { observer, disposable in
-        observer.send(value: self.watcher1Ready() && self.watcher2Ready())
-      }
-    }
-  }
+  private var _watchers: MutableProperty<[MovieWatcherProtocol]?>
   var watchers: Property<[MovieWatcherProtocol]?> {
     return Property(_watchers)
   }
-  var watchersReady: SignalProducer<Bool, NoError>?
   var activeWatcher: Int = 0
   
   init(watchers: [MovieWatcherProtocol]?) {
@@ -56,12 +42,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     guard let watcher1 = watchers.value?[0] else {
       return false
     }
-    if watcher1.isReady {
-      activeWatcher = 1
-      return true
-    } else {
-      return false
-    }
+    return watcher1.isReady
   }
   
   func watcher2Ready() -> Bool {
@@ -75,7 +56,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     guard index >= 0 && index <= 1 && name.characters.count >= 2 else {
       return false
     }
-    _watchers.value?[index].name = name
+    _watchers.value?[index].name = name.capitalized
     return watchers.value?[index].nameValid ?? false
   }
   
@@ -105,5 +86,12 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     }
   }
   
+  func updateActiveWatcher() {
+    if activeWatcher == 0 {
+      activeWatcher = 1
+    } else {
+      activeWatcher = 0
+    }
+  }
 }
   

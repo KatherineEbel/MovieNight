@@ -113,16 +113,19 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVT-vA-jcv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="337" y="117"/>
+            <point key="canvasLocation" x="-460" y="134"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ncK-1c-A9Y">
             <objects>
-                <tabBarController id="ruC-9J-dkm" sceneMemberID="viewController">
+                <tabBarController modalTransitionStyle="flipHorizontal" id="ruC-9J-dkm" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="pvr-up-Joc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.79957622289999997" green="0.37377208470000001" blue="0.35509386659999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="YFD-OG-ZjM" kind="relationship" relationship="viewControllers" id="Ml7-cJ-pIv"/>
@@ -132,13 +135,13 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yn9-pC-f2r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1183" y="116"/>
+            <point key="canvasLocation" x="353" y="399"/>
         </scene>
         <!--Actor Preferences-->
         <scene sceneID="Iqu-T6-khk">
             <objects>
                 <tableViewController id="YLI-Qm-gUo" customClass="PeoplePickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -147,7 +150,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NMh-9k-8aW" id="ksI-FL-XNU">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="EZ1-8o-7za">
@@ -186,17 +189,24 @@
                             <outlet property="delegate" destination="YLI-Qm-gUo" id="454-8Z-pE6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Actor Preferences" id="LWL-Mg-Yym"/>
+                    <navigationItem key="navigationItem" title="Actor Preferences" id="LWL-Mg-Yym">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="b8R-hG-QQy">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="preferencesComplete:" destination="YLI-Qm-gUo" id="Ww1-7z-1uX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2890" y="-290"/>
+            <point key="canvasLocation" x="1886" y="-134"/>
         </scene>
         <!--Genre Preferences-->
         <scene sceneID="aWX-6o-5aR">
             <objects>
                 <tableViewController id="lYE-rq-Wfz" customClass="GenrePickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="XC8-hq-8u5">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="XC8-hq-8u5">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -205,7 +215,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q48-wO-ecf" id="k5p-Nl-3rQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -214,11 +224,17 @@
                             <outlet property="delegate" destination="lYE-rq-Wfz" id="tIS-v7-wO6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Genre Preferences" id="NT3-nY-tBW"/>
+                    <navigationItem key="navigationItem" title="Genre Preferences" id="NT3-nY-tBW">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="bdM-du-mbx">
+                            <connections>
+                                <action selector="savePreferences:" destination="lYE-rq-Wfz" id="NKe-9e-xrq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3JD-C9-Si8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2888.8000000000002" y="458.32083958020991"/>
+            <point key="canvasLocation" x="1886" y="589"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="tdT-s0-3dQ">
@@ -243,13 +259,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P4D-LV-evE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-484" y="116"/>
+            <point key="canvasLocation" x="-1361" y="134"/>
         </scene>
         <!--Actor Preference Navigation Controller Scene-->
         <scene sceneID="PjN-7a-Gh3">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cmQ-Si-u5Q" userLabel="Actor Preference Navigation Controller Scene" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Actors" id="ZmW-V1-7X1"/>
+                    <tabBarItem key="tabBarItem" title="Actors" image="mov-chair" id="ZmW-V1-7X1"/>
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
@@ -268,13 +284,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="53p-ZD-9le" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2036" y="-290"/>
+            <point key="canvasLocation" x="1142" y="-134"/>
         </scene>
         <!--Genre Preference Navigation Controller Scene-->
         <scene sceneID="cHE-i8-mPf">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="YFD-OG-ZjM" userLabel="Genre Preference Navigation Controller Scene" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Genres" id="LAo-VZ-D3h"/>
+                    <tabBarItem key="tabBarItem" title="Genres" image="mov-drama" id="LAo-VZ-D3h"/>
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
@@ -294,13 +310,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nLa-Vc-hD3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2036" y="458"/>
+            <point key="canvasLocation" x="1143" y="589"/>
         </scene>
         <!--Rating Preference Navigation Controller Scene-->
         <scene sceneID="f2W-l2-tVf">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xim-TL-SRP" userLabel="Rating Preference Navigation Controller Scene" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Rating" id="3Iu-NG-RfK"/>
+                    <tabBarItem key="tabBarItem" title="Rating" image="mov-star" id="3Iu-NG-RfK"/>
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
@@ -317,13 +333,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jiq-o7-XKq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1031.5" y="1255.5"/>
+            <point key="canvasLocation" x="1142" y="1251"/>
         </scene>
         <!--Rating Preference-->
         <scene sceneID="hG2-lW-vqh">
             <objects>
                 <tableViewController id="6bp-y6-VB8" customClass="RatingPickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="GD8-vC-WDt">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="GD8-vC-WDt">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -332,7 +348,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kOh-Qg-49u" id="jG6-ro-rUI">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -341,7 +357,13 @@
                             <outlet property="delegate" destination="6bp-y6-VB8" id="WLx-H4-6eX"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Rating Preference" id="Bqr-yX-MeC"/>
+                    <navigationItem key="navigationItem" title="Rating Preference" id="Bqr-yX-MeC">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="Y0Y-uY-mYy">
+                            <connections>
+                                <action selector="savePreferences:" destination="6bp-y6-VB8" id="Vun-AB-OVL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="22G-zU-lxv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -353,5 +375,8 @@
         <image name="bubble-empty" width="123" height="97"/>
         <image name="checked-circle" width="60" height="60"/>
         <image name="empty-circle" width="64" height="64"/>
+        <image name="mov-chair" width="18" height="21"/>
+        <image name="mov-drama" width="21" height="21"/>
+        <image name="mov-star" width="21" height="21"/>
     </resources>
 </document>

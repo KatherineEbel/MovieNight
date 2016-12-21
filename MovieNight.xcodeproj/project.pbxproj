@@ -11,8 +11,8 @@
 		2709C85F1E01CEF900F21D60 /* WatcherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */; };
 		2717F7561DFB237600FFEA5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7551DFB237600FFEA5F /* AppDelegate.swift */; };
 		2717F7581DFB237600FFEA5F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7571DFB237600FFEA5F /* HomeViewController.swift */; };
-		2717F75D1DFB237600FFEA5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2717F75C1DFB237600FFEA5F /* Assets.xcassets */; };
 		2717F7601DFB237600FFEA5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */; };
+		27234F141E0B3138002BA4C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27234F131E0B3138002BA4C0 /* Assets.xcassets */; };
 		279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */; };
 		27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB981DFE362B0060E98F /* TMDBClient.swift */; };
 		27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */; };
@@ -39,9 +39,9 @@
 		2717F7521DFB237600FFEA5F /* MovieNight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieNight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2717F7551DFB237600FFEA5F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2717F7571DFB237600FFEA5F /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		2717F75C1DFB237600FFEA5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2717F75F1DFB237600FFEA5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2717F7611DFB237600FFEA5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		27234F131E0B3138002BA4C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightPreference.swift; sourceTree = "<group>"; };
 		27D6BB981DFE362B0060E98F /* TMDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utitlites.swift; sourceTree = "<group>"; };
@@ -85,8 +85,8 @@
 		2717F7491DFB237600FFEA5F = {
 			isa = PBXGroup;
 			children = (
-				44E2E20C1E0582030072BB77 /* Main.storyboard */,
-				44E2E2191E0809E70072BB77 /* PreferenceCell.xib */,
+				27234F131E0B3138002BA4C0 /* Assets.xcassets */,
+				27234F121E0AE840002BA4C0 /* StoryBoards */,
 				2717F7541DFB237600FFEA5F /* MovieNight */,
 				2717F7531DFB237600FFEA5F /* Products */,
 				8C4589B3B742DB44BA39E0B4 /* Pods */,
@@ -106,20 +106,44 @@
 			isa = PBXGroup;
 			children = (
 				2717F7551DFB237600FFEA5F /* AppDelegate.swift */,
-				44E2E20E1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift */,
-				2717F75C1DFB237600FFEA5F /* Assets.xcassets */,
-				2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */,
 				2717F7611DFB237600FFEA5F /* Info.plist */,
+				27234F101E0AE812002BA4C0 /* Model */,
+				44796BB11E00826A0002CF6F /* View */,
+				44796BB01E00825E0002CF6F /* ViewModel+ DataSource */,
+				27234F111E0AE82A002BA4C0 /* Helpers */,
+			);
+			path = MovieNight;
+			sourceTree = "<group>";
+		};
+		27234F101E0AE812002BA4C0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
 				44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */,
 				44C57A4A1E01A9460023417D /* TMDBResponseEntity.swift */,
 				2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */,
 				279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */,
 				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
-				27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */,
-				44796BB01E00825E0002CF6F /* ViewModel+ DataSource */,
-				44796BB11E00826A0002CF6F /* View */,
 			);
-			path = MovieNight;
+			name = Model;
+			sourceTree = "<group>";
+		};
+		27234F111E0AE82A002BA4C0 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				44E2E20E1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift */,
+				27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		27234F121E0AE840002BA4C0 /* StoryBoards */ = {
+			isa = PBXGroup;
+			children = (
+				44E2E2191E0809E70072BB77 /* PreferenceCell.xib */,
+				2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */,
+				44E2E20C1E0582030072BB77 /* Main.storyboard */,
+			);
+			name = StoryBoards;
 			sourceTree = "<group>";
 		};
 		44796BB01E00825E0002CF6F /* ViewModel+ DataSource */ = {
@@ -227,8 +251,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2717F7601DFB237600FFEA5F /* LaunchScreen.storyboard in Resources */,
-				2717F75D1DFB237600FFEA5F /* Assets.xcassets in Resources */,
 				44E2E21B1E0809E70072BB77 /* PreferenceCell.xib in Resources */,
+				27234F141E0B3138002BA4C0 /* Assets.xcassets in Resources */,
 				44E2E20D1E0582030072BB77 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,6 +342,7 @@
 				2717F75F1DFB237600FFEA5F /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = MovieNight;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

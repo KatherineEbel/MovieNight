@@ -28,6 +28,11 @@ class GenrePickerController: UITableViewController {
         }
         tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: genreCellModelProducer)
         watcherSignal = movieWatcherViewModel.watchers.signal
+        
+        let activeWatcherReadySignal = watcherSignal.map { signal in
+          return signal![self.movieWatcherViewModel.activeWatcher].isReady
+        }
+        configureNavBarWithSignal(watcherReady: activeWatcherReadySignal)
         configureTabBar()
       }
     }
@@ -42,13 +47,23 @@ class GenrePickerController: UITableViewController {
       }
     }
   
+  func configureNavBarWithSignal(watcherReady: Signal<Bool, NoError>) {
+    // FIXME: Implement navbar actions
+    watcherReady.observeValues { isReady in
+      self.navigationItem.rightBarButtonItem?.isEnabled = isReady
+    }
+  }
+  
   func configureTabBar() {
     watcherSignal.observeValues { watchers in
       if let watchers = watchers {
         let activeWatcher = watchers[self.movieWatcherViewModel.activeWatcher]
         let count = activeWatcher.genreChoices.count
-        self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? UIColor.green : UIColor.red
+        let readyColor =  UIColor(red: 138/255.0, green: 199/255.0, blue: 223/255.0, alpha: 1.0)
+        let notReadyColor = UIColor(red: 255/255.0, green: 142/255.0, blue: 138/255.0, alpha: 1.0)
+        self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? readyColor : notReadyColor
         self.navigationController?.tabBarItem.badgeValue = "\(count)/5"
+        self.editButtonItem.reactive.isEnabled <~ MutableProperty(activeWatcher.isReady)
       }
     }
   }
@@ -69,8 +84,6 @@ class GenrePickerController: UITableViewController {
     }
     let preference = viewModel?.genreModelData.value[indexPath.row]
     if  movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
-      print("Success")
-//      count += 1
     }
   }
   
@@ -89,4 +102,15 @@ class GenrePickerController: UITableViewController {
     })
     return notSet || isactiveWatcherChoice!
   }
+  
+  @IBAction func savePreferences(_ sender: UIBarButtonItem) {
+    if movieWatcherViewModel.watcher1Ready() || movieWatcherViewModel.watcher2Ready() {
+      self.navigationController?.tabBarController?.dismiss(animated: true) {
+        self.movieWatcherViewModel.updateActiveWatcher()
+      }
+    } else {
+      print("Not finished yet!")
+    }
+  }
+  
 }

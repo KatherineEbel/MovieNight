@@ -21,6 +21,7 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var viewResultsButton: UIButton!
   @IBOutlet weak var watcher2StackView: UIStackView!
   var updateWatcherNameAction: Action<Int,Bool,NoError>!
+  var watchersReadySignal: SignalProducer<Bool, NoError>!
   var viewModel: WatcherViewModelProtocol! {
     didSet {
     }
@@ -28,6 +29,12 @@ class HomeViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    watchersReadySignal = viewModel.watchers.producer.map { _ in
+      self.viewModel.watcher1Ready() && self.viewModel.watcher2Ready()
+    }
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
     configureBindings()
   }
   
@@ -98,6 +105,10 @@ class HomeViewController: UIViewController {
     updateWatcherNameAction.values.observeValues { value in
       self.showUpdateAlert(value)
     }
+    self.viewResultsButton.reactive.isEnabled <~ watchersReadySignal
+    watchersReadySignal.on { value in
+      self.viewResultsButton.isEnabled = value
+    }.observe(on: UIScheduler()).start()
   }
   
 }
