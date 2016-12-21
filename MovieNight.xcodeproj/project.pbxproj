@@ -115,7 +115,6 @@
 				2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */,
 				279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */,
 				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
-				44D9962A1E0951C000373B0C /* MNTableViewDataSource.swift */,
 				27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */,
 				44796BB01E00825E0002CF6F /* ViewModel+ DataSource */,
 				44796BB11E00826A0002CF6F /* View */,
@@ -126,6 +125,7 @@
 		44796BB01E00825E0002CF6F /* ViewModel+ DataSource */ = {
 			isa = PBXGroup;
 			children = (
+				44D9962A1E0951C000373B0C /* MNTableViewDataSource.swift */,
 				44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */,
 				44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */,
 				2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */,

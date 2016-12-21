@@ -19,10 +19,16 @@ class PeoplePickerController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.clearsSelectionOnViewWillAppear = false
     if let viewModel = viewModel {
-      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: viewModel.cellModels.producer)
+      let actorCellModelProducer = viewModel.actorModelData.producer.map { actors in
+        return actors .flatMap { $0 as TMDBEntityProtocol }
+      }
+      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: actorCellModelProducer)
       watcherSignal = movieWatcherViewModel.watchers.signal
       configureTabBar()
+    } else {
+      fatalError("No view model!")
     }
   }
   
@@ -35,7 +41,7 @@ class PeoplePickerController: UITableViewController {
   }
   
   override func viewWillDisappear(_ animated: Bool) {
-    autoSearchStarted = false
+    //autoSearchStarted = false
   }
 
   override func didReceiveMemoryWarning() {
@@ -60,7 +66,7 @@ class PeoplePickerController: UITableViewController {
     guard count < 5 else {
       return
     }
-    let preference = viewModel?.actorCollection.value[indexPath.row]
+    let preference = viewModel?.actorModelData.value[indexPath.row]
     if  movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
       count += 1
     }
@@ -68,14 +74,14 @@ class PeoplePickerController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     let watcherIndex = movieWatcherViewModel.activeWatcher
-    let preference = viewModel!.actorCollection.value[indexPath.row]
+    let preference = viewModel!.actorModelData.value[indexPath.row]
     _ = movieWatcherViewModel.remove(preference: preference, watcherAtIndex: watcherIndex)
   }
   
   override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
     let notSet = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].actorChoices.count < 5
     let isactiveWatcherChoice = movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].actorChoices.contains(where: { actor in
-      actor.name == viewModel?.actorCollection.value[indexPath.row].name
+      actor.name == viewModel?.actorModelData.value[indexPath.row].name
     })
     return notSet || isactiveWatcherChoice!
   }

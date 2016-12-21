@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 import Result
+import Argo
 
 //protocol MNightTableviewDataSource: UITableViewDataSource {
 //  
@@ -17,23 +18,24 @@ import Result
 class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   var data: [SearchResultsTableViewCellModeling] = []
   var tableView: UITableView
-  let sourceSignal: SignalProducer<[SearchResultsTableViewCellModeling], NoError>!
+  let sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>!
   var nibName: String
   
-  private init(tableView: UITableView, sourceSignal: SignalProducer<[SearchResultsTableViewCellModeling], NoError>, nibName: String) {
+  private init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>, nibName: String) {
     self.tableView = tableView
     self.sourceSignal = sourceSignal
     self.nibName = nibName
     super.init()
   }
   
-  convenience init(tableView: UITableView, sourceSignal: SignalProducer<[SearchResultsTableViewCellModeling], NoError>) {
+  convenience init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>) {
     self.init(tableView: tableView, sourceSignal: sourceSignal, nibName: "PreferenceCell")
-    tableView.dataSource = self
-    tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: "preferenceCell")
+    self.tableView.dataSource = self
+    self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: "preferenceCell")
     sourceSignal.producer.on { value in
-      self.data = value
-      self.tableView.reloadData()
+      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.description) as SearchResultsTableViewCellModeling }
+      self.data = cellModels
+      tableView.reloadData()
     }.observe(on: UIScheduler())
     .start()
   }

@@ -20,8 +20,12 @@ class RatingPickerController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.clearsSelectionOnViewWillAppear = false
     if let viewModel = viewModel {
-      tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: viewModel.cellModels.producer)
+      let ratingCellProducer = viewModel.ratingModelData.producer.map { ratings in
+        return ratings.flatMap { $0 as TMDBEntityProtocol }
+      }
+      tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: ratingCellProducer)
       watcherSignal = movieWatcherViewModel.watchers.signal
       configureTabBar()
     }
@@ -36,7 +40,7 @@ class RatingPickerController: UITableViewController {
   }
   
   override func viewWillDisappear(_ animated: Bool) {
-    autoSearchStarted = false
+    //autoSearchStarted = false
   }
 
   override func didReceiveMemoryWarning() {
@@ -56,7 +60,7 @@ class RatingPickerController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if let preference = viewModel?.ratingCollection.value[indexPath.row] {
+    if let preference = viewModel?.ratingModelData.value[indexPath.row] {
       if movieWatcherViewModel.add(preference: preference, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
         self.navigationController?.tabBarItem.badgeColor = UIColor.green
         self.navigationController?.tabBarItem.badgeValue = "Set"

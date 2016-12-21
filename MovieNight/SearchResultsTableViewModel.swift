@@ -11,23 +11,18 @@ import Argo
 import Result
 
 public protocol SearchResultsTableViewModeling {
-  var cellModels: Property<[SearchResultsTableViewCellModeling]> { get }
-  var genreCollection: MutableProperty<[TMDBEntity.MovieGenre]> { get }
-  var actorCollection: MutableProperty<[TMDBEntity.Actor]> { get }
-  var ratingCollection: MutableProperty<[TMDBEntity.Rating]> { get }
+  var genreModelData: MutableProperty<[TMDBEntity.MovieGenre]> { get }
+  var actorModelData: MutableProperty<[TMDBEntity.Actor]> { get }
+  var ratingModelData: MutableProperty<[TMDBEntity.Rating]> { get }
   func getNextPage()
   func getGenres()
   func getRatings()
 }
 
 public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
-  private let _cellModels = MutableProperty<[SearchResultsTableViewCellModeling]>([])
-  public var cellModels: Property<[SearchResultsTableViewCellModeling]> {
-    return Property(_cellModels)
-  }
-  public var genreCollection = MutableProperty<[TMDBEntity.MovieGenre]>([]) 
-  public var actorCollection = MutableProperty<[TMDBEntity.Actor]>([])
-  public var ratingCollection = MutableProperty<[TMDBEntity.Rating]>([])
+  public var genreModelData = MutableProperty<[TMDBEntity.MovieGenre]>([])
+  public var actorModelData = MutableProperty<[TMDBEntity.Actor]>([])
+  public var ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
   private let client: TMDBSearching
   private var nextPage: Int
   private let maxPages = 5
@@ -44,9 +39,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
     .observe(on: UIScheduler())
     .on { actors in
-      self.actorCollection.value.append(contentsOf: actors)
-      let cellModels =  actors.flatMap { SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling }
-      self._cellModels.value.append(contentsOf: cellModels)
+      self.actorModelData.value.append(contentsOf: actors)
     }
     .start()
     nextPage += 1
@@ -59,10 +52,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
       .observe(on: UIScheduler())
       .on { genres in
-        self.genreCollection.value = genres
-        self._cellModels.value = genres.flatMap {
-          SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling
-        }
+        self.genreModelData.value = genres
       }
     .start()
   }
@@ -74,10 +64,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
       .observe(on: UIScheduler())
       .on { ratings in
-        self.ratingCollection.value = ratings.certifications
-        self._cellModels.value = ratings.certifications.flatMap {
-          return SearchResultsTableViewCellModel(title: $0.certification) as SearchResultsTableViewCellModeling
-        }
+        self.ratingModelData.value = ratings.certifications
       }
       .start()
   }

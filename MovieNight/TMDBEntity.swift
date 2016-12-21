@@ -11,21 +11,29 @@ import Runes
 import Curry
 import Result
 
+public protocol TMDBEntityProtocol: CustomStringConvertible {
+  var description: String { get }
+}
 
 // Defines types of the responses from TMDB
 public struct TMDBEntity {
-  public struct MovieGenre: Decodable {
+  enum Category {
+    case actor
+    case genre
+    case rating
+  }
+  public struct MovieGenre: Decodable, TMDBEntityProtocol {
     let id: Int
     let name: String
   }
   
-  public struct Rating: Decodable {
+  public struct Rating: Decodable, TMDBEntityProtocol {
     let certification: String
     let meaning: String
     let order: Int
   }
   
-   public struct Actor: Decodable {
+   public struct Actor: Decodable, TMDBEntityProtocol {
     let name: String
     let popularity: Double
     let profile_path: String
@@ -46,6 +54,10 @@ extension TMDBEntity.Actor {
       <*> json <|| "known_for"
       <*> json <| "adult"
   }
+  
+  public var description: String {
+    return self.name
+  }
 }
 
 extension TMDBEntity.MovieGenre {
@@ -53,6 +65,10 @@ extension TMDBEntity.MovieGenre {
     return curry(TMDBEntity.MovieGenre.init)
       <^> json <| "id"
       <*> json <| "name"
+  }
+  
+  public var description: String {
+    return self.name
   }
 }
 
@@ -64,5 +80,10 @@ extension TMDBEntity.Rating {
       <^> json <| "certification"
       <*> json <| "meaning"
       <*> json <| "order"
+  }
+  
+  
+  public var description: String {
+    return self.certification
   }
 }
