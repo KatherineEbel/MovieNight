@@ -11,23 +11,22 @@ import UIKit
 class PeoplePickerController: UITableViewController {
   private var autoSearchStarted = false
   public var movieWatcherViewModel: WatcherViewModelProtocol!
-  public var viewModel: SearchResultsTableViewModeling? {
-    didSet {
-      if let viewModel = viewModel {
-        viewModel.cellModels.producer
-          .on { _ in
-            self.tableView.reloadData()
-          }
-          .start()
+  public var viewModel: SearchResultsTableViewModeling?
+  private var tableViewDataSource: MNightTableviewDataSource!
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    if let viewModel = viewModel {
+      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: viewModel.cellModels.producer)
+      movieWatcherViewModel.watchers.signal.observeValues { watchers in
+        let activeWatcher = watchers![self.movieWatcherViewModel.activeWatcher]
+        let count = activeWatcher.moviePreference.actorChoices.count
+        self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? UIColor.green : UIColor.red
+        self.navigationController?.tabBarItem.badgeValue = "\(count)/5"
+        
       }
     }
   }
-
-    override func viewDidLoad() {
-      super.viewDidLoad()
-      
-      self.tableView.register(UINib(nibName: "PreferenceCell", bundle: nil), forCellReuseIdentifier: "preferenceCell")
-    }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -42,19 +41,28 @@ class PeoplePickerController: UITableViewController {
       // Dispose of any resources that can be recreated.
   }
 
-  // MARK: - Table view data source
-
-  override func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    var count = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.actorChoices.count
+    guard count < 5 else {
+      return
+    }
+    let preference = viewModel?.actorCollection.value[indexPath.row]
+    if  movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
+      count += 1
+    }
   }
-
-  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return viewModel?.cellModels.value.count ?? 0
+  
+  override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    let watcherIndex = movieWatcherViewModel.activeWatcher
+    let preference = viewModel!.actorCollection.value[indexPath.row]
+    _ = movieWatcherViewModel.remove(preference: preference, watcherAtIndex: watcherIndex)
   }
-
-  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-      let cell = tableView.dequeueReusableCell(withIdentifier: "preferenceCell", for: indexPath) as! PreferenceCell
-      cell.viewModel = viewModel?.cellModels.value[indexPath.row] ?? nil
-      return cell
+  
+  override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+    let notSet = movieWatcherViewModel.watchers.value![movieWatcherViewModel.activeWatcher].moviePreference.actorChoices.count < 5
+    let isactiveWatcherChoice = movieWatcherViewModel.watchers.value?[movieWatcherViewModel.activeWatcher].moviePreference.actorChoices.contains(where: { actor in
+      actor.name == viewModel?.actorCollection.value[indexPath.row].name
+    })
+    return notSet || isactiveWatcherChoice!
   }
 }

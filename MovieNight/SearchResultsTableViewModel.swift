@@ -40,12 +40,12 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   public func getNextPage() {
     client.searchPopularPeople(pageNumber: nextPage)
      .map { response in
-        let cellModels = response.results.flatMap { SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling }
-        return cellModels
+        return response.results
       }
     .observe(on: UIScheduler())
-    .on { cellModels in
-      self._cellModels.value = cellModels
+    .on { actors in
+      self.actorCollection.value = actors
+      self._cellModels.value = actors.flatMap { SearchResultsTableViewCellModel(title: $0.name) as SearchResultsTableViewCellModeling }
     }
     .start()
     nextPage += 1

@@ -186,7 +186,7 @@
                             <outlet property="delegate" destination="YLI-Qm-gUo" id="454-8Z-pE6"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Actor Preferences" id="4V3-15-Lvj"/>
+                    <navigationItem key="navigationItem" title="Actor Preferences" id="LWL-Mg-Yym"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -338,7 +338,6 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="6bp-y6-VB8" id="3Go-o8-nql"/>
                             <outlet property="delegate" destination="6bp-y6-VB8" id="WLx-H4-6eX"/>
                         </connections>
                     </tableView>

@@ -14,7 +14,7 @@ import Result
 //  
 //}
 
-class MovieNightTableviewBindingHelper: NSObject, UITableViewDataSource {
+class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   var data: [SearchResultsTableViewCellModeling] = []
   var tableView: UITableView
   let sourceSignal: SignalProducer<[SearchResultsTableViewCellModeling], NoError>!

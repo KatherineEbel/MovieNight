@@ -28,6 +28,7 @@ protocol WatcherViewModelProtocol {
   func setNameForWatcher(at index: Int, with name: String) -> Bool
   func addWalker(watcher: MovieWatcherProtocol) -> Bool
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
+  func remove<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
   func watcher1Ready() -> Bool
   func watcher2Ready() -> Bool
 }
@@ -87,34 +88,11 @@ public class WatcherViewModel: WatcherViewModelProtocol {
   }
   
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool {
-    guard (watchers.value != nil) else {
-      return false
-    }
-    switch preference {
-      case let actor where preference is TMDBEntity.Actor:
-        guard _watchers.value![index].moviePreference.actorChoices.count < 5 else {
-          return false
-        }
-        if let actor = actor as? TMDBEntity.Actor {
-          _watchers.value![index].moviePreference.actorChoices.append(actor)
-          return true
-        }
-      case _ where preference is TMDBEntity.MovieGenre:
-        guard _watchers.value![index].moviePreference.genreChoices.count < 5 else {
-          return false
-        }
-        if let genre = preference as? TMDBEntity.MovieGenre {
-          _watchers.value![index].moviePreference.genreChoices.append(genre)
-          return true
-        }
-      case _ where preference is TMDBEntity.Rating:
-        if let rating = preference as? TMDBEntity.Rating {
-          _watchers.value![index].moviePreference.maxRating = rating
-          return true
-        }
-      default: break
-    }
-    return false
+    return _watchers.value?[activeWatcher].moviePreference.add(preference) ?? false
+  }
+  
+  func remove<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool{
+    return _watchers.value?[activeWatcher].moviePreference.remove(preference) ?? false
   }
   
 }
