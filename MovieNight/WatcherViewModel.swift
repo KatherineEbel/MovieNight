@@ -22,6 +22,7 @@ protocol WatcherViewModelProtocol {
   func addWalker(watcher: MovieWatcherProtocol) -> Bool
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
   func remove<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
+  func combineWatchersChoices() -> (actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String)?
   func updateActiveWatcher()
   func watcher1Ready() -> Bool
   func watcher2Ready() -> Bool
@@ -29,6 +30,7 @@ protocol WatcherViewModelProtocol {
 
 public class WatcherViewModel: WatcherViewModelProtocol {
   private var _watchers: MutableProperty<[MovieWatcherProtocol]?>
+  var resultValues: SignalProducer<(actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String)?, NoError>!
   var watchers: Property<[MovieWatcherProtocol]?> {
     return Property(_watchers)
   }
@@ -92,6 +94,21 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     } else {
       activeWatcher = 0
     }
+  }
+  
+  func combineWatchersChoices() -> (actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String)? {
+    guard watcher1Ready() && watcher2Ready() else {
+      return nil
+    }
+    let watcher1 = watchers.value?[0]
+    let watcher2 = watchers.value?[1]
+    var actors = watcher1!.actorChoices.map { $0.id }
+    actors.append(contentsOf: watcher2!.actorChoices.map { $0.id })
+    var genres = watcher1!.genreChoices.map { $0.id }
+    genres.append(contentsOf: watcher2!.genreChoices.map { $0.id })
+    let rating = watcher1!.maxRatingChoice!.order > watcher2!.maxRatingChoice!.order ?
+      watcher2!.maxRatingChoice : watcher1!.maxRatingChoice
+    return (Set(actors), Set(genres), rating!.description)
   }
 }
   

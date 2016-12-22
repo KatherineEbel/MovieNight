@@ -41,6 +41,47 @@ public struct TMDBEntity {
     let known_for: [JSON]
     let adult: Bool
   }
+  
+  public struct Movie: Decodable, TMDBEntityProtocol {
+    let poster_path: String
+    let adult: Bool
+    let overview: String
+    let release_date: String
+    let genre_ids: [Int]
+    let id: Int
+    let original_title: String
+    let original_language: String
+    let title: String
+    let backdrop_path: String
+    let popularity: Double
+    let vote_count: Int
+    let video: Bool
+    let voteAverage: Double
+  }
+}
+
+extension TMDBEntity.Movie {
+  public var description: String {
+    return title
+  }
+  
+  public static func decode(_ json: JSON) -> Decoded<TMDBEntity.Movie> {
+    return curry(TMDBEntity.Movie.init)
+      <^> json <| "poster_path"
+      <*> json <| "adult"
+      <*> json <| "overview"
+      <*> json <| "release_date"
+      <*> json <|| "genre_ids"
+      <*> json <| "id"
+      <*> json <| "original_title"
+      <*> json <| "original_language"
+      <*> json <| "title"
+      <*> json <| "backdrop_path"
+      <*> json <| "popularity"
+      <*> json <| "vote_count"
+      <*> json <| "video"
+      <*> json <| "vote_average"
+  }
 }
 
 // MARK: Conform to Decodable Protocol

@@ -8,7 +8,7 @@
 
 import Foundation
 
-func allPairs<T>(inSet set: Set<T>) -> [Array<T>] {
+public func allPairs<T>(inSet set: Set<T>) -> [Array<T>] {
   let arrayFromSet: [T] = Array(set)
     var result = [[T]]()
       for i in 0..<arrayFromSet.count {

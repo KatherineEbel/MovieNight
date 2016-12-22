@@ -11,7 +11,6 @@ import Runes
 import Curry
 import Result
 
-
 // Defines a response from TMDB
 public enum TMDBResponseEntity {
   case movieGenre(PopularPeople)
@@ -22,7 +21,7 @@ public enum TMDBResponseEntity {
     let page: Int
     let results: [TMDBEntity.Actor]
     let totalResults: Int
-    let total_pages: Int
+    let totalPages: Int
   }
   
   public struct MovieGenreResponse: Decodable {
@@ -31,6 +30,13 @@ public enum TMDBResponseEntity {
   
   public struct USCertifications: Decodable {
     let certifications: [TMDBEntity.Rating]
+  }
+  
+  public struct MovieDiscover: Decodable {
+    let page: Int
+    let results: [TMDBEntity.Movie]
+    let totalResults: Int
+    let totalPages: Int
   }
 }
 
@@ -45,6 +51,16 @@ extension TMDBResponseEntity.USCertifications {
 extension TMDBResponseEntity.PopularPeople {
   public static func decode(_ json: JSON) -> Decoded<TMDBResponseEntity.PopularPeople> {
     return curry(TMDBResponseEntity.PopularPeople.init)
+      <^> json <| "page"
+      <*> json <|| "results"
+      <*> json <| "total_results"
+      <*> json <| "total_pages"
+  }
+}
+
+extension TMDBResponseEntity.MovieDiscover {
+  public static func decode(_ json: JSON) -> Decoded<TMDBResponseEntity.MovieDiscover> {
+    return curry(TMDBResponseEntity.MovieDiscover.init)
       <^> json <| "page"
       <*> json <|| "results"
       <*> json <| "total_results"

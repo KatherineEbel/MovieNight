@@ -21,6 +21,7 @@ extension SwinjectStoryboard {
       MovieNightWatcher(name: name)
     }
     
+       // page: Int, actorIDs: [Int], genreIDs: [Int], rating: String
     // View model dependencies
     defaultContainer.register(SearchResultsTableViewModeling.self) { resolver in
       SearchResultsTableViewModel(client: resolver.resolve(TMDBSearching.self)!)
@@ -36,7 +37,7 @@ extension SwinjectStoryboard {
         fatalError("Couldn't complete!")
       }
       return WatcherViewModel(watchers: [watcher1, watcher2])
-    }.inObjectScope(.container)
+      }.inObjectScope(.container)
     // registers all of the controllers
     defaultContainer.storyboardInitCompleted(UINavigationController.self){ _, _ in
       // FIXME: Remove debug statements
@@ -46,6 +47,12 @@ extension SwinjectStoryboard {
       print("Home Controller")
       controller.viewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
+    
+    defaultContainer.storyboardInitCompleted(ViewResultsController.self) { resolver, controller in
+        controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)
+        controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)
+    }
+    
     defaultContainer.storyboardInitCompleted(UITabBarController.self){ _, _ in }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "RatingNav"){ _, _ in
       print("Rating Nav")

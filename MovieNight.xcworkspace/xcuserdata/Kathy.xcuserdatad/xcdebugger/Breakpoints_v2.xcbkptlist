@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MovieNight/SearchResultsTableViewModel.swift"
-            timestampString = "504029699.641537"
+            filePath = "MovieNight/TMDBClient.swift"
+            timestampString = "504082552.999562"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "getGenres()"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
+            landmarkName = "searchMovieDiscover(page:actorIDs:genreIDs:rating:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,29 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MovieNight/SearchResultsTableViewModel.swift"
-            timestampString = "504029703.387468"
+            filePath = "MovieNight/TMDBClient.swift"
+            timestampString = "504083223.41061"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "getRatings()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MovieNight/SearchResultsTableViewModel.swift"
-            timestampString = "504029706.945389"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "getNextPage()"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
+            landmarkName = "searchMovieDiscover(page:actorIDs:genreIDs:rating:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

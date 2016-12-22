@@ -33,10 +33,5 @@ class PreferenceCell: UITableViewCell {
   
   override func awakeFromNib() {
     super.awakeFromNib()
-    let backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-    self.contentMode = .redraw
-    self.selectedBackgroundView = backgroundView
-    self.selectedBackgroundView?.backgroundColor = UIColor.clear
-      //UIColor(red: 255/255.0, green: 142/255.0, blue: 138/255.0, alpha: 0.2)
   }
 }

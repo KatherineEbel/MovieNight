@@ -14,6 +14,8 @@ public protocol SearchResultsTableViewModeling {
   var genreModelData: MutableProperty<[TMDBEntity.MovieGenre]> { get }
   var actorModelData: MutableProperty<[TMDBEntity.Actor]> { get }
   var ratingModelData: MutableProperty<[TMDBEntity.Rating]> { get }
+  var resultsModelData: MutableProperty<[TMDBEntity.Movie]> { get }
+  func getResults(actorIDs: Set<Int>, genreIDs: Set<Int>, maxRating: String)
   func getNextPage()
   func getGenres()
   func getRatings()
@@ -23,13 +25,26 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   public var genreModelData = MutableProperty<[TMDBEntity.MovieGenre]>([])
   public var actorModelData = MutableProperty<[TMDBEntity.Actor]>([])
   public var ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
+  public var resultsModelData = MutableProperty<[TMDBEntity.Movie]>([])
   private let client: TMDBSearching
   private var nextPage: Int
   private let maxPages = 5
+  private var resultPage = 1
   
   public init(client: TMDBSearching) {
     nextPage = 1
     self.client = client
+  }
+  
+  public func getResults(actorIDs: Set<Int>, genreIDs: Set<Int>, maxRating: String) {
+    client.searchMovieDiscover(page: resultPage, actorIDs: actorIDs, genreIDs: genreIDs, rating: maxRating)
+      .map { response in
+        return response.results
+      }
+      .observe(on: UIScheduler())
+      .on { results in
+        self.resultsModelData.value.append(contentsOf: results)
+      }.start()
   }
 
   public func getNextPage() {

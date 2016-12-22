@@ -82,6 +82,9 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="Ready for Results"/>
+                                <connections>
+                                    <segue destination="6EX-ED-DEW" kind="show" identifier="viewResults" id="q97-2W-20c"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -98,7 +101,9 @@
                             <constraint firstItem="4WA-bL-C3r" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="zTr-tT-Etv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Movie Night" id="VDa-Od-Dmx"/>
+                    <navigationItem key="navigationItem" title="Movie Night" id="VDa-Od-Dmx">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="nSB-Oa-5En"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="viewResultsButton" destination="aZg-ws-2cX" id="Pur-J4-2tq"/>
                         <outlet property="watcher1Button" destination="V1p-qs-iRR" id="gvH-Fm-2b6"/>
@@ -114,6 +119,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVT-vA-jcv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-460" y="134"/>
+        </scene>
+        <!--Your Results-->
+        <scene sceneID="ggd-4q-bzl">
+            <objects>
+                <tableViewController id="6EX-ED-DEW" customClass="ViewResultsController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VoV-eJ-Zn4">
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="preferenceCell" id="I5r-fO-0iq" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="I5r-fO-0iq" id="kgC-WF-CyO">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="6EX-ED-DEW" id="eRB-a5-NTs"/>
+                            <outlet property="delegate" destination="6EX-ED-DEW" id="ddZ-EX-Y0F"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Your Results" id="O03-CU-P7O"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HLg-Bl-xtr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-460" y="863"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ncK-1c-A9Y">
@@ -239,7 +273,7 @@
         <!--Navigation Controller-->
         <scene sceneID="tdT-s0-3dQ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rF8-BV-dn8" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" id="rF8-BV-dn8" sceneMemberID="viewController">
                     <toolbarItems/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
