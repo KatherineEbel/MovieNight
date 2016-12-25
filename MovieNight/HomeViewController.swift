@@ -32,6 +32,9 @@ class HomeViewController: UIViewController {
     watchersReadySignal = viewModel.watchers.producer.map { _ in
       self.viewModel.watcher1Ready() && self.viewModel.watcher2Ready()
     }
+    let signal = viewModel.watchers.producer.startWithValues { values in
+      
+    }
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +65,7 @@ class HomeViewController: UIViewController {
     watcher2Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 1)
     configureWatcherLabels()
     configureObservers()
-    watcher2StackView.reactive.isHidden <~ MutableProperty(!self.viewModel.watcher1Ready())
+//    watcher2StackView.reactive.isHidden <~ MutableProperty(!self.viewModel.watcher1Ready())
   }
   
   func showUpdateAlert(_ success: Bool) {
@@ -87,18 +90,16 @@ class HomeViewController: UIViewController {
   }
   
   func configureWatcherLabels() {
-    self.watcher1ReadyLabel.reactive.text <~ MutableProperty((viewModel.watcher1Ready()) ? "Ready!" : "Undecided")
-    self.watcher2ReadyLabel.reactive.text <~ MutableProperty(viewModel.watcher2Ready() ? "Ready!" : "Undecided")
-    if let viewModel = viewModel {
-      viewModel.watchers.signal.observeValues { value in
-        self.watcher1NameLabel.reactive.text <~ MutableProperty(value?.first?.name)
-        self.watcher2NameLabel.reactive.text <~ MutableProperty(value?.last!.name)
-        self.watcher1ReadyLabel.reactive.text <~ MutableProperty((viewModel.watcher1Ready()) ? "Ready!" : "Undecided")
-        self.watcher2ReadyLabel.reactive.text <~ MutableProperty(viewModel.watcher2Ready() ? "Ready!" : "Undecided")
-      }
-    } else {
-      print("No view model")
+    watcher2StackView.reactive.isHidden <~ viewModel.watchers.map { !(($0?.first?.isReady)!) }
+    watcher1ReadyLabel.reactive.text <~ viewModel.watchers.map { watchers in
+      (watchers?.first?.isReady)! ? "Ready" : "Undecided"
     }
+    
+    watcher2ReadyLabel.reactive.text <~ viewModel.watchers.map { watchers in
+      (watchers?.last?.isReady)! ? "Ready" : "Undecided"
+    }
+    watcher1NameLabel.reactive.text <~ viewModel.watchers.map { $0?.first?.name }
+    watcher2NameLabel.reactive.text <~ viewModel.watchers.map {$0?.last?.name }
   }
   
   func configureObservers() {
