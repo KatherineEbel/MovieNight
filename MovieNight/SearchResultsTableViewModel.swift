@@ -11,10 +11,10 @@ import Argo
 import Result
 
 public protocol SearchResultsTableViewModeling {
-  var genreModelData: MutableProperty<[TMDBEntity.MovieGenre]> { get }
-  var actorModelData: MutableProperty<[TMDBEntity.Actor]> { get }
-  var ratingModelData: MutableProperty<[TMDBEntity.Rating]> { get }
-  var resultsModelData: MutableProperty<[TMDBEntity.Movie]> { get }
+  var genreModelData: Property<[TMDBEntity.MovieGenre]> { get }
+  var actorModelData: Property<[TMDBEntity.Actor]> { get }
+  var ratingModelData: Property<[TMDBEntity.Rating]> { get }
+  var resultsModelData: Property<[TMDBEntity.Movie]> { get }
   func getResults(actorIDs: Set<Int>, genreIDs: Set<Int>, maxRating: String)
   func getNextPage()
   func getGenres()
@@ -22,15 +22,30 @@ public protocol SearchResultsTableViewModeling {
 }
 
 public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
-  public var genreModelData = MutableProperty<[TMDBEntity.MovieGenre]>([])
-  public var actorModelData = MutableProperty<[TMDBEntity.Actor]>([])
-  public var ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
-  public var resultsModelData = MutableProperty<[TMDBEntity.Movie]>([])
+  private let _genreModelData = MutableProperty<[TMDBEntity.MovieGenre]>([])
+  private let _actorModelData = MutableProperty<[TMDBEntity.Actor]>([])
+  private let _ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
+  private let _resultsModelData = MutableProperty<[TMDBEntity.Movie]>([])
   private let client: TMDBSearching
   private var nextPage: Int
   private let maxPages = 5
   private var resultPage = 1
   
+  public var genreModelData: Property<[TMDBEntity.MovieGenre]> {
+    return Property(_genreModelData)
+  }
+  
+  public var actorModelData: Property<[TMDBEntity.Actor]> {
+    return Property(_actorModelData)
+  }
+  
+  public var ratingModelData: Property<[TMDBEntity.Rating]> {
+    return Property(_ratingModelData)
+  }
+  
+  public var resultsModelData: Property<[TMDBEntity.Movie]> {
+    return Property(_resultsModelData)
+  }
   public init(client: TMDBSearching) {
     nextPage = 1
     self.client = client
@@ -43,7 +58,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
       .observe(on: UIScheduler())
       .on { results in
-        self.resultsModelData.value.append(contentsOf: results)
+        self._resultsModelData.value.append(contentsOf: results)
       }.start()
   }
 
@@ -54,7 +69,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
     .observe(on: UIScheduler())
     .on { actors in
-      self.actorModelData.value.append(contentsOf: actors)
+      self._actorModelData.value.append(contentsOf: actors)
     }
     .start()
     nextPage += 1
@@ -67,7 +82,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
       .observe(on: UIScheduler())
       .on { genres in
-        self.genreModelData.value = genres
+        self._genreModelData.value = genres
       }
     .start()
   }
@@ -79,7 +94,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
       .observe(on: UIScheduler())
       .on { ratings in
-        self.ratingModelData.value = ratings.certifications
+        self._ratingModelData.value = ratings.certifications
       }
       .start()
   }

@@ -51,8 +51,8 @@ class RatingPickerController: UITableViewController {
   
   func configureNavBarWithSignal(watcherReady: Signal<Bool, NoError>) {
     // FIXME: Implement navbar actions
-    watcherReady.observeValues { isReady in
-      self.navigationItem.rightBarButtonItem?.isEnabled = isReady
+    if let rightNavBarItem = navigationItem.rightBarButtonItem?.reactive {
+      rightNavBarItem.isEnabled <~ movieWatcherViewModel.watchers.map { $0![self.movieWatcherViewModel.activeWatcher].isReady }
     }
   }
 
@@ -65,7 +65,7 @@ class RatingPickerController: UITableViewController {
         let notReadyColor = UIColor(red: 255/255.0, green: 95/255.0, blue: 138/255.0, alpha: 1.0)
         self.navigationController?.tabBarItem.badgeColor = ratingChoice != nil ? readyColor : notReadyColor
         self.navigationController?.tabBarItem.badgeValue = ratingChoice != nil ? "Set" : "!"
-        self.editButtonItem.reactive.isEnabled <~ MutableProperty(activeWatcher.isReady)
+        //self.editButtonItem.reactive.isEnabled <~ MutableProperty(activeWatcher.isReady)
       }
     }
   }

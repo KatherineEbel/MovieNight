@@ -17,6 +17,7 @@ import Argo
 
 class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   private var data: [SearchResultsTableViewCellModeling] = []
+  private var cellModels = MutableProperty<[SearchResultsTableViewCellModel]>([])
   private var network: MovieNightNetworkProtocol!
   var tableView: UITableView
   let sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>!
@@ -28,18 +29,6 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     self.nibName = nibName
     super.init()
   }
-  
-//  convenience init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>) {
-//    self.init(tableView: tableView, sourceSignal: sourceSignal, nibName: "PreferenceCell")
-//    self.tableView.dataSource = self
-//    self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: "preferenceCell")
-//    sourceSignal.producer.on { value in
-//      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.description, imagePath: $0.thumbnailPath) as SearchResultsTableViewCellModeling }
-//      self.data = cellModels
-//      tableView.reloadData()
-//    }.observe(on: UIScheduler())
-//    .start()
-//  }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return data.count

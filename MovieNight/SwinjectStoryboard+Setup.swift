@@ -14,13 +14,6 @@ extension SwinjectStoryboard {
   class func setup() {
     // Register Models
     defaultContainer.register(MovieNightNetworkProtocol.self) { _ in MovieNightNetwork() }
-//    defaultContainer.register(MovieNightConfigurationProtocol.self) { _ in MovieNightConfiguration(configuration: nil) }
-//      .initCompleted { _, config in
-//        var copy = config
-//        TMDB.getConfig().producer.on { value in
-//          copy.configuration = value
-//        }.observe(on: UIScheduler()).start()
-//      }.inObjectScope(.container)
     defaultContainer.register(TMDBSearching.self) { resolver in
       TMDBClient(network: resolver.resolve(MovieNightNetworkProtocol.self)!)
       }.inObjectScope(.container)
