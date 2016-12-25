@@ -25,7 +25,8 @@ class RatingPickerController: UITableViewController {
       let ratingCellProducer = viewModel.ratingModelData.producer.map { ratings in
         return ratings.flatMap { $0 as TMDBEntityProtocol }
       }
-      tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: ratingCellProducer)
+      tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: ratingCellProducer, nibName: "PreferenceCell")
+      tableViewDataSource.configureTableView()
       watcherSignal = movieWatcherViewModel.watchers.signal
       let activeWatcherReadySignal = watcherSignal.map { signal in
         return signal![self.movieWatcherViewModel.activeWatcher].isReady

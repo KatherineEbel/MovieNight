@@ -18,6 +18,8 @@
 		27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */; };
 		2FDB5991AD474002E570CB96 /* Pods_MovieNight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */; };
 		442AA1711E0B759600D92378 /* ViewResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442AA1701E0B759600D92378 /* ViewResultsController.swift */; };
+		442AA1781E0EA41800D92378 /* MovieResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442AA1761E0EA41800D92378 /* MovieResultCell.swift */; };
+		442AA1791E0EA41800D92378 /* MovieResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 442AA1771E0EA41800D92378 /* MovieResultCell.xib */; };
 		44796BAF1E006DB80002CF6F /* SearchResultsTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */; };
 		44B1EFE91E0020EE00B8485D /* TableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */; };
 		44B1EFED1E002E1F00B8485D /* PeoplePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B1EFEC1E002E1F00B8485D /* PeoplePickerController.swift */; };
@@ -47,6 +49,8 @@
 		27D6BB981DFE362B0060E98F /* TMDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utitlites.swift; sourceTree = "<group>"; };
 		442AA1701E0B759600D92378 /* ViewResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewResultsController.swift; sourceTree = "<group>"; };
+		442AA1761E0EA41800D92378 /* MovieResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieResultCell.swift; sourceTree = "<group>"; };
+		442AA1771E0EA41800D92378 /* MovieResultCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MovieResultCell.xib; path = MovieNight/MovieResultCell.xib; sourceTree = "<group>"; };
 		44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultsTableViewModel.swift; sourceTree = "<group>"; };
 		44B1EFE81E0020EE00B8485D /* TableViewCellModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellModel.swift; sourceTree = "<group>"; };
 		44B1EFEC1E002E1F00B8485D /* PeoplePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeoplePickerController.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 		27234F121E0AE840002BA4C0 /* StoryBoards */ = {
 			isa = PBXGroup;
 			children = (
+				442AA1771E0EA41800D92378 /* MovieResultCell.xib */,
 				44E2E2191E0809E70072BB77 /* PreferenceCell.xib */,
 				2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */,
 				44E2E20C1E0582030072BB77 /* Main.storyboard */,
@@ -162,6 +167,7 @@
 		44796BB11E00826A0002CF6F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				442AA1761E0EA41800D92378 /* MovieResultCell.swift */,
 				44E2E2181E0809E70072BB77 /* PreferenceCell.swift */,
 				44E2E2091E04DD840072BB77 /* Controllers */,
 			);
@@ -256,6 +262,7 @@
 				2717F7601DFB237600FFEA5F /* LaunchScreen.storyboard in Resources */,
 				44E2E21B1E0809E70072BB77 /* PreferenceCell.xib in Resources */,
 				27234F141E0B3138002BA4C0 /* Assets.xcassets in Resources */,
+				442AA1791E0EA41800D92378 /* MovieResultCell.xib in Resources */,
 				44E2E20D1E0582030072BB77 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,6 +337,7 @@
 				44E2E2111E06459E0072BB77 /* GenrePickerController.swift in Sources */,
 				279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */,
 				44D9962B1E0951C000373B0C /* MNTableViewDataSource.swift in Sources */,
+				442AA1781E0EA41800D92378 /* MovieResultCell.swift in Sources */,
 				44E2E20F1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift in Sources */,
 				44B1EFED1E002E1F00B8485D /* PeoplePickerController.swift in Sources */,
 				44E2E2131E0645BF0072BB77 /* RatingPickerController.swift in Sources */,

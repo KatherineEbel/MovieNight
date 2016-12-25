@@ -16,29 +16,30 @@ import Argo
 //}
 
 class MNightTableviewDataSource: NSObject, UITableViewDataSource {
-  var data: [SearchResultsTableViewCellModeling] = []
+  private var data: [SearchResultsTableViewCellModeling] = []
+  private var network: MovieNightNetworkProtocol!
   var tableView: UITableView
   let sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>!
   var nibName: String
   
-  private init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>, nibName: String) {
+  init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>, nibName: String) {
     self.tableView = tableView
     self.sourceSignal = sourceSignal
     self.nibName = nibName
     super.init()
   }
   
-  convenience init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>) {
-    self.init(tableView: tableView, sourceSignal: sourceSignal, nibName: "PreferenceCell")
-    self.tableView.dataSource = self
-    self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: "preferenceCell")
-    sourceSignal.producer.on { value in
-      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.description) as SearchResultsTableViewCellModeling }
-      self.data = cellModels
-      tableView.reloadData()
-    }.observe(on: UIScheduler())
-    .start()
-  }
+//  convenience init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>) {
+//    self.init(tableView: tableView, sourceSignal: sourceSignal, nibName: "PreferenceCell")
+//    self.tableView.dataSource = self
+//    self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: "preferenceCell")
+//    sourceSignal.producer.on { value in
+//      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.description, imagePath: $0.thumbnailPath) as SearchResultsTableViewCellModeling }
+//      self.data = cellModels
+//      tableView.reloadData()
+//    }.observe(on: UIScheduler())
+//    .start()
+//  }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return data.count
@@ -49,9 +50,37 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "preferenceCell", for: indexPath) as! PreferenceCell
-    cell.viewModel = data[indexPath.row]
-    return cell
+    switch getIdentifier() {
+      case "movieResultCell":
+        let cell = tableView.dequeueReusableCell(withIdentifier: "movieResultCell", for: indexPath) as! MovieResultCell
+        cell.viewModel = data[indexPath.row]
+        return cell
+      default:
+        let cell = tableView.dequeueReusableCell(withIdentifier: "preferenceCell", for: indexPath) as! PreferenceCell
+        cell.viewModel = data[indexPath.row]
+        return cell
+    }
   }
   
+  func getIdentifier() -> String {
+    switch self.nibName {
+      case "PreferenceCell": return "preferenceCell"
+      case "MovieResultCell": return "movieResultCell"
+      default: break
+    }
+    return "Unknown"
+  }
+  
+  func configureTableView() {
+    self.tableView.dataSource = self
+    tableView.rowHeight = UITableViewAutomaticDimension
+    tableView.estimatedRowHeight = 60
+    self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: getIdentifier())
+    sourceSignal.producer.on { value in
+      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.description, imagePath: $0.thumbnailPath) as SearchResultsTableViewCellModeling }
+      self.data = cellModels
+      self.tableView.reloadData()
+    }.observe(on: UIScheduler())
+    .start()
+  }
 }

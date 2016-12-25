@@ -24,7 +24,8 @@ class PeoplePickerController: UITableViewController {
       let actorCellModelProducer = viewModel.actorModelData.producer.map { actors in
         return actors .flatMap { $0 as TMDBEntityProtocol }
       }
-      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: actorCellModelProducer)
+      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: actorCellModelProducer, nibName: "PreferenceCell")
+      tableViewDataSource.configureTableView()
       watcherSignal = movieWatcherViewModel.watchers.signal
       let activeWatcherReadySignal = watcherSignal.map { signal in
         return signal![self.movieWatcherViewModel.activeWatcher].isReady

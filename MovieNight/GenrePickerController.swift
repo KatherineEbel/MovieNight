@@ -26,7 +26,8 @@ class GenrePickerController: UITableViewController {
           return genres.flatMap { $0 as TMDBEntityProtocol }
           
         }
-        tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: genreCellModelProducer)
+        tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: genreCellModelProducer, nibName: "PreferenceCell")
+        tableViewDataSource.configureTableView()
         watcherSignal = movieWatcherViewModel.watchers.signal
         
         let activeWatcherReadySignal = watcherSignal.map { signal in

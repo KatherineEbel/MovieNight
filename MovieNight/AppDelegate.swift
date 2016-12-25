@@ -7,13 +7,24 @@
 //
 
 import UIKit
+import ReactiveSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
+  
+  // FIXME: Figure out way to remove from app delegate
+  public var movieNightConfig: TMDBConfiguration!
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    _ = TMDB.setConfig()
+//    TMDB.getConfig().producer.on { value in
+//      self.movieNightConfig = value
+//      if (self.movieNightConfig) != nil {
+//        print("Success")
+//      }
+//    }.observe(on: UIScheduler()).start()
     return true
   }
 

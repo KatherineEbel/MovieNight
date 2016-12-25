@@ -13,6 +13,7 @@ import Result
 
 public protocol TMDBEntityProtocol: CustomStringConvertible {
   var description: String { get }
+  var thumbnailPath: String { get }
 }
 
 // Defines types of the responses from TMDB
@@ -65,6 +66,10 @@ extension TMDBEntity.Movie {
     return title
   }
   
+  public var thumbnailPath: String {
+    return poster_path
+  }
+  
   public static func decode(_ json: JSON) -> Decoded<TMDBEntity.Movie> {
     return curry(TMDBEntity.Movie.init)
       <^> json <| "poster_path"
@@ -99,6 +104,10 @@ extension TMDBEntity.Actor {
   public var description: String {
     return self.name
   }
+  
+  public var thumbnailPath: String {
+    return profile_path
+  }
 }
 
 extension TMDBEntity.MovieGenre {
@@ -110,6 +119,10 @@ extension TMDBEntity.MovieGenre {
   
   public var description: String {
     return self.name
+  }
+  
+  public var thumbnailPath: String {
+    return ""
   }
 }
 
@@ -126,5 +139,9 @@ extension TMDBEntity.Rating {
   
   public var description: String {
     return self.certification
+  }
+  
+  public var thumbnailPath: String {
+    return ""
   }
 }

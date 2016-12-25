@@ -31,7 +31,8 @@ class ViewResultsController: UITableViewController {
       let resultsCellModelProducer = tableViewModel.resultsModelData.producer.map { results in
         return results.flatMap { $0 as TMDBEntityProtocol }
       }
-      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer)
+      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: "MovieResultCell")
+      tableViewDataSource.configureTableView()
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 

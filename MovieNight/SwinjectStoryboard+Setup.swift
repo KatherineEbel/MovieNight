@@ -8,25 +8,37 @@
 
 import SwinjectStoryboard
 import ReactiveSwift
+import Result
 
 extension SwinjectStoryboard {
   class func setup() {
     // Register Models
-    defaultContainer.register(MovieNightNetworking.self) { _ in MovieNightNetworking() }
+    defaultContainer.register(MovieNightNetworkProtocol.self) { _ in MovieNightNetwork() }
+//    defaultContainer.register(MovieNightConfigurationProtocol.self) { _ in MovieNightConfiguration(configuration: nil) }
+//      .initCompleted { _, config in
+//        var copy = config
+//        TMDB.getConfig().producer.on { value in
+//          copy.configuration = value
+//        }.observe(on: UIScheduler()).start()
+//      }.inObjectScope(.container)
     defaultContainer.register(TMDBSearching.self) { resolver in
-      TMDBClient(network: resolver.resolve(MovieNightNetworking.self)!)
-    }
+      TMDBClient(network: resolver.resolve(MovieNightNetworkProtocol.self)!)
+      }.inObjectScope(.container)
+    
     defaultContainer.register(MoviePreferenceProtocol.self) { resolver in MovieNightPreference() }
     defaultContainer.register(MovieWatcherProtocol.self) { resolver, name in
       MovieNightWatcher(name: name)
     }
+    
     
        // page: Int, actorIDs: [Int], genreIDs: [Int], rating: String
     // View model dependencies
     defaultContainer.register(SearchResultsTableViewModeling.self) { resolver in
       SearchResultsTableViewModel(client: resolver.resolve(TMDBSearching.self)!)
     }.inObjectScope(.container)
-    
+//    defaultContainer.register(SearchResultsTableViewCellModeling.self) { resolver, title, path in
+//      SearchResultsTableViewCellModel(title: title, imagePath: path)
+//    }
     // set watchers property for WatcherViewModel
     defaultContainer.register(WatcherViewModelProtocol.self) { resolver in
       let name1: String = "Watcher 1"
@@ -39,12 +51,8 @@ extension SwinjectStoryboard {
       return WatcherViewModel(watchers: [watcher1, watcher2])
       }.inObjectScope(.container)
     // registers all of the controllers
-    defaultContainer.storyboardInitCompleted(UINavigationController.self){ _, _ in
-      // FIXME: Remove debug statements
-      print("Home Nav")
-    }
+    defaultContainer.storyboardInitCompleted(UINavigationController.self){ _, _ in }
     defaultContainer.storyboardInitCompleted(HomeViewController.self) { resolver, controller in
-      print("Home Controller")
       controller.viewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     
@@ -55,26 +63,20 @@ extension SwinjectStoryboard {
     
     defaultContainer.storyboardInitCompleted(UITabBarController.self){ _, _ in }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "RatingNav"){ _, _ in
-      print("Rating Nav")
     }
     defaultContainer.storyboardInitCompleted(RatingPickerController.self) { resolver, controller in
-      print("Rating controller")
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "GenreNav"){ _, _ in
-      print("Genre Nav")
     }
     defaultContainer.storyboardInitCompleted(GenrePickerController.self) { resolver, controller in
-      print("Genre Picker")
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "ActorNav"){ _, _ in
-      print("Actor Nav")
     }
     defaultContainer.storyboardInitCompleted(PeoplePickerController.self) { resolver, controller in
-      print("People Picker")
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
