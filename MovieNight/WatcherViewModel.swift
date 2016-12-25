@@ -23,6 +23,7 @@ protocol WatcherViewModelProtocol {
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
   func remove<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
   func combineWatchersChoices() -> (actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String)?
+  func clearWatcherChoices()
   func updateActiveWatcher()
   func watcher1Ready() -> Bool
   func watcher2Ready() -> Bool
@@ -109,6 +110,15 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     let rating = watcher1!.maxRatingChoice!.order > watcher2!.maxRatingChoice!.order ?
       watcher2!.maxRatingChoice : watcher1!.maxRatingChoice
     return (Set(actors), Set(genres), rating!.description)
+  }
+  
+  func clearWatcherChoices() {
+    _watchers.value = _watchers.value?.enumerated().map { (index,watcher) in
+      var copy = watcher
+      copy.clearPreferences()
+      copy.name = "Watcher \(index + 1)"
+      return copy
+    }
   }
 }
   

@@ -21,6 +21,7 @@ public protocol MovieWatcherProtocol {
   mutating func removeActor(choice: TMDBEntity.Actor) -> Bool
   mutating func removeGenre(choice: TMDBEntity.MovieGenre) -> Bool
   mutating func setMaxRating(choice: TMDBEntity.Rating) -> Bool
+  mutating func clearPreferences()
 }
 
 public struct MovieNightWatcher: MovieWatcherProtocol {
@@ -93,6 +94,12 @@ extension MovieNightWatcher {
     } else {
       return false
     }
+  }
+  
+  public mutating func clearPreferences() {
+    moviePreference.actorChoices.removeAll()
+    moviePreference.genreChoices.removeAll()
+    moviePreference.maxRating = nil
   }
 }
 

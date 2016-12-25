@@ -32,9 +32,6 @@ class HomeViewController: UIViewController {
     watchersReadySignal = viewModel.watchers.producer.map { _ in
       self.viewModel.watcher1Ready() && self.viewModel.watcher2Ready()
     }
-    let signal = viewModel.watchers.producer.startWithValues { values in
-      
-    }
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -110,6 +107,18 @@ class HomeViewController: UIViewController {
     watchersReadySignal.on { value in
       self.viewResultsButton.isEnabled = value
     }.observe(on: UIScheduler()).start()
+  }
+  @IBAction func clearPreferencesButtonPressed(_ sender: UIBarButtonItem) {
+    let controller = UIAlertController(title: "Proceeding, will clear all selected preferences", message: "Are you sure you want to continue?", preferredStyle: .alert)
+    let resetAction = UIAlertAction(title: "Reset", style: .destructive) { _ in
+      DispatchQueue.main.async {
+        self.viewModel.clearWatcherChoices()
+      }
+    }
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+    controller.addAction(resetAction)
+    controller.addAction(cancelAction)
+    present(controller, animated: true, completion: nil)
   }
   
 }

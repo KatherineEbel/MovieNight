@@ -44,10 +44,6 @@ class RatingPickerController: UITableViewController {
     }
   }
   
-  override func viewWillDisappear(_ animated: Bool) {
-    //autoSearchStarted = false
-  }
-
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
       // Dispose of any resources that can be recreated.

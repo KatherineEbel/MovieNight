@@ -22,7 +22,7 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
   public var genreChoices: [TMDBEntity.MovieGenre] = []
   public var maxRating: TMDBEntity.Rating?
   public var isSet: Bool {
-    guard let _ = maxRating else {
+    guard maxRating != nil else {
       return false
     }
     return actorChoices.count > 0 && genreChoices.count > 0
