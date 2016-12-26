@@ -60,8 +60,8 @@ class GenrePickerController: UITableViewController {
       if let watchers = watchers {
         let activeWatcher = watchers[self.movieWatcherViewModel.activeWatcher]
         let count = activeWatcher.genreChoices.count
-        let readyColor =  UIColor(red: 138/255.0, green: 199/255.0, blue: 223/255.0, alpha: 1.0)
-        let notReadyColor = UIColor(red: 255/255.0, green: 142/255.0, blue: 138/255.0, alpha: 1.0)
+        let readyColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)
+        let notReadyColor = UIColor.red
         self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? readyColor : notReadyColor
         self.navigationController?.tabBarItem.badgeValue = "\(count)/5"
         //self.editButtonItem.reactive.isEnabled <~ MutableProperty(activeWatcher.isReady)

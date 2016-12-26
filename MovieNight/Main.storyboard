@@ -23,27 +23,31 @@
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg-iphone6plus" translatesAutoresizingMaskIntoConstraints="NO" id="4WA-bL-C3r">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                            <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="movie-night-bg" translatesAutoresizingMaskIntoConstraints="NO" id="o4v-du-iKg">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ueq-a6-6Vd" userLabel="Watchers Stack View">
-                                <rect key="frame" x="16" y="100" width="343" height="181"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ueq-a6-6Vd" userLabel="Watchers Stack View">
+                                <rect key="frame" x="24" y="100" width="327" height="199.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="oVn-NB-XxT" userLabel="Watcher 1 Stack View">
-                                        <rect key="frame" x="0.0" y="0.0" width="171.5" height="181"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="153.5" height="199.5"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V1p-qs-iRR">
-                                                <rect key="frame" x="24.5" y="0.0" width="123" height="97"/>
-                                                <state key="normal" image="bubble-empty"/>
+                                            <button opaque="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V1p-qs-iRR">
+                                                <rect key="frame" x="0.0" y="0.0" width="153.5" height="115.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="V1p-qs-iRR" secondAttribute="height" multiplier="4:3" id="CKr-vk-IbM"/>
+                                                </constraints>
+                                                <state key="normal" backgroundImage="bubble-empty-1"/>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watcher 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fie-6S-Xjc">
-                                                <rect key="frame" x="45" y="117" width="82" height="20.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Watcher 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fie-6S-Xjc">
+                                                <rect key="frame" x="36" y="135.5" width="82" height="20.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ready !" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TlA-Pg-Uw9">
-                                                <rect key="frame" x="52" y="157.5" width="68" height="23.5"/>
+                                                <rect key="frame" x="43" y="176" width="68" height="23.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -51,20 +55,23 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Dz3-FV-GeZ" userLabel="Watcher 2 Stack View">
-                                        <rect key="frame" x="171.5" y="0.0" width="171.5" height="181"/>
+                                        <rect key="frame" x="173.5" y="0.0" width="153.5" height="199.5"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L0j-Sl-aRG">
-                                                <rect key="frame" x="24.5" y="0.0" width="123" height="97"/>
-                                                <state key="normal" image="bubble-empty"/>
+                                            <button opaque="NO" contentMode="scaleAspectFit" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L0j-Sl-aRG">
+                                                <rect key="frame" x="0.0" y="0.0" width="153.5" height="115.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="L0j-Sl-aRG" secondAttribute="height" multiplier="4:3" id="n6m-xs-rCu"/>
+                                                </constraints>
+                                                <state key="normal" backgroundImage="bubble-empty-1"/>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Watcher 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Kv-B8-JPp">
-                                                <rect key="frame" x="45" y="117" width="82" height="20.5"/>
+                                                <rect key="frame" x="36" y="135.5" width="82" height="20.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Undecided" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fb8-FD-xsW">
-                                                <rect key="frame" x="37" y="157.5" width="98" height="23.5"/>
+                                                <rect key="frame" x="28" y="176" width="98" height="23.5"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -87,18 +94,14 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="4WA-bL-C3r" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" id="1oX-VR-1K2"/>
                             <constraint firstItem="ueq-a6-6Vd" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" constant="100" id="McC-rf-xqy"/>
                             <constraint firstAttribute="trailing" secondItem="aZg-ws-2cX" secondAttribute="trailing" id="OVl-XO-gZI"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="ueq-a6-6Vd" secondAttribute="trailing" id="WaK-Po-M3n"/>
-                            <constraint firstItem="ueq-a6-6Vd" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" id="Wo0-eH-vUW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="ueq-a6-6Vd" secondAttribute="trailing" constant="8" id="WaK-Po-M3n"/>
+                            <constraint firstItem="ueq-a6-6Vd" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" constant="8" id="Wo0-eH-vUW"/>
                             <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="aZg-ws-2cX" secondAttribute="bottom" id="ZiP-9C-dqL"/>
-                            <constraint firstAttribute="trailing" secondItem="4WA-bL-C3r" secondAttribute="trailing" id="bbb-NJ-Bgu"/>
                             <constraint firstItem="aZg-ws-2cX" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="tyk-ze-GN6"/>
-                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="4WA-bL-C3r" secondAttribute="bottom" id="v8y-Kb-NBJ"/>
-                            <constraint firstItem="4WA-bL-C3r" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="zTr-tT-Etv"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Movie Night" id="VDa-Od-Dmx">
@@ -123,7 +126,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVT-vA-jcv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-460" y="134"/>
+            <point key="canvasLocation" x="-460" y="133.5832083958021"/>
         </scene>
         <!--Your Results-->
         <scene sceneID="ggd-4q-bzl">
@@ -167,7 +170,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="0.031372549020000001" green="0.10980392160000001" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="selectedImageTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="YFD-OG-ZjM" kind="relationship" relationship="viewControllers" id="Ml7-cJ-pIv"/>
@@ -411,12 +414,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bg-iphone6plus" width="1241" height="2209"/>
-        <image name="bubble-empty" width="123" height="97"/>
+        <image name="bubble-empty-1" width="247" height="195"/>
         <image name="checked-circle" width="60" height="60"/>
         <image name="empty-circle" width="64" height="64"/>
         <image name="mov-chair" width="32" height="32"/>
         <image name="mov-drama" width="32" height="32"/>
         <image name="mov-star" width="32" height="32"/>
+        <image name="movie-night-bg" width="751" height="1335"/>
     </resources>
 </document>

@@ -59,10 +59,10 @@ class HomeViewController: UIViewController {
       }
     }
     viewModel.watchers.signal.observeValues { watchers in
-      let (readyImage, undecidedImage) = (UIImage(named: "bubble-selected")!, UIImage(named: "bubble-empty")!)
+      let (readyImage, undecidedImage) = (UIImage(named: "bubble-filled")!, UIImage(named: "bubble-empty-1")!)
       if let watcher1 = watchers?.first, let watcher2 = watchers?.last {
-        self.watcher1Button.setImage(watcher1.isReady ? readyImage : undecidedImage, for: .normal)
-        self.watcher2Button.setImage(watcher2.isReady ? readyImage : undecidedImage, for: .normal)
+        self.watcher1Button.setBackgroundImage(watcher1.isReady ? readyImage : undecidedImage, for: .normal)
+        self.watcher2Button.setBackgroundImage(watcher2.isReady ? readyImage : undecidedImage, for: .normal)
       }
     }
     watcher1Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 0)

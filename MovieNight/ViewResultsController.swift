@@ -47,7 +47,7 @@ class ViewResultsController: UITableViewController {
     }
   
   func handleRefresh(refreshControl: UIRefreshControl) {
-    guard (tableViewModel?.peoplePageCountTracker.page)! > 1 else {
+    guard (tableViewModel?.resultPageCountTracker.page)! > 1 else {
       return
     }
     self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker

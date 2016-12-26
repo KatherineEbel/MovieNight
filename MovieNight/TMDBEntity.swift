@@ -17,12 +17,12 @@ public protocol TMDBEntityProtocol: CustomStringConvertible {
 }
 
 // Defines types of the responses from TMDB
-public struct TMDBEntity {
-  enum Category {
-    case actor
-    case genre
-    case rating
-  }
+public enum TMDBEntity {
+  case actor(Actor)
+  case genre(MovieGenre)
+  case rating(Rating)
+  case movie(Movie)
+  
   public struct MovieGenre: Decodable, TMDBEntityProtocol {
     let id: Int
     let name: String

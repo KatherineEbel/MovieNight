@@ -11,11 +11,20 @@ import Runes
 import Curry
 import Result
 
+public protocol PagedResponseProtocol: Decodable {
+  associatedtype TMDB
+  var page: Int { get }
+  var results: [TMDBEntity] { get }
+  var totalResults: Int { get }
+  var totalPages: Int { get }
+}
+
 // Defines a response from TMDB
 public enum TMDBResponseEntity {
-  case movieGenre(PopularPeople)
-  case certification(MovieGenreResponse)
-  case popularPeople(USCertifications)
+  case popularPeople(PopularPeople)
+  case movieGenre(MovieGenreResponse)
+  case certification(USCertifications)
+  case movieDiscover(MovieDiscover)
   
   public struct PopularPeople: Decodable {
     let page: Int

@@ -21,17 +21,19 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qVI-eB-a6q">
-                        <rect key="frame" x="8" y="8" width="304" height="27.5"/>
+                        <rect key="frame" x="8" y="8.5" width="304" height="40"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="240" verticalCompressionResistancePriority="1000" image="empty-circle" highlightedImage="checked-circle" translatesAutoresizingMaskIntoConstraints="NO" id="RdW-bV-P6e">
-                                <rect key="frame" x="0.0" y="0.0" width="27.5" height="27.5"/>
+                            <imageView userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="240" verticalCompressionResistancePriority="1000" image="circle-empty" highlightedImage="circle-checked" translatesAutoresizingMaskIntoConstraints="NO" id="RdW-bV-P6e">
+                                <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Fwq-dm-7dZ"/>
                                     <constraint firstAttribute="width" secondItem="RdW-bV-P6e" secondAttribute="height" multiplier="1:1" id="kMt-Eq-tT7"/>
+                                    <constraint firstAttribute="width" constant="40" id="snA-Sc-N6R"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wvf-9L-XEc">
-                                <rect key="frame" x="47.5" y="0.0" width="256.5" height="27.5"/>
+                                <rect key="frame" x="60" y="0.0" width="244" height="40"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -40,10 +42,10 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="qVI-eB-a6q" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="HbF-tb-3Fi"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="qVI-eB-a6q" secondAttribute="trailing" id="MdZ-wN-jpS"/>
-                    <constraint firstItem="qVI-eB-a6q" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="i7G-g0-cBY"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="qVI-eB-a6q" secondAttribute="bottom" id="lY6-aD-KWI"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="qVI-eB-a6q" secondAttribute="bottom" id="D4y-1R-nU1"/>
+                    <constraint firstItem="qVI-eB-a6q" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="cpi-LF-kgi"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="qVI-eB-a6q" secondAttribute="trailing" id="j1o-LM-bPn"/>
+                    <constraint firstItem="qVI-eB-a6q" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="kZZ-Cz-ZSV"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -54,7 +56,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="checked-circle" width="60" height="60"/>
-        <image name="empty-circle" width="64" height="64"/>
+        <image name="circle-checked" width="118" height="105"/>
+        <image name="circle-empty" width="126" height="121"/>
     </resources>
 </document>

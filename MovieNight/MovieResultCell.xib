@@ -45,7 +45,7 @@
                                                     <constraint firstAttribute="width" constant="40" id="4CB-ih-GO9"/>
                                                     <constraint firstAttribute="height" constant="40" id="htV-rE-6Zx"/>
                                                 </constraints>
-                                                <state key="normal" image="gen-information-2"/>
+                                                <state key="normal" image="info"/>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -78,7 +78,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="gen-information-2" width="35" height="35"/>
+        <image name="info" width="35" height="35"/>
         <image name="tmdb-logo-green" width="408" height="161"/>
     </resources>
 </document>

@@ -66,7 +66,13 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     refreshControl.endRefreshing()
   }
   func configureTableView() {
-//    tableView.refreshControl?.addTarget(self, action: #selector(MNightTableviewDataSource.handleRefresh(refreshControl:)), for: .valueChanged)
+    _ = cellModels.map { cellModels in
+      return cellModels.flatMap { cellModel in
+        cellModel.getThumbnailImage().producer.map { image in
+          self.tableView.reloadData()
+        }
+      }
+    }
     self.tableView.dataSource = self
     tableView.rowHeight = UITableViewAutomaticDimension
     switch getIdentifier() {

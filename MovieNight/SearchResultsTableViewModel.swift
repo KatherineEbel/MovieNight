@@ -36,7 +36,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   private var resultPage = 1
   
   public var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) {
-    let result = "\(nextPage - 1) out of \(resultPageCount)"
+    let result = "\(nextPage - 1) out of \(peoplePageCount)"
     return (peoplePageCount, NSAttributedString(string: result, attributes: nil))
   }
   public var resultPageCountTracker: (page: Int, tracker: NSAttributedString) {
