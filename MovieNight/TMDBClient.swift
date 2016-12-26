@@ -16,6 +16,23 @@ import Keys
 import ReactiveSwift
 import Result
 
+enum TMDBColor {
+  case green
+  case blue
+}
+
+extension TMDBColor {
+  static func ColorFromRGB(color: TMDBColor, withAlpha alpha: CGFloat) -> UIColor {
+    switch color {
+    case .green:
+      return UIColor(red: 1/255.0, green: 210/255.0, blue: 119/255.0, alpha: alpha)
+    case .blue:
+      return UIColor(red: 8/255.0, green: 28/255.0, blue: 36/255.0, alpha: alpha)
+    }
+  
+  }
+}
+
 // MARK: Configuration
 public struct TMDBConfiguration: Decodable {
   let images: TMDBImageConfiguration
@@ -82,7 +99,7 @@ public enum TMDB: URLRequestConvertible {
   static let sortPreference = "popularity.desc"
   static let imageURLString = TMDB.movieNightConfig?.images.secure_base_url
   static var posterThumbNailSize: String? {
-    return (TMDB.movieNightConfig?.images.poster_sizes)?.first ?? nil
+    return (TMDB.movieNightConfig?.images.poster_sizes)?[3] ?? nil
     
   }
   static var actorThumbNailSize: String? {
@@ -92,7 +109,6 @@ public enum TMDB: URLRequestConvertible {
   var urlString: String? {
     switch self {
     case .image:
-      print(TMDB.imageURLString!)
       return TMDB.imageURLString
     default:
       return TMDB.baseURLString
@@ -142,10 +158,7 @@ public enum TMDB: URLRequestConvertible {
         case .movieGenres: return ("genre/movie/list", params)
         case .ratings: return ("certification/movie/list", params)
         case .movieDiscover: return ("discover/movie", params)
-        case .image(size: let size, imagePath: let path):
-          let components = ("\(size)/\(path)", params)
-          print(components)
-          return components
+        case .image(size: let size, imagePath: let path): return  ("\(size)\(path)", params)
       }
     }()
     let url = try urlString!.asURL()

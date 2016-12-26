@@ -58,11 +58,19 @@ class HomeViewController: UIViewController {
         self.present(alert, animated: true)
       }
     }
+    viewModel.watchers.signal.observeValues { watchers in
+      let (readyImage, undecidedImage) = (UIImage(named: "bubble-selected")!, UIImage(named: "bubble-empty")!)
+      if let watcher1 = watchers?.first, let watcher2 = watchers?.last {
+        self.watcher1Button.setImage(watcher1.isReady ? readyImage : undecidedImage, for: .normal)
+        self.watcher2Button.setImage(watcher2.isReady ? readyImage : undecidedImage, for: .normal)
+      }
+    }
     watcher1Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 0)
     watcher2Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 1)
+    watcher2StackView.reactive.isHidden <~ viewModel.watchers.map { $0!.first!.isReady }
+    
     configureWatcherLabels()
     configureObservers()
-//    watcher2StackView.reactive.isHidden <~ MutableProperty(!self.viewModel.watcher1Ready())
   }
   
   func showUpdateAlert(_ success: Bool) {

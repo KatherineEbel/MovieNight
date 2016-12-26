@@ -11,7 +11,7 @@ import Result
 
 public protocol SearchResultsTableViewCellModeling {
   var title: String { get }
-  func getThumbnailImage() -> SignalProducer<UIImage,NoError>
+  func getThumbnailImage() -> SignalProducer<UIImage, NoError>
 }
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {

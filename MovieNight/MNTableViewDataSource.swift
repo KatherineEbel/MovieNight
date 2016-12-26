@@ -60,14 +60,27 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     return "Unknown"
   }
   
+  func handleRefresh(refreshControl: UIRefreshControl) {
+    refreshControl.beginRefreshing()
+    print("Refreshing")
+    refreshControl.endRefreshing()
+  }
   func configureTableView() {
+//    tableView.refreshControl?.addTarget(self, action: #selector(MNightTableviewDataSource.handleRefresh(refreshControl:)), for: .valueChanged)
     self.tableView.dataSource = self
     tableView.rowHeight = UITableViewAutomaticDimension
+    switch getIdentifier() {
+    case "movieResultCell":
+      tableView.estimatedRowHeight = 200
+    default:
+      tableView.estimatedRowHeight = 44
+    }
     tableView.estimatedRowHeight = 60
     self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: getIdentifier())
     sourceSignal.producer.on { value in
       let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.description, imagePath: $0.thumbnailPath) as SearchResultsTableViewCellModeling }
       self.data = cellModels
+      
       self.tableView.reloadData()
     }.observe(on: UIScheduler())
     .start()

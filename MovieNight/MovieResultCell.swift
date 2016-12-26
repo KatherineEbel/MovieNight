@@ -13,14 +13,16 @@ class MovieResultCell: UITableViewCell {
 
   @IBOutlet weak var posterImageView: UIImageView!
   @IBOutlet weak var movieTitleLabel: UILabel!
+  @IBOutlet weak var infoButtonPressed: UIButton!
+  
   var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
       movieTitleLabel.text? = viewModel!.title
       viewModel!.getThumbnailImage()
         .take(until: self.reactive.prepareForReuse)
         .on { image in
-        self.posterImageView.image = image
-        self.setNeedsDisplay()
+          self.posterImageView.image = image
+//          self.setNeedsDisplay()
       }.observe(on: UIScheduler()).start()
     }
   }

@@ -27,6 +27,7 @@ class ViewResultsController: UITableViewController {
   private var tableViewDataSource: MNightTableviewDataSource!
     override func viewDidLoad() {
       super.viewDidLoad()
+      refreshControl?.addTarget(self, action: #selector(ViewResultsController.handleRefresh(refreshControl:)), for: .valueChanged)
       self.clearsSelectionOnViewWillAppear = false
       let resultsCellModelProducer = tableViewModel.resultsModelData.producer.map { results in
         return results.flatMap { $0 as TMDBEntityProtocol }
@@ -44,4 +45,15 @@ class ViewResultsController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
       super.viewWillAppear(animated)
     }
+  
+  func handleRefresh(refreshControl: UIRefreshControl) {
+    guard (tableViewModel?.peoplePageCountTracker.page)! > 1 else {
+      return
+    }
+    self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker
+    refreshControl.beginRefreshing()
+    print("Changed")
+    tableViewModel?.getNextPage()
+    refreshControl.endRefreshing()
+  }
 }

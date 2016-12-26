@@ -18,6 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   public var movieNightConfig: TMDBConfiguration!
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    let appearance = UINavigationBar.appearance()
+    appearance.titleTextAttributes = [NSForegroundColorAttributeName: TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)]
+    
     _ = TMDB.setConfig()
 //    TMDB.getConfig().producer.on { value in
 //      self.movieNightConfig = value

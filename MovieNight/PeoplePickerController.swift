@@ -19,6 +19,12 @@ class PeoplePickerController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    if let _ = refreshControl {
+      print("Have refreshcontrol")
+    } else {
+      print("No refresh control")
+    }
+    refreshControl?.addTarget(self, action: #selector(PeoplePickerController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     if let viewModel = viewModel {
       let actorCellModelProducer = viewModel.actorModelData.producer.map { actors in
@@ -43,6 +49,17 @@ class PeoplePickerController: UITableViewController {
       autoSearchStarted = true
       viewModel?.getNextPage()
     }
+  }
+  
+  func handleRefresh(refreshControl: UIRefreshControl) {
+    guard (viewModel?.peoplePageCountTracker.page)! > 1 else {
+      return
+    }
+    self.tableView.refreshControl?.attributedTitle = viewModel?.peoplePageCountTracker.tracker
+    refreshControl.beginRefreshing()
+    print("Changed")
+    viewModel?.getNextPage()
+    refreshControl.endRefreshing()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
