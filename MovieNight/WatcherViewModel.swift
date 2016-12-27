@@ -109,7 +109,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     genres.append(contentsOf: watcher2!.genreChoices.map { $0.id })
     let rating = watcher1!.maxRatingChoice!.order > watcher2!.maxRatingChoice!.order ?
       watcher2!.maxRatingChoice : watcher1!.maxRatingChoice
-    return (Set(actors), Set(genres), rating!.description)
+    return (Set(actors), Set(genres), rating!.title)
   }
   
   func clearWatcherChoices() {

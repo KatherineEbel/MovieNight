@@ -11,9 +11,10 @@ import Runes
 import Curry
 import Result
 
-public protocol TMDBEntityProtocol: CustomStringConvertible {
-  var description: String { get }
-  var thumbnailPath: String { get }
+public protocol TMDBEntityProtocol {
+  var title: String { get }
+  var details: String? { get }
+  var imagePath: String? { get }
 }
 
 // Defines types of the responses from TMDB
@@ -52,7 +53,7 @@ public enum TMDBEntity {
     let id: Int
     let original_title: String
     let original_language: String
-    let title: String
+    let _title: String
     let backdrop_path: String
     let popularity: Double
     let vote_count: Int
@@ -62,11 +63,15 @@ public enum TMDBEntity {
 }
 
 extension TMDBEntity.Movie {
-  public var description: String {
-    return title
+  public var title: String {
+    return _title
   }
   
-  public var thumbnailPath: String {
+  public var details: String? {
+    return overview
+  }
+  
+  public var imagePath: String? {
     return poster_path
   }
   
@@ -101,11 +106,16 @@ extension TMDBEntity.Actor {
       <*> json <| "adult"
   }
   
-  public var description: String {
+  public var title: String {
     return self.name
   }
   
-  public var thumbnailPath: String {
+  public var details: String? {
+    // FIXME: Parse known_for to get details for actor?
+    return ""
+  }
+  
+  public var imagePath: String? {
     return profile_path
   }
 }
@@ -117,12 +127,16 @@ extension TMDBEntity.MovieGenre {
       <*> json <| "name"
   }
   
-  public var description: String {
+  public var title: String {
     return self.name
   }
   
-  public var thumbnailPath: String {
-    return ""
+  public var details: String? {
+    return nil
+  }
+  
+  public var imagePath: String? {
+    return nil
   }
 }
 
@@ -137,11 +151,16 @@ extension TMDBEntity.Rating {
   }
   
   
-  public var description: String {
-    return self.certification
+  public var title: String {
+    return certification
   }
   
-  public var thumbnailPath: String {
-    return ""
+  public var details: String? {
+    return meaning
   }
+  
+  public var imagePath: String? {
+    return nil
+  }
+  
 }

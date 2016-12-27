@@ -30,17 +30,17 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   private let _ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
   private let _resultsModelData = MutableProperty<[TMDBEntity.Movie]>([])
   private let client: TMDBSearching
-  private var nextPage: Int = 1
+  private var currentPeoplePage: Int = 1
   private var resultPageCount = 0
   private var peoplePageCount = 0
-  private var resultPage = 1
+  private var currentResultPage = 1
   
   public var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) {
-    let result = "\(nextPage - 1) out of \(peoplePageCount)"
+    let result = "\(currentPeoplePage - 1) out of \(peoplePageCount)"
     return (peoplePageCount, NSAttributedString(string: result, attributes: nil))
   }
   public var resultPageCountTracker: (page: Int, tracker: NSAttributedString) {
-    return (resultPageCount, NSAttributedString(string: "\(resultPage - 1) out of \(resultPageCount)", attributes: nil))
+    return (resultPageCount, NSAttributedString(string: "\(currentResultPage - 1) out of \(resultPageCount)", attributes: nil))
   }
   
   public var genreModelData: Property<[TMDBEntity.MovieGenre]> {
@@ -63,7 +63,12 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   }
   
   public func getResults(actorIDs: Set<Int>, genreIDs: Set<Int>, maxRating: String) {
-    client.searchMovieDiscover(page: resultPage, actorIDs: actorIDs, genreIDs: genreIDs, rating: maxRating)
+    if currentResultPage > 1 {
+      guard resultPageCount > currentResultPage else {
+        return
+      }
+    }
+    client.searchMovieDiscover(page: currentResultPage, actorIDs: actorIDs, genreIDs: genreIDs, rating: maxRating)
       .map { $0 }
       .observe(on: UIScheduler())
       .on { response in
@@ -71,11 +76,16 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
         self.resultPageCount = response.totalPages
         print(response.totalPages)
       }.start()
-    resultPage += 1
+    currentResultPage += 1
   }
 
   public func getNextPage() {
-    client.searchPopularPeople(pageNumber: nextPage)
+    if currentPeoplePage > 1 {
+      guard currentPeoplePage < peoplePageCount else {
+        return
+      }
+    }
+    client.searchPopularPeople(pageNumber: currentPeoplePage)
      .map { $0 }
     .observe(on: UIScheduler())
     .on { response in
@@ -84,7 +94,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       self.peoplePageCount = response.totalPages
     }
     .start()
-    nextPage += 1
+    currentPeoplePage += 1
   }
   
   public func getGenres() {

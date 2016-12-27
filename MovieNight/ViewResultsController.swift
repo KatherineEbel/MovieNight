@@ -17,8 +17,8 @@ class ViewResultsController: UITableViewController {
         return self.watcherViewModel.combineWatchersChoices()
       }.startWithSignal { (observer, disposabel) in
         observer.observe { event in
-          if let result = event.value {
-            self.tableViewModel.getResults(actorIDs: (result?.actorIDs)!, genreIDs: (result?.genreIDs)!, maxRating: (result?.rating)!)
+          if let result = event.value, let value = result {
+            self.tableViewModel.getResults(actorIDs: value.actorIDs, genreIDs: value.genreIDs, maxRating: value.rating)
           }
         }
       }

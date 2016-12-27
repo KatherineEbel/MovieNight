@@ -65,6 +65,7 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     print("Refreshing")
     refreshControl.endRefreshing()
   }
+  
   func configureTableView() {
     _ = cellModels.map { cellModels in
       return cellModels.flatMap { cellModel in
@@ -84,7 +85,7 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     tableView.estimatedRowHeight = 60
     self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: getIdentifier())
     sourceSignal.producer.on { value in
-      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.description, imagePath: $0.thumbnailPath) as SearchResultsTableViewCellModeling }
+      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.title, imagePath: $0.imagePath) as SearchResultsTableViewCellModeling }
       self.data = cellModels
       
       self.tableView.reloadData()

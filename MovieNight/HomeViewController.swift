@@ -20,6 +20,8 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var watcher2ReadyLabel: UILabel!
   @IBOutlet weak var viewResultsButton: UIButton!
   @IBOutlet weak var watcher2StackView: UIStackView!
+  @IBOutlet weak var popupView: PopupView!
+  
   var updateWatcherNameAction: Action<Int,Bool,NoError>!
   var watchersReadySignal: SignalProducer<Bool, NoError>!
   var viewModel: WatcherViewModelProtocol! {
@@ -73,21 +75,21 @@ class HomeViewController: UIViewController {
     configureObservers()
   }
   
-  func showUpdateAlert(_ success: Bool) {
-    let title = success ? "Succesful" : "Failed to update"
-    let message = success ? "Name updated!" : "Name must have at least two characters"
-    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-      if success {
-        self.performSegue(withIdentifier: "choosePreferences", sender: self)
-      } else {
-        self.updateWatcherNameAction.apply(0).start()
-      }
-    }
-    alert.addAction(okAction)
-    present(alert, animated: true, completion: nil)
-    
-  }
+//  func showUpdateAlert(_ success: Bool) {
+//    let title = success ? "Succesful" : "Failed to update"
+//    let message = success ? "Name updated!" : "Name must have at least two characters"
+//    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+//    let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+//      if success {
+//        self.performSegue(withIdentifier: "choosePreferences", sender: self)
+//      } else {
+//        self.updateWatcherNameAction.apply(0).start()
+//      }
+//    }
+//    alert.addAction(okAction)
+//    present(alert, animated: true, completion: nil)
+//    
+//  }
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
@@ -109,7 +111,10 @@ class HomeViewController: UIViewController {
   
   func configureObservers() {
     updateWatcherNameAction.values.observeValues { value in
-      self.showUpdateAlert(value)
+      self.popupView.success = MutableProperty(value)
+      self.popupView.popUp() {
+      self.performSegue(withIdentifier: "choosePreferences", sender: self)
+      }
     }
     self.viewResultsButton.reactive.isEnabled <~ watchersReadySignal
     watchersReadySignal.on { value in
