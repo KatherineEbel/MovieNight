@@ -177,6 +177,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Your Results" id="O03-CU-P7O"/>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="Sit-g5-P3g">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                 </tableViewController>
@@ -209,7 +210,6 @@
         <!--Actor Preferences-->
         <scene sceneID="Iqu-T6-khk">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="YLI-Qm-gUo" customClass="PeoplePickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
@@ -268,10 +268,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="CNu-4k-ec5">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <attributedString key="attributedTitle"/>
                     </refreshControl>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1886" y="-134"/>
         </scene>
@@ -284,30 +286,35 @@
                         <viewControllerLayoutGuide type="bottom" id="Pa9-1q-yBv"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Lo7-1u-fU8">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-night-bg" translatesAutoresizingMaskIntoConstraints="NO" id="ga7-cv-mqq">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7D-UP-QYU">
-                                <rect key="frame" x="67" y="126.5" width="240" height="350"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7D-UP-QYU" userLabel="Detail View">
+                                <rect key="frame" x="67" y="158.5" width="240" height="350"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="d1x-5X-3G7">
-                                        <rect key="frame" x="0.0" y="111" width="240" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Details" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RkR-2j-gRG">
+                                        <rect key="frame" x="8" y="20" width="224" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="RkR-2j-gRG" secondAttribute="trailing" constant="8" id="7g4-pv-K9g"/>
+                                    <constraint firstItem="RkR-2j-gRG" firstAttribute="top" secondItem="s7D-UP-QYU" secondAttribute="top" constant="20" id="aVW-SJ-MVn"/>
+                                    <constraint firstItem="RkR-2j-gRG" firstAttribute="leading" secondItem="s7D-UP-QYU" secondAttribute="leading" constant="8" id="ak8-1k-UK1"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="350" id="y0A-us-sAB"/>
                                     <constraint firstAttribute="height" constant="350" id="yMV-f0-OND"/>
                                     <constraint firstAttribute="width" constant="240" id="zaS-1D-gbz"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="LUf-dj-g2b" appends="YES" id="arb-Om-yKb"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -321,10 +328,16 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="detailTextView" destination="d1x-5X-3G7" id="DeW-8t-tb8"/>
+                        <outlet property="detailLabel" destination="RkR-2j-gRG" id="3Xf-Az-Xti"/>
+                        <outlet property="detailView" destination="s7D-UP-QYU" id="7iS-9L-ddO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jzR-Ey-nqE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="LUf-dj-g2b">
+                    <connections>
+                        <action selector="swipeToDismiss:" destination="7PJ-sf-e7d" id="BiU-Bx-QIl"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2652" y="5.8470764617691158"/>
         </scene>
@@ -472,9 +485,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="7PJ-sf-e7d" kind="show" id="h5u-8V-UJl"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -488,6 +498,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="7PJ-sf-e7d" kind="showDetail" identifier="showDetails" id="97x-Uv-9NV"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="22G-zU-lxv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -505,6 +518,6 @@
         <image name="ok" width="120" height="120"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="h5u-8V-UJl"/>
+        <segue reference="97x-Uv-9NV"/>
     </inferredMetricsTieBreakers>
 </document>

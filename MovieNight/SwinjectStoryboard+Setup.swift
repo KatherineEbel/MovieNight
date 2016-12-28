@@ -22,16 +22,11 @@ extension SwinjectStoryboard {
     defaultContainer.register(MovieWatcherProtocol.self) { resolver, name in
       MovieNightWatcher(name: name)
     }
-    
-    
        // page: Int, actorIDs: [Int], genreIDs: [Int], rating: String
     // View model dependencies
     defaultContainer.register(SearchResultsTableViewModeling.self) { resolver in
       SearchResultsTableViewModel(client: resolver.resolve(TMDBSearching.self)!)
     }.inObjectScope(.container)
-//    defaultContainer.register(SearchResultsTableViewCellModeling.self) { resolver, title, path in
-//      SearchResultsTableViewCellModel(title: title, imagePath: path)
-//    }
     // set watchers property for WatcherViewModel
     defaultContainer.register(WatcherViewModelProtocol.self) { resolver in
       let name1: String = "Watcher 1"
@@ -43,6 +38,8 @@ extension SwinjectStoryboard {
       }
       return WatcherViewModel(watchers: [watcher1, watcher2])
       }.inObjectScope(.container)
+    defaultContainer.register(DetailViewModelProtocol.self) { _ in DetailViewModel() }
+    
     // registers all of the controllers
     defaultContainer.storyboardInitCompleted(UINavigationController.self){ _, _ in }
     defaultContainer.storyboardInitCompleted(HomeViewController.self) { resolver, controller in
@@ -72,6 +69,9 @@ extension SwinjectStoryboard {
     defaultContainer.storyboardInitCompleted(PeoplePickerController.self) { resolver, controller in
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
+    }
+    defaultContainer.storyboardInitCompleted(DetailController.self) { resolver, controller in
+      controller.viewModel = resolver.resolve(DetailViewModelProtocol.self)!
     }
   }
 }

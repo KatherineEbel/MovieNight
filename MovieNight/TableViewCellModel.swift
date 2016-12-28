@@ -10,21 +10,24 @@ import ReactiveSwift
 import Result
 
 public protocol SearchResultsTableViewCellModeling {
-  var title: String { get }
+  var data: Property<TMDBEntityProtocol> { get }
+  var shouldGetInfo: Bool { get set }
   func getThumbnailImage() -> SignalProducer<UIImage, NoError>
 }
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
-  public var title: String
-  private var imagePath: String?
+  public var _data: MutableProperty<TMDBEntityProtocol>
   private let network: MovieNightNetworkProtocol! = MovieNightNetwork()
-  init(title: String, imagePath: String?) {
-    self.title = title
-    self.imagePath = imagePath
+  public var shouldGetInfo: Bool = false
+  public var data: Property<TMDBEntityProtocol> {
+    return Property(_data)
+  }
+  init(model: TMDBEntityProtocol) {
+    self._data = MutableProperty(model)
   }
   
   public func getThumbnailImage() -> SignalProducer<UIImage, NoError> {
-    return network.requestImage(search: .image(size: TMDB.posterThumbNailSize!, imagePath: imagePath!))
+    return network.requestImage(search: .image(size: TMDB.posterThumbNailSize!, imagePath: data.value.imagePath!))
       .flatMapError { _ in SignalProducer<UIImage, NoError>.empty }
   }
 }

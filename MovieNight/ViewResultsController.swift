@@ -52,7 +52,6 @@ class ViewResultsController: UITableViewController {
     }
     self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker
     refreshControl.beginRefreshing()
-    print("Changed")
     tableViewModel?.getNextPage()
     refreshControl.endRefreshing()
   }

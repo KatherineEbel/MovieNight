@@ -69,6 +69,11 @@ class RatingPickerController: UITableViewController {
       }
     }
   }
+  
+  override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    let entity = viewModel!.ratingModelData.value[indexPath.row] as TMDBEntityProtocol
+    performSegue(withIdentifier: "showDetails", sender: entity)
+  }
 
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let preference = viewModel?.ratingModelData.value[indexPath.row] {
@@ -88,6 +93,15 @@ class RatingPickerController: UITableViewController {
       }
     } else {
       print("Not finished yet!")
+    }
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "showDetails" {
+      let detailController = segue.destination as! DetailController
+      if let sender = sender as? TMDBEntity.Rating {
+        detailController.viewModel.entity = sender
+      }
     }
   }
   

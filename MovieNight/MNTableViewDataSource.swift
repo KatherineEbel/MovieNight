@@ -16,12 +16,15 @@ import Argo
 //}
 
 class MNightTableviewDataSource: NSObject, UITableViewDataSource {
-  private var data: [SearchResultsTableViewCellModeling] = []
-  private var cellModels = MutableProperty<[SearchResultsTableViewCellModel]>([])
+  //private var data: [SearchResultsTableViewCellModeling] = []
+  private var _cellModels = MutableProperty<[SearchResultsTableViewCellModeling]>([])
   private var network: MovieNightNetworkProtocol!
   var tableView: UITableView
   let sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>!
   var nibName: String
+  public var cellModels: Property<[SearchResultsTableViewCellModeling]> {
+    return Property(_cellModels)
+  }
   
   init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>, nibName: String) {
     self.tableView = tableView
@@ -31,7 +34,7 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return data.count
+    return cellModels.value.count
   }
   
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -42,11 +45,11 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     switch getIdentifier() {
       case "movieResultCell":
         let cell = tableView.dequeueReusableCell(withIdentifier: "movieResultCell", for: indexPath) as! MovieResultCell
-        cell.viewModel = data[indexPath.row]
+        cell.viewModel = cellModels.value[indexPath.row]
         return cell
       default:
         let cell = tableView.dequeueReusableCell(withIdentifier: "preferenceCell", for: indexPath) as! PreferenceCell
-        cell.viewModel = data[indexPath.row]
+        cell.viewModel = cellModels.value[indexPath.row]
         return cell
     }
   }
@@ -67,29 +70,22 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   }
   
   func configureTableView() {
-    _ = cellModels.map { cellModels in
-      return cellModels.flatMap { cellModel in
-        cellModel.getThumbnailImage().producer.map { image in
-          self.tableView.reloadData()
-        }
-      }
-    }
-    self.tableView.dataSource = self
-    tableView.rowHeight = UITableViewAutomaticDimension
-    switch getIdentifier() {
-    case "movieResultCell":
+//    }.producer.on { value in
+//    }.observe(on: UIScheduler()).start()
+    tableView.dataSource = self
+    if getIdentifier() == "preferenceCell" {
+      tableView.rowHeight = 60
+    } else {
+      tableView.rowHeight = UITableViewAutomaticDimension
       tableView.estimatedRowHeight = 200
-    default:
-      tableView.estimatedRowHeight = 44
     }
-    tableView.estimatedRowHeight = 60
     self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: getIdentifier())
     sourceSignal.producer.on { value in
-      let cellModels = value.flatMap { SearchResultsTableViewCellModel(title: $0.title, imagePath: $0.imagePath) as SearchResultsTableViewCellModeling }
-      self.data = cellModels
-      
+      let models = value.flatMap { SearchResultsTableViewCellModel(model: $0 ) as SearchResultsTableViewCellModeling }
+      self._cellModels.value = models
       self.tableView.reloadData()
     }.observe(on: UIScheduler())
     .start()
+    
   }
 }
