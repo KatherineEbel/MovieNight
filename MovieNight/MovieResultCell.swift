@@ -12,17 +12,18 @@ import ReactiveSwift
 class MovieResultCell: UITableViewCell {
 
   @IBOutlet weak var posterImageView: UIImageView!
-  @IBOutlet weak var movieTitleLabel: UILabel!
-  @IBOutlet weak var infoButtonPressed: UIButton!
+//  @IBOutlet weak var movieTitleLabel: UILabel!
+//  @IBOutlet weak var infoButtonPressed: UIButton!
   
   var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
-      movieTitleLabel.text? = viewModel!.data.value.title
+//      movieTitleLabel.text? = viewModel!.data.value.title
       viewModel!.getThumbnailImage()
         .take(until: self.reactive.prepareForReuse)
         .on { image in
           self.posterImageView.image = image
-          self.setNeedsLayout()
+          self.viewModel?.imageUpdated.value = true
+          self.layoutIfNeeded()
       }.observe(on: UIScheduler()).start()
     }
   }

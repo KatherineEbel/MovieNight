@@ -22,7 +22,7 @@ public enum TMDBEntity {
   case actor(Actor)
   case genre(MovieGenre)
   case rating(Rating)
-  case movie(Movie)
+  case movie(Media)
   
   public struct MovieGenre: Decodable, TMDBEntityProtocol {
     let id: Int
@@ -40,31 +40,22 @@ public enum TMDBEntity {
     let popularity: Double
     let profile_path: String
     let id: Int
-    let known_for: [JSON]
+    let known_for: [Media]
     let adult: Bool
   }
   
-  public struct Movie: Decodable, TMDBEntityProtocol {
-    let poster_path: String
-    let adult: Bool
+  public struct Media: Decodable, TMDBEntityProtocol {
+    let poster_path: String?
     let overview: String
-    let release_date: String
-    let genre_ids: [Int]
     let id: Int
-    let original_title: String
-    let original_language: String
-    let _title: String
-    let backdrop_path: String
-    let popularity: Double
-    let vote_count: Int
-    let video: Bool
-    let voteAverage: Double
+    let _title: String?
+    let name: String?
   }
 }
 
-extension TMDBEntity.Movie {
+extension TMDBEntity.Media {
   public var title: String {
-    return _title
+    return _title != nil ? _title! : name!
   }
   
   public var details: String? {
@@ -75,22 +66,13 @@ extension TMDBEntity.Movie {
     return poster_path
   }
   
-  public static func decode(_ json: JSON) -> Decoded<TMDBEntity.Movie> {
-    return curry(TMDBEntity.Movie.init)
-      <^> json <| "poster_path"
-      <*> json <| "adult"
+  public static func decode(_ json: JSON) -> Decoded<TMDBEntity.Media> {
+    return curry(TMDBEntity.Media.init)
+      <^> json <|? "poster_path"
       <*> json <| "overview"
-      <*> json <| "release_date"
-      <*> json <|| "genre_ids"
       <*> json <| "id"
-      <*> json <| "original_title"
-      <*> json <| "original_language"
-      <*> json <| "title"
-      <*> json <| "backdrop_path"
-      <*> json <| "popularity"
-      <*> json <| "vote_count"
-      <*> json <| "video"
-      <*> json <| "vote_average"
+      <*> json <|? "title"
+      <*> json <|? "name"
   }
 }
 
@@ -112,7 +94,7 @@ extension TMDBEntity.Actor {
   
   public var details: String? {
     // FIXME: Parse known_for to get details for actor?
-    return ""
+    return "Known For:\n\n\n\(known_for.map { $0.title }.joined(separator: ",\n"))"
   }
   
   public var imagePath: String? {

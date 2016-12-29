@@ -19,11 +19,6 @@ class PeoplePickerController: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    if let _ = refreshControl {
-      print("Have refreshcontrol")
-    } else {
-      print("No refresh control")
-    }
     refreshControl?.addTarget(self, action: #selector(PeoplePickerController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     if let viewModel = viewModel {
@@ -57,7 +52,6 @@ class PeoplePickerController: UITableViewController {
     }
     self.tableView.refreshControl?.attributedTitle = viewModel?.peoplePageCountTracker.tracker
     refreshControl.beginRefreshing()
-    print("Changed")
     viewModel?.getNextPage()
     refreshControl.endRefreshing()
   }
@@ -117,6 +111,11 @@ class PeoplePickerController: UITableViewController {
     return notSet || isactiveWatcherChoice!
   }
   
+  override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    let entity = viewModel!.actorModelData.value[indexPath.row] as TMDBEntityProtocol
+    performSegue(withIdentifier: "showDetails", sender: entity)
+  }
+  
   @IBAction func preferencesComplete(_ sender: UIBarButtonItem) {
     if movieWatcherViewModel.watcher1Ready() || movieWatcherViewModel.watcher2Ready() {
       self.navigationController?.tabBarController?.dismiss(animated: true) {
@@ -127,4 +126,13 @@ class PeoplePickerController: UITableViewController {
     }
   }
   
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "showDetails" {
+      let detailController = segue.destination as! DetailController
+      if let sender = sender as? TMDBEntity.Actor {
+        detailController.viewModel.entity = sender
+      }
+    }
+  }
 }

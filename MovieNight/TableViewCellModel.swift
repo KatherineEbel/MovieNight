@@ -11,14 +11,14 @@ import Result
 
 public protocol SearchResultsTableViewCellModeling {
   var data: Property<TMDBEntityProtocol> { get }
-  var shouldGetInfo: Bool { get set }
+  var imageUpdated: MutableProperty<Bool> { get }
   func getThumbnailImage() -> SignalProducer<UIImage, NoError>
 }
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
   public var _data: MutableProperty<TMDBEntityProtocol>
   private let network: MovieNightNetworkProtocol! = MovieNightNetwork()
-  public var shouldGetInfo: Bool = false
+  public var imageUpdated = MutableProperty<Bool>(false)
   public var data: Property<TMDBEntityProtocol> {
     return Property(_data)
   }

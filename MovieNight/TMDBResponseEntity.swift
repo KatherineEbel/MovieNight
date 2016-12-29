@@ -43,7 +43,7 @@ public enum TMDBResponseEntity {
   
   public struct MovieDiscover: Decodable {
     let page: Int
-    let results: [TMDBEntity.Movie]
+    let results: [TMDBEntity.Media]
     let totalResults: Int
     let totalPages: Int
   }

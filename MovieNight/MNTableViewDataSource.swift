@@ -65,13 +65,10 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   
   func handleRefresh(refreshControl: UIRefreshControl) {
     refreshControl.beginRefreshing()
-    print("Refreshing")
     refreshControl.endRefreshing()
   }
   
   func configureTableView() {
-//    }.producer.on { value in
-//    }.observe(on: UIScheduler()).start()
     tableView.dataSource = self
     if getIdentifier() == "preferenceCell" {
       tableView.rowHeight = 60
@@ -86,6 +83,5 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
       self.tableView.reloadData()
     }.observe(on: UIScheduler())
     .start()
-    
   }
 }

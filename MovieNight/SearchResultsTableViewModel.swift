@@ -15,7 +15,7 @@ public protocol SearchResultsTableViewModeling {
   var genreModelData: Property<[TMDBEntity.MovieGenre]> { get }
   var actorModelData: Property<[TMDBEntity.Actor]> { get }
   var ratingModelData: Property<[TMDBEntity.Rating]> { get }
-  var resultsModelData: Property<[TMDBEntity.Movie]> { get }
+  var resultsModelData: Property<[TMDBEntity.Media]> { get }
   var resultPageCountTracker: (page: Int, tracker: NSAttributedString) { get }
   var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) { get }
   func getResults(actorIDs: Set<Int>, genreIDs: Set<Int>, maxRating: String)
@@ -28,7 +28,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   private let _genreModelData = MutableProperty<[TMDBEntity.MovieGenre]>([])
   private let _actorModelData = MutableProperty<[TMDBEntity.Actor]>([])
   private let _ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
-  private let _resultsModelData = MutableProperty<[TMDBEntity.Movie]>([])
+  private let _resultsModelData = MutableProperty<[TMDBEntity.Media]>([])
   private let client: TMDBSearching
   private var currentPeoplePage: Int = 1
   private var resultPageCount = 0
@@ -43,19 +43,15 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     return (resultPageCount, NSAttributedString(string: "\(currentResultPage - 1) out of \(resultPageCount)", attributes: nil))
   }
   
-  public var genreModelData: Property<[TMDBEntity.MovieGenre]> {
-    return Property(_genreModelData)
-  }
+  public var genreModelData: Property<[TMDBEntity.MovieGenre]> { return Property(_genreModelData) }
   
-  public var actorModelData: Property<[TMDBEntity.Actor]> {
-    return Property(_actorModelData)
-  }
+  public var actorModelData: Property<[TMDBEntity.Actor]> { return Property(_actorModelData) }
   
   public var ratingModelData: Property<[TMDBEntity.Rating]> {
     return Property(_ratingModelData)
   }
   
-  public var resultsModelData: Property<[TMDBEntity.Movie]> {
+  public var resultsModelData: Property<[TMDBEntity.Media]> {
     return Property(_resultsModelData)
   }
   public init(client: TMDBSearching) {
@@ -90,7 +86,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     .observe(on: UIScheduler())
     .on { response in
       self._actorModelData.value.append(contentsOf: response.results)
-      print(response.totalPages)
       self.peoplePageCount = response.totalPages
     }
     .start()

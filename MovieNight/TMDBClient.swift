@@ -308,6 +308,3 @@ public final class TMDBClient: TMDBSearching {
       }
   }
 }
-
-extension TMDBClient {
-}

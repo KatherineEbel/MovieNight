@@ -34,7 +34,6 @@ class ViewResultsController: UITableViewController {
       }
       tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: "MovieResultCell")
       tableViewDataSource.configureTableView()
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,5 +53,19 @@ class ViewResultsController: UITableViewController {
     refreshControl.beginRefreshing()
     tableViewModel?.getNextPage()
     refreshControl.endRefreshing()
+  }
+  
+  override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    let entity = tableViewModel!.resultsModelData.value[indexPath.row] as TMDBEntityProtocol
+    performSegue(withIdentifier: "showDetails", sender: entity)
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "showDetails" {
+      let detailController = segue.destination as! DetailController
+      if let sender = sender as? TMDBEntity.Media {
+        detailController.viewModel.entity = sender
+      }
+    }
   }
 }
