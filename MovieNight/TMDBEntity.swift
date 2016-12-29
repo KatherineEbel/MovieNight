@@ -94,7 +94,7 @@ extension TMDBEntity.Actor {
   
   public var details: String? {
     // FIXME: Parse known_for to get details for actor?
-    return "Known For:\n\n\n\(known_for.map { $0.title }.joined(separator: ",\n"))"
+    return "Known For:\n\n\(known_for.map { $0.title }.joined(separator: ",\n"))"
   }
   
   public var imagePath: String? {

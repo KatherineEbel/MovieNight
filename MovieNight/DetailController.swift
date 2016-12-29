@@ -12,36 +12,33 @@ import ReactiveCocoa
 
 class DetailController: UIViewController {
   
-  @IBOutlet weak var detailLabel: UILabel!
   @IBOutlet weak var detailView: UIView!
+  @IBOutlet weak var titleLabel: UILabel!
+  @IBOutlet weak var detailLabel: UILabel!
+  var viewModel: DetailViewModelProtocol!
   
-  var viewModel: DetailViewModelProtocol! {
-    didSet {
-      print("View model set")
-    }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    detailView.isHidden = true
+    detailView.layer.cornerRadius = 8.0
+    titleLabel.text = viewModel.entity?.title
+    detailLabel.text = viewModel.entity?.details ?? "No Details"
   }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      detailView.isHidden = true
-      detailView.layer.cornerRadius = 8.0
-      detailLabel.text = viewModel.entity?.details ?? "No Details"
-    }
   
   override func viewDidAppear(_ animated: Bool) {
     UIView.transition(with: detailView, duration: 0.33, options: [.curveEaseIn, .transitionFlipFromLeft], animations: {
       self.detailView.isHidden = false
     }, completion: nil)
   }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
   
-  
-  func setDetails(entity: TMDBEntity) {
-    // FIXME: Implement Me
+  override func viewWillLayoutSubviews() {
   }
+
+  override func didReceiveMemoryWarning() {
+      super.didReceiveMemoryWarning()
+      // Dispose of any resources that can be recreated.
+  }
+  
   
   @IBAction func swipeToDismiss(_ sender: UISwipeGestureRecognizer) {
     UIView.transition(with: detailView, duration: 0.33, options: [.curveEaseOut, .transitionFlipFromRight], animations: {
@@ -50,14 +47,4 @@ class DetailController: UIViewController {
       self.dismiss(animated: true, completion: nil)
     })
   }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
