@@ -11,6 +11,7 @@ import UIKit
 class ViewResultsController: UITableViewController {
   private var autoSearchStarted = false
   public var tableViewModel: SearchResultsTableViewModeling!
+  private var movieDiscover: MovieDiscoverProtocol?
   public var watcherViewModel: WatcherViewModelProtocol! {
     didSet {
       self.watcherViewModel.watchers.producer.map { _ in
@@ -18,7 +19,8 @@ class ViewResultsController: UITableViewController {
       }.startWithSignal { (observer, disposabel) in
         observer.observe { event in
           if let result = event.value, let value = result {
-            self.tableViewModel.getResults(actorIDs: value.actorIDs, genreIDs: value.genreIDs, maxRating: value.rating)
+            self.movieDiscover = MovieDiscover(actorIDs: value.actorIDs, genreIDs: value.genreIDs, maxRating: value.maxRating)
+            self.tableViewModel.getResultPage(discover: self.movieDiscover!)
           }
         }
       }
@@ -41,17 +43,16 @@ class ViewResultsController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
   
-    override func viewWillAppear(_ animated: Bool) {
-      super.viewWillAppear(animated)
-    }
-  
   func handleRefresh(refreshControl: UIRefreshControl) {
     guard (tableViewModel?.resultPageCountTracker.page)! > 1 else {
       return
     }
+    guard let movieDiscover = movieDiscover else {
+      return
+    }
     self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker
     refreshControl.beginRefreshing()
-    tableViewModel?.getNextPage()
+    tableViewModel?.getResultPage(discover: movieDiscover)
     refreshControl.endRefreshing()
   }
   

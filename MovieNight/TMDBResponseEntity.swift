@@ -20,12 +20,7 @@ public protocol PagedResponseProtocol: Decodable {
 }
 
 // Defines a response from TMDB
-public enum TMDBResponseEntity {
-  case popularPeople(PopularPeople)
-  case movieGenre(MovieGenreResponse)
-  case certification(USCertifications)
-  case movieDiscover(MovieDiscover)
-  
+public struct TMDBResponseEntity {
   public struct PopularPeople: Decodable {
     let page: Int
     let results: [TMDBEntity.Actor]

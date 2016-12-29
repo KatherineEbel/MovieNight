@@ -22,7 +22,7 @@ protocol WatcherViewModelProtocol {
   func addWalker(watcher: MovieWatcherProtocol) -> Bool
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
   func remove<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool
-  func combineWatchersChoices() -> (actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String)?
+  func combineWatchersChoices() -> MovieDiscoverProtocol?
   func clearWatcherChoices()
   func updateActiveWatcher()
   func watcher1Ready() -> Bool
@@ -90,14 +90,10 @@ public class WatcherViewModel: WatcherViewModelProtocol {
   }
   
   func updateActiveWatcher() {
-    if activeWatcher == 0 {
-      activeWatcher = 1
-    } else {
-      activeWatcher = 0
-    }
+    activeWatcher = activeWatcher == 0 ? 1 : 0
   }
   
-  func combineWatchersChoices() -> (actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String)? {
+  func combineWatchersChoices() -> MovieDiscoverProtocol? {
     guard watcher1Ready() && watcher2Ready() else {
       return nil
     }
@@ -109,7 +105,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     genres.append(contentsOf: watcher2!.genreChoices.map { $0.id })
     let rating = watcher1!.maxRatingChoice!.order > watcher2!.maxRatingChoice!.order ?
       watcher2!.maxRatingChoice : watcher1!.maxRatingChoice
-    return (Set(actors), Set(genres), rating!.title)
+    return MovieDiscover(actorIDs: Set(actors), genreIDs: Set(genres), maxRating: rating!.title)
   }
   
   func clearWatcherChoices() {

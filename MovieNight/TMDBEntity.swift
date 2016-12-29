@@ -18,12 +18,7 @@ public protocol TMDBEntityProtocol {
 }
 
 // Defines types of the responses from TMDB
-public enum TMDBEntity {
-  case actor(Actor)
-  case genre(MovieGenre)
-  case rating(Rating)
-  case movie(Media)
-  
+public struct TMDBEntity {
   public struct MovieGenre: Decodable, TMDBEntityProtocol {
     let id: Int
     let name: String
@@ -44,6 +39,7 @@ public enum TMDBEntity {
     let adult: Bool
   }
   
+  // combines movie and tv results when searching popular people
   public struct Media: Decodable, TMDBEntityProtocol {
     let poster_path: String?
     let overview: String
@@ -54,6 +50,8 @@ public enum TMDBEntity {
 }
 
 extension TMDBEntity.Media {
+  // popular people response comes back with known_for value of either
+  // tv credits or movie which have different schemas. Either name or title respectively
   public var title: String {
     return _title != nil ? _title! : name!
   }
@@ -93,7 +91,6 @@ extension TMDBEntity.Actor {
   }
   
   public var details: String? {
-    // FIXME: Parse known_for to get details for actor?
     return "Known For:\n\n\(known_for.map { $0.title }.joined(separator: ",\n"))"
   }
   

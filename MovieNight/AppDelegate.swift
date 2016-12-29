@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let appearance = UINavigationBar.appearance()
     appearance.titleTextAttributes = [NSForegroundColorAttributeName: TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)]
     
-    _ = TMDB.setConfig()
+    _ = TMDBEndpoint.setConfig()
 //    TMDB.getConfig().producer.on { value in
 //      self.movieNightConfig = value
 //      if (self.movieNightConfig) != nil {

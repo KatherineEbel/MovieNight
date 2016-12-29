@@ -18,7 +18,7 @@ public protocol SearchResultsTableViewModeling {
   var resultsModelData: Property<[TMDBEntity.Media]> { get }
   var resultPageCountTracker: (page: Int, tracker: NSAttributedString) { get }
   var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) { get }
-  func getResults(actorIDs: Set<Int>, genreIDs: Set<Int>, maxRating: String)
+  func getResultPage(discover: MovieDiscoverProtocol)
   func getNextPage()
   func getGenres()
   func getRatings()
@@ -29,7 +29,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   private let _actorModelData = MutableProperty<[TMDBEntity.Actor]>([])
   private let _ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
   private let _resultsModelData = MutableProperty<[TMDBEntity.Media]>([])
-  private let client: TMDBSearching
+  private let client: TMDBClientPrototcol
   private var currentPeoplePage: Int = 1
   private var resultPageCount = 0
   private var peoplePageCount = 0
@@ -54,23 +54,22 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   public var resultsModelData: Property<[TMDBEntity.Media]> {
     return Property(_resultsModelData)
   }
-  public init(client: TMDBSearching) {
+  public init(client: TMDBClientPrototcol) {
     self.client = client
   }
   
-  public func getResults(actorIDs: Set<Int>, genreIDs: Set<Int>, maxRating: String) {
+  public func getResultPage(discover: MovieDiscoverProtocol) {
     if currentResultPage > 1 {
       guard resultPageCount > currentResultPage else {
         return
       }
     }
-    client.searchMovieDiscover(page: currentResultPage, actorIDs: actorIDs, genreIDs: genreIDs, rating: maxRating)
+    client.searchMovieDiscover(page: currentResultPage, discover: discover)
       .map { $0 }
       .observe(on: UIScheduler())
       .on { response in
         self._resultsModelData.value.append(contentsOf: response.results)
         self.resultPageCount = response.totalPages
-        print(response.totalPages)
       }.start()
     currentResultPage += 1
   }

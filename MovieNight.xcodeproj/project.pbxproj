@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2709C85D1E01CB1F00F21D60 /* MovieNightWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */; };
+		2709C85D1E01CB1F00F21D60 /* MovieNightWatcher + Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709C85C1E01CB1F00F21D60 /* MovieNightWatcher + Protocol.swift */; };
 		2709C85F1E01CEF900F21D60 /* WatcherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */; };
 		2717F7561DFB237600FFEA5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7551DFB237600FFEA5F /* AppDelegate.swift */; };
 		2717F7581DFB237600FFEA5F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2717F7571DFB237600FFEA5F /* HomeViewController.swift */; };
 		2717F7601DFB237600FFEA5F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */; };
 		27234F141E0B3138002BA4C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27234F131E0B3138002BA4C0 /* Assets.xcassets */; };
-		279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */; };
+		279F8DD71DFC2DE900436973 /* MovieNightPreference + Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F8DD61DFC2DE900436973 /* MovieNightPreference + Protocol.swift */; };
 		27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB981DFE362B0060E98F /* TMDBClient.swift */; };
 		27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */; };
 		2FDB5991AD474002E570CB96 /* Pods_MovieNight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */; };
@@ -37,11 +37,15 @@
 		44E2E21A1E0809E70072BB77 /* PreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E2181E0809E70072BB77 /* PreferenceCell.swift */; };
 		44E2E21B1E0809E70072BB77 /* PreferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44E2E2191E0809E70072BB77 /* PreferenceCell.xib */; };
 		44E2E21D1E08EB630072BB77 /* MoviePreferenceTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E2E21C1E08EB630072BB77 /* MoviePreferenceTabBarController.swift */; };
+		44FF76E21E15500C006D39D7 /* MovieNightNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FF76E11E15500C006D39D7 /* MovieNightNetworking.swift */; };
+		44FF76E41E1550CC006D39D7 /* TMDBEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FF76E31E1550CC006D39D7 /* TMDBEndpoint.swift */; };
+		44FF76E61E155151006D39D7 /* TMDBConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FF76E51E155151006D39D7 /* TMDBConfiguration.swift */; };
+		44FF76E81E1556B4006D39D7 /* TMDBMovieDiscover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FF76E71E1556B4006D39D7 /* TMDBMovieDiscover.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1A26BE1B7AD4D04562017F53 /* Pods-MovieNight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieNight.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieNight/Pods-MovieNight.release.xcconfig"; sourceTree = "<group>"; };
-		2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightWatcher.swift; sourceTree = "<group>"; };
+		2709C85C1E01CB1F00F21D60 /* MovieNightWatcher + Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MovieNightWatcher + Protocol.swift"; sourceTree = "<group>"; };
 		2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatcherViewModel.swift; sourceTree = "<group>"; };
 		2717F7521DFB237600FFEA5F /* MovieNight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieNight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2717F7551DFB237600FFEA5F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -49,7 +53,7 @@
 		2717F75F1DFB237600FFEA5F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2717F7611DFB237600FFEA5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27234F131E0B3138002BA4C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightPreference.swift; sourceTree = "<group>"; };
+		279F8DD61DFC2DE900436973 /* MovieNightPreference + Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MovieNightPreference + Protocol.swift"; sourceTree = "<group>"; };
 		27D6BB981DFE362B0060E98F /* TMDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
 		27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utitlites.swift; sourceTree = "<group>"; };
 		442AA1701E0B759600D92378 /* ViewResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewResultsController.swift; sourceTree = "<group>"; };
@@ -72,6 +76,10 @@
 		44E2E2181E0809E70072BB77 /* PreferenceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreferenceCell.swift; path = ../PreferenceCell.swift; sourceTree = "<group>"; };
 		44E2E2191E0809E70072BB77 /* PreferenceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferenceCell.xib; sourceTree = "<group>"; };
 		44E2E21C1E08EB630072BB77 /* MoviePreferenceTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviePreferenceTabBarController.swift; sourceTree = "<group>"; };
+		44FF76E11E15500C006D39D7 /* MovieNightNetworking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightNetworking.swift; sourceTree = "<group>"; };
+		44FF76E31E1550CC006D39D7 /* TMDBEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBEndpoint.swift; sourceTree = "<group>"; };
+		44FF76E51E155151006D39D7 /* TMDBConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBConfiguration.swift; sourceTree = "<group>"; };
+		44FF76E71E1556B4006D39D7 /* TMDBMovieDiscover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBMovieDiscover.swift; sourceTree = "<group>"; };
 		63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieNight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC4E9B5B10356CE3858E2F8F /* Pods-MovieNight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieNight.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieNight/Pods-MovieNight.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -134,9 +142,13 @@
 			children = (
 				44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */,
 				44C57A4A1E01A9460023417D /* TMDBResponseEntity.swift */,
-				2709C85C1E01CB1F00F21D60 /* MovieNightWatcher.swift */,
-				279F8DD61DFC2DE900436973 /* MovieNightPreference.swift */,
+				2709C85C1E01CB1F00F21D60 /* MovieNightWatcher + Protocol.swift */,
+				279F8DD61DFC2DE900436973 /* MovieNightPreference + Protocol.swift */,
 				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
+				44FF76E11E15500C006D39D7 /* MovieNightNetworking.swift */,
+				44FF76E31E1550CC006D39D7 /* TMDBEndpoint.swift */,
+				44FF76E51E155151006D39D7 /* TMDBConfiguration.swift */,
+				44FF76E71E1556B4006D39D7 /* TMDBMovieDiscover.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -334,8 +346,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44FF76E61E155151006D39D7 /* TMDBConfiguration.swift in Sources */,
 				44E2E21A1E0809E70072BB77 /* PreferenceCell.swift in Sources */,
-				2709C85D1E01CB1F00F21D60 /* MovieNightWatcher.swift in Sources */,
+				2709C85D1E01CB1F00F21D60 /* MovieNightWatcher + Protocol.swift in Sources */,
 				27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */,
 				27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */,
 				442AA1711E0B759600D92378 /* ViewResultsController.swift in Sources */,
@@ -349,15 +362,18 @@
 				4459F6381E11F11000991A32 /* PopupView.swift in Sources */,
 				44C57A4B1E01A9460023417D /* TMDBResponseEntity.swift in Sources */,
 				4459F63A1E1212C800991A32 /* DetailController.swift in Sources */,
+				44FF76E81E1556B4006D39D7 /* TMDBMovieDiscover.swift in Sources */,
 				44E2E2111E06459E0072BB77 /* GenrePickerController.swift in Sources */,
-				279F8DD71DFC2DE900436973 /* MovieNightPreference.swift in Sources */,
+				279F8DD71DFC2DE900436973 /* MovieNightPreference + Protocol.swift in Sources */,
 				44D9962B1E0951C000373B0C /* MNTableViewDataSource.swift in Sources */,
 				442AA1781E0EA41800D92378 /* MovieResultCell.swift in Sources */,
 				44E2E20F1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift in Sources */,
 				44B1EFED1E002E1F00B8485D /* PeoplePickerController.swift in Sources */,
+				44FF76E21E15500C006D39D7 /* MovieNightNetworking.swift in Sources */,
 				44E2E2131E0645BF0072BB77 /* RatingPickerController.swift in Sources */,
 				4459F6361E11CA7300991A32 /* UpdateView.swift in Sources */,
 				44B1EFE91E0020EE00B8485D /* TableViewCellModel.swift in Sources */,
+				44FF76E41E1550CC006D39D7 /* TMDBEndpoint.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

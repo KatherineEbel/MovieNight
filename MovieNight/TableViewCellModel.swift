@@ -27,7 +27,7 @@ public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellMo
   }
   
   public func getThumbnailImage() -> SignalProducer<UIImage, NoError> {
-    return network.requestImage(search: .image(size: TMDB.posterThumbNailSize!, imagePath: data.value.imagePath!))
+    return network.requestImage(search: .image(size: TMDBEndpoint.posterThumbNailSize!, imagePath: data.value.imagePath!))
       .flatMapError { _ in SignalProducer<UIImage, NoError>.empty }
   }
 }

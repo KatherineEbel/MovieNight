@@ -14,7 +14,7 @@ extension SwinjectStoryboard {
   class func setup() {
     // Register Models
     defaultContainer.register(MovieNightNetworkProtocol.self) { _ in MovieNightNetwork() }
-    defaultContainer.register(TMDBSearching.self) { resolver in
+    defaultContainer.register(TMDBClientPrototcol.self) { resolver in
       TMDBClient(network: resolver.resolve(MovieNightNetworkProtocol.self)!)
       }.inObjectScope(.container)
     
@@ -25,19 +25,14 @@ extension SwinjectStoryboard {
        // page: Int, actorIDs: [Int], genreIDs: [Int], rating: String
     // View model dependencies
     defaultContainer.register(SearchResultsTableViewModeling.self) { resolver in
-      SearchResultsTableViewModel(client: resolver.resolve(TMDBSearching.self)!)
+      SearchResultsTableViewModel(client: resolver.resolve(TMDBClientPrototcol.self)!)
     }.inObjectScope(.container)
     // set watchers property for WatcherViewModel
     defaultContainer.register(WatcherViewModelProtocol.self) { resolver in
-      let name1: String = "Watcher 1"
-      let name2: String = "Watcher 2"
-      guard let watcher1 = resolver.resolve(MovieWatcherProtocol.self, argument: name1),
-      let watcher2 = resolver.resolve(MovieWatcherProtocol.self, argument: name2) else {
-        print("No watchers")
-        fatalError("Couldn't complete!")
-      }
+      let watcher1 = MovieNightWatcher(name: "Watcher 1")
+      let watcher2 = MovieNightWatcher(name: "Watcher 2")
       return WatcherViewModel(watchers: [watcher1, watcher2])
-      }.inObjectScope(.container)
+    }.inObjectScope(.container)
     defaultContainer.register(DetailViewModelProtocol.self) { _ in DetailViewModel() }
     
     // registers all of the controllers
