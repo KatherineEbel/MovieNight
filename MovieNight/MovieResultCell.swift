@@ -17,11 +17,10 @@ class MovieResultCell: UITableViewCell {
   
   var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
-//      movieTitleLabel.text? = viewModel!.data.value.title
       viewModel!.getThumbnailImage()
         .take(until: self.reactive.prepareForReuse)
         .on { image in
-          self.posterImageView.image = image
+          self.posterImageView.image = image.resizedImage(withBounds: self.contentView.bounds.size)
           self.viewModel?.imageUpdated.value = true
           self.layoutIfNeeded()
       }.observe(on: UIScheduler()).start()

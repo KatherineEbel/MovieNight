@@ -73,7 +73,13 @@ public class WatcherViewModel: WatcherViewModelProtocol {
   
   func add<T: Decodable>(preference: T, watcherAtIndex index: Int) -> Bool {
     switch preference {
-      case let actor as TMDBEntity.Actor: return _watchers.value![index].addActor(choice: actor)
+      case let actor as TMDBEntity.Actor:
+        // makes sure same choice isn't accidentally added again
+        if let watcher = watchers.value?[index] {
+          let exists = watcher.actorChoices.contains { $0.name == actor.name }
+          guard !exists else { return false }
+        }
+        return _watchers.value![index].addActor(choice: actor)
       case let genre as TMDBEntity.MovieGenre: return _watchers.value![index].addGenre(choice: genre)
       case let rating as TMDBEntity.Rating: return _watchers.value![index].setMaxRating(choice: rating)
       default: return false

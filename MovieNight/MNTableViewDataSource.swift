@@ -73,8 +73,9 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     if getIdentifier() == "preferenceCell" {
       tableView.rowHeight = 60
     } else {
-      tableView.rowHeight = UITableViewAutomaticDimension
-      tableView.estimatedRowHeight = 200
+//      tableView.rowHeight = UITableViewAutomaticDimension
+//      tableView.estimatedRowHeight = 200
+      tableView.rowHeight = 470
     }
     self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: getIdentifier())
     sourceSignal.producer.on { value in

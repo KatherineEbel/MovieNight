@@ -25,12 +25,13 @@ class PreferenceCell: UITableViewCell {
     case selected = "circle-checked"
     case unselected = "circle-empty"
   }
+  
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     let selectedImage = UIImage(named: SelectionImage.selected.rawValue)!
     let unselectedImage = UIImage(named: SelectionImage.unselected.rawValue)!
     selectionImage.image = selected ? selectedImage : unselectedImage
-    
+    self.layoutIfNeeded()
   }
   
   override func awakeFromNib() {

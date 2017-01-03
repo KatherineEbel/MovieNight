@@ -82,10 +82,11 @@ class RatingPickerController: UITableViewController {
   }
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     let preference = viewModel?.ratingModelData.value[indexPath.row]
-    if movieWatcherViewModel.remove(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
-      print("Success")
-    }
+    // remove method returns a bool. Not currently using value
+    _ = movieWatcherViewModel.remove(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher)
   }
+  
+  // save allowed when minium requirements for preferences are set
   @IBAction func savePreferences(_ sender: UIBarButtonItem) {
     if movieWatcherViewModel.watcher1Ready() || movieWatcherViewModel.watcher2Ready() {
       self.navigationController?.tabBarController?.dismiss(animated: true) {

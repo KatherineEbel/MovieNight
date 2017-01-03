@@ -23,21 +23,20 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var popupView: PopupView!
   
   var updateWatcherNameAction: Action<Int,Bool,NoError>!
-  var watchersReadySignal: SignalProducer<Bool, NoError>!
-  var viewModel: WatcherViewModelProtocol! {
-    didSet {
-    }
-  }
+  var watchersReadyProducer: SignalProducer<Bool, NoError>!
+  var viewModel: WatcherViewModelProtocol!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    watchersReadySignal = viewModel.watchers.producer.map { _ in
+    watchersReadyProducer = viewModel.watchers.producer.map { _ in
       self.viewModel.watcher1Ready() && self.viewModel.watcher2Ready()
     }
   }
   
   override func viewWillAppear(_ animated: Bool) {
     configureBindings()
+    self.watcher1Button.reactive.isEnabled <~ MutableProperty(!(self.viewModel.watcher1Ready()))
+    self.watcher2Button.reactive.isEnabled <~ MutableProperty(!(self.viewModel.watcher2Ready()))
   }
   
   func configureBindings() {
@@ -100,10 +99,7 @@ class HomeViewController: UIViewController {
       self.performSegue(withIdentifier: "choosePreferences", sender: self)
       }
     }
-    self.viewResultsButton.reactive.isEnabled <~ watchersReadySignal
-    watchersReadySignal.on { value in
-      self.viewResultsButton.isEnabled = value
-    }.observe(on: UIScheduler()).start()
+    self.viewResultsButton.reactive.isEnabled <~ watchersReadyProducer
   }
   @IBAction func clearPreferencesButtonPressed(_ sender: UIBarButtonItem) {
     let controller = UIAlertController(title: "Proceeding, will clear all selected preferences", message: "Are you sure you want to continue?", preferredStyle: .alert)

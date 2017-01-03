@@ -20,14 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     let appearance = UINavigationBar.appearance()
     appearance.titleTextAttributes = [NSForegroundColorAttributeName: TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)]
-    
+    // setup TMDB config for images
     _ = TMDBEndpoint.setConfig()
-//    TMDB.getConfig().producer.on { value in
-//      self.movieNightConfig = value
-//      if (self.movieNightConfig) != nil {
-//        print("Success")
-//      }
-//    }.observe(on: UIScheduler()).start()
     return true
   }
 

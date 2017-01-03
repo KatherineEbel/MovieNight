@@ -19,16 +19,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="329" height="231.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="275" verticalHuggingPriority="251" image="tmdb-logo-green" translatesAutoresizingMaskIntoConstraints="NO" id="33a-bt-nAV">
-                        <rect key="frame" x="16" y="8" width="297" height="215"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="275" verticalHuggingPriority="251" image="tmdb-logo-green" translatesAutoresizingMaskIntoConstraints="NO" id="33a-bt-nAV">
+                        <rect key="frame" x="16" y="16" width="297" height="199.5"/>
                     </imageView>
                 </subviews>
                 <color key="backgroundColor" red="0.031372549019607843" green="0.10980392156862745" blue="0.14117647058823529" alpha="0.75" colorSpace="calibratedRGB"/>
                 <constraints>
-                    <constraint firstItem="33a-bt-nAV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="KlG-9w-0I6"/>
-                    <constraint firstItem="33a-bt-nAV" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="NgQ-Se-Ade"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="33a-bt-nAV" secondAttribute="trailing" constant="8" id="XDF-Ak-H5m"/>
-                    <constraint firstItem="33a-bt-nAV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="ZFC-FR-1uC"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="33a-bt-nAV" secondAttribute="trailing" constant="8" id="HkW-ap-3Nu"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="33a-bt-nAV" secondAttribute="bottom" constant="8" id="JYB-Bh-D5W"/>
+                    <constraint firstItem="33a-bt-nAV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="pdH-ug-86O"/>
+                    <constraint firstItem="33a-bt-nAV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="zgh-NH-g7i"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.031372549019607843" green="0.10980392156862745" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>

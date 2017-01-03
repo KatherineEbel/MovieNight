@@ -91,7 +91,6 @@ class GenrePickerController: UITableViewController {
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     let preference = viewModel!.genreModelData.value[indexPath.row]
     if movieWatcherViewModel.remove(preference: preference, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
-      print("Removed")
     }
   }
   
