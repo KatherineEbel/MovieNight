@@ -52,8 +52,10 @@ class PeoplePickerController: UITableViewController {
       }
       viewModel.errorMessage.signal.observeValues { message in
         if let message = message {
-          self.alertForError(message: message)
-          self.refreshControl?.endRefreshing()
+          DispatchQueue.main.async {
+            self.alertForError(message: message)
+            self.refreshControl?.endRefreshing()
+          }
         }
       }
       // set datasource using the above producer
