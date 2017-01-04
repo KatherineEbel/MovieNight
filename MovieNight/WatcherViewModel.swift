@@ -80,7 +80,12 @@ public class WatcherViewModel: WatcherViewModelProtocol {
           guard !exists else { return false }
         }
         return _watchers.value![index].addActor(choice: actor)
-      case let genre as TMDBEntity.MovieGenre: return _watchers.value![index].addGenre(choice: genre)
+      case let genre as TMDBEntity.MovieGenre:
+        if let watcher = watchers.value?[index] {
+          let exists = watcher.genreChoices.contains { $0.name == genre.name }
+          guard  !exists else { return false }
+        }
+        return _watchers.value![index].addGenre(choice: genre)
       case let rating as TMDBEntity.Rating: return _watchers.value![index].setMaxRating(choice: rating)
       default: return false
     }

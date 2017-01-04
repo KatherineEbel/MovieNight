@@ -394,6 +394,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Genre Preferences" id="NT3-nY-tBW">
+                        <barButtonItem key="leftBarButtonItem" image="gen-home" id="yVP-Se-ST2">
+                            <connections>
+                                <action selector="goHome:" destination="lYE-rq-Wfz" id="mxn-6v-CsK"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="bdM-du-mbx">
                             <connections>
                                 <action selector="savePreferences:" destination="lYE-rq-Wfz" id="NKe-9e-xrq"/>

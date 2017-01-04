@@ -17,15 +17,21 @@ class GenrePickerController: UITableViewController {
   private var tableViewDataSource: MNightTableviewDataSource!
   public var viewModel: SearchResultsTableViewModeling?
   private var watcherSignal: Signal<[MovieWatcherProtocol]?, NoError>!
-  
+  private var activeWatcherSignal: Signal<MovieWatcherProtocol?, NoError> {
+    let watcherSignal = movieWatcherViewModel.watchers.signal
+    return watcherSignal.map { signal in
+      return signal![self.movieWatcherViewModel.activeWatcher]
+      }
+  }
+    
     override func viewDidLoad() {
       super.viewDidLoad()
       self.clearsSelectionOnViewWillAppear = false
       if let viewModel = viewModel {
         let genreCellModelProducer = viewModel.genreModelData.producer.map { genres in
           return genres.flatMap { $0 as TMDBEntityProtocol }
-          
         }
+        
         viewModel.errorMessage.signal.take(last: 1).observeValues { message in
           if let message = message {
             DispatchQueue.main.async {
@@ -43,6 +49,7 @@ class GenrePickerController: UITableViewController {
         }
         configureNavBarWithSignal(watcherReady: activeWatcherReadySignal)
         configureTabBar()
+        observeForTableViewReload()
       }
     }
   
@@ -55,6 +62,29 @@ class GenrePickerController: UITableViewController {
         }
       }
     }
+  
+  func observeForTableViewReload() {
+    _ = tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues {
+      let activeWatcher = self.movieWatcherViewModel.watchers.map { $0?[self.movieWatcherViewModel.activeWatcher] }
+      let currentSelections = self.viewModel?.genreModelData.combineLatest(with: activeWatcher)
+      let allGenres = currentSelections?.value.0
+        if let watcherChoices = currentSelections?.value.1?.genreChoices {
+          let indexes = allGenres?.enumerated().reduce(Set<IndexPath>()) { (result, nextResult: (idx: Int, genre: TMDBEntity.MovieGenre)) in
+            var copy = result
+            if watcherChoices.contains(where: { $0.name == nextResult.genre.name }) {
+              copy.insert(IndexPath(row: nextResult.idx, section: 0))
+            }
+            return copy
+          }
+          if let indexes = indexes {
+            _ = indexes.map { row in
+              self.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
+              self.tableView(self.tableView, didSelectRowAt: row)
+            }
+          }
+        }
+    }
+  }
   
   func alertForError(message: String) {
     let alertController = UIAlertController(title: "Sorry! Something went wrong.", message: message, preferredStyle: .alert)
@@ -71,15 +101,13 @@ class GenrePickerController: UITableViewController {
   }
   
   func configureTabBar() {
-    watcherSignal.observeValues { watchers in
-      if let watchers = watchers {
-        let activeWatcher = watchers[self.movieWatcherViewModel.activeWatcher]
-        let count = activeWatcher.genreChoices.count
+    activeWatcherSignal.observeValues { watcher in
+      if let watcher = watcher {
+        let count = watcher.genreChoices.count
         let readyColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)
         let notReadyColor = UIColor.red
         self.navigationController?.tabBarItem.badgeColor = count >= 1 && count <= 5 ? readyColor : notReadyColor
         self.navigationController?.tabBarItem.badgeValue = "\(count)/5"
-        //self.editButtonItem.reactive.isEnabled <~ MutableProperty(activeWatcher.isReady)
       }
     }
   }
@@ -100,12 +128,14 @@ class GenrePickerController: UITableViewController {
     }
     let preference = viewModel?.genreModelData.value[indexPath.row]
     if  movieWatcherViewModel.add(preference: preference!, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
+      
     }
   }
   
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     let preference = viewModel!.genreModelData.value[indexPath.row]
     if movieWatcherViewModel.remove(preference: preference, watcherAtIndex: movieWatcherViewModel.activeWatcher) {
+      
     }
   }
   
@@ -127,5 +157,9 @@ class GenrePickerController: UITableViewController {
       print("Not finished yet!")
     }
   }
+  @IBAction func goHome(_ sender: UIBarButtonItem) {
+    dismiss(animated: true, completion: nil)
+  }
+  
   
 }
