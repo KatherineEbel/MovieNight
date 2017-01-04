@@ -1,5 +1,7 @@
 PODS:
   - Alamofire (4.2.0)
+  - AlamofireNetworkActivityIndicator (2.1.0):
+    - Alamofire (~> 4.1)
   - Argo (4.1.1):
     - Runes (>= 4.0.0)
   - Curry (3.0.0)
@@ -16,6 +18,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
+  - AlamofireNetworkActivityIndicator (~> 2.0)
   - Argo
   - Curry
   - Keys (from `Pods/CocoaPodsKeys`)
@@ -30,6 +33,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  AlamofireNetworkActivityIndicator: 4716f6554bdfb9c7cf13b1e0e3af21163129690a
   Argo: 014ac072f97462bc1a9b83d302edb351488a532f
   Curry: eb3d2c75aec678b3cc7fb2729d2ad6dd121531d1
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
@@ -40,6 +44,6 @@ SPEC CHECKSUMS:
   Swinject: a94dd23e05c7b557e53ee4e0f795f15cba19c7df
   SwinjectStoryboard: 13615584c211abda82552df2ebd4942cc8d6f487
 
-PODFILE CHECKSUM: '0720159c08e18ad031a1a9319710ede45788ed25'
+PODFILE CHECKSUM: 0b1c4eac67a3c46a30c721a0f9d65cd20634eced
 
 COCOAPODS: 1.1.1

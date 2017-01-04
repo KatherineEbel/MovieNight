@@ -14,6 +14,7 @@ target 'MovieNight' do
   }
   pod 'Argo'
   pod 'Alamofire', '~> 4.0'
+  pod 'AlamofireNetworkActivityIndicator', '~> 2.0'
   pod 'ReactiveCocoa', '5.0.0-alpha.3'
   pod 'ReactiveSwift', '1.0.0-alpha.4'
   pod 'Curry'

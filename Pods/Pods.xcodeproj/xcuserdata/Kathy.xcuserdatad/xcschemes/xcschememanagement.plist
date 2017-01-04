@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>AlamofireNetworkActivityIndicator.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Argo.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -62,32 +67,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>04577AA1034DCA68802FFA8B788BB17D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>0B902D3E52CB0D16AF20313A6FB12070</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>17BC26E967934E87F525640BC45AFB92</key>
+		<key>115FA0D867E07C04838493890DBD8D29</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2F3BC0BB7B91530E09A95E1E821E2E66</key>
+		<key>23FB867B824630AB2049304A8FF08470</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2CBE80D41C4AADD5EFB9F5D566807B2C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>378E1575B1A77DB0CC90AD1E5B4E59B9</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>397DAEA8199F728BE4C6E83A75257FD5</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>58940923D85490A1BC819B61397D7F85</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -102,7 +107,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>84CA39F44790621A144B99A1B6675EDF</key>
+		<key>6F30EFC1025D0CC969BBCED3AECF7C46</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,7 +117,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E23ED959A081DE4B80B63497C58EB420</key>
+		<key>8A027904F63EEFA95B5457085B7FD0A6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C9E5DF1C392AC48597E60823F1EE37CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

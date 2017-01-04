@@ -19,7 +19,6 @@ public protocol SearchResultsTableViewModeling {
   var resultPageCountTracker: (page: Int, tracker: NSAttributedString) { get }
   var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) { get }
   var errorMessage: Property<String?> { get }
-  var isSearching: Property<Bool> { get }
   func getResultPage(discover: MovieDiscoverProtocol)
   func getNextPage()
   func getGenres()
@@ -32,7 +31,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   private let _ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
   private let _resultsModelData = MutableProperty<[TMDBEntity.Media]>([])
   private let _errorMessage = MutableProperty<String?>(nil)
-  private let _isSearching = MutableProperty<Bool>(false)
   private let client: TMDBClientPrototcol
   private var currentPeoplePage: Int = 1
   private var resultPageCount = 0
@@ -63,10 +61,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     return Property(_errorMessage)
   }
   
-  public var isSearching: Property<Bool> {
-    return Property(_isSearching)
-  }
-  
   public init(client: TMDBClientPrototcol) {
     self.client = client
   }
@@ -84,11 +78,10 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
         switch event {
           case .value(let value):
             self._resultsModelData.value.append(contentsOf: value.results)
-            self._isSearching.value = true
             self.resultPageCount = value.totalPages
             self.currentResultPage += 1
           case .failed(let error): self._errorMessage.value = error.localizedDescription
-          case .completed, .interrupted: self._isSearching.value = false
+          default: break
         }
       }).start()
   }
@@ -106,11 +99,10 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       switch event {
         case .value(let value):
           self._actorModelData.value.append(contentsOf: value.results)
-          self._isSearching.value = true
           self.peoplePageCount = value.totalPages
           self.currentPeoplePage += 1
         case .failed(let error): self._errorMessage.value = error.localizedDescription
-        case .completed, .interrupted: self._isSearching.value = false
+        default: break
       }
     }).start()
   }
