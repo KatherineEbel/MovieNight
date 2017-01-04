@@ -97,7 +97,7 @@ class PeoplePickerController: UITableViewController {
   func configureNavBarForActiveWatcher() {
     // FIXME: Implement navbar actions
     if let rightNavBarItem = navigationItem.rightBarButtonItem?.reactive {
-      let isReady = activeWatcherSignal.map { $0!.isReady }
+      let isReady = movieWatcherViewModel.watchers.map { $0![self.movieWatcherViewModel.activeWatcher].isReady }
       rightNavBarItem.isEnabled <~ isReady
     }
   }
