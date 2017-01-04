@@ -12,7 +12,7 @@ import Result
 public protocol SearchResultsTableViewCellModeling {
   var data: Property<TMDBEntityProtocol> { get }
   var imageUpdated: MutableProperty<Bool> { get }
-  func getThumbnailImage() -> SignalProducer<UIImage, NoError>
+  func getThumbnailImage() -> SignalProducer<UIImage, NoError>?
 }
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
@@ -26,8 +26,12 @@ public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellMo
     self._data = MutableProperty(model)
   }
   
-  public func getThumbnailImage() -> SignalProducer<UIImage, NoError> {
-    return network.requestImage(search: .image(size: TMDBEndpoint.posterThumbNailSize!, imagePath: data.value.imagePath!))
+  public func getThumbnailImage() -> SignalProducer<UIImage, NoError>? {
+    guard let size = TMDBEndpoint.posterThumbNailSize, let path = data.value.imagePath
+    else {
+      return nil
+    }
+    return network.requestImage(search: .image(size: size, imagePath: path))
       .flatMapError { _ in SignalProducer<UIImage, NoError>.empty }
   }
 }

@@ -129,9 +129,13 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
           return response
       }
       .observe(on: UIScheduler())
-      .on { ratings in
-        self._ratingModelData.value = ratings.certifications
-      }
-      .start()
+      .on(event: { event in
+        switch event {
+          case .value(let value):
+            self._ratingModelData.value = value.certifications
+          case .failed(let error): self._errorMessage.value = error.localizedDescription
+          default: break
+        }
+      }).start()
   }
 }

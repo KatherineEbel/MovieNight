@@ -22,7 +22,12 @@ extension TMDBEndpointError: LocalizedError {
   public var errorDescription: String? {
     switch self {
       case .incorrectURLString(let error): return error.localizedDescription
-      case .parsingError(let error): return error.localizedDescription
+      case .parsingError(let error):
+        if let error = error as? DecodeError {
+          return "Unable to parse data due to: \(error.description)"
+        } else {
+          return "Unknown data parsing error."
+        }
       case .createPhotoError(let error): return error.localizedDescription
       case .none: return "Error fetching TMDB configuration"
     }

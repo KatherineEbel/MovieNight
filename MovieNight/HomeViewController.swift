@@ -34,12 +34,19 @@ class HomeViewController: UIViewController {
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    configureBindings()
-    self.watcher1Button.reactive.isEnabled <~ MutableProperty(!(self.viewModel.watcher1Ready()))
-    self.watcher2Button.reactive.isEnabled <~ MutableProperty(!(self.viewModel.watcher2Ready()))
+    configureWatcherButtons()
+    configureWatcherLabels()
+    configureObservers()
   }
   
-  func configureBindings() {
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    // Dispose of any resources that can be recreated.
+  }
+  
+  func configureWatcherButtons() {
+    // action to be performed when user presses one of the watcher buttons (could have just been IBAction but
+    // wanted to use for practice with ReactiveSwift framework
     updateWatcherNameAction = Action { input in
       return SignalProducer { observer, disposable in
         let watcherToUpdate: String = self.viewModel.watchers.value![input].name
@@ -59,6 +66,7 @@ class HomeViewController: UIViewController {
         self.present(alert, animated: true)
       }
     }
+    // change image for when watchers have completed choosing preferences
     viewModel.watchers.signal.observeValues { watchers in
       let (readyImage, undecidedImage) = (UIImage(named: "bubble-filled")!, UIImage(named: "bubble-empty-1")!)
       if let watcher1 = watchers?.first, let watcher2 = watchers?.last {
@@ -70,13 +78,11 @@ class HomeViewController: UIViewController {
     watcher2Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 1)
     watcher2StackView.reactive.isHidden <~ viewModel.watchers.map { $0!.first!.isReady }
     
-    configureWatcherLabels()
-    configureObservers()
-  }
-  
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+    guard viewModel.watchers.value != nil && viewModel.watchers.value?.count == 2 else {
+      return
+    }
+    watcher1Button.reactive.isEnabled <~ viewModel.watchers.map { !$0!.first!.isReady }
+    watcher2Button.reactive.isEnabled <~ viewModel.watchers.map { !$0!.last!.isReady }
   }
   
   func configureWatcherLabels() {
@@ -101,6 +107,7 @@ class HomeViewController: UIViewController {
     }
     self.viewResultsButton.reactive.isEnabled <~ watchersReadyProducer
   }
+  
   @IBAction func clearPreferencesButtonPressed(_ sender: UIBarButtonItem) {
     let controller = UIAlertController(title: "Proceeding, will clear all selected preferences", message: "Are you sure you want to continue?", preferredStyle: .alert)
     let resetAction = UIAlertAction(title: "Reset", style: .destructive) { _ in
@@ -113,6 +120,5 @@ class HomeViewController: UIViewController {
     controller.addAction(cancelAction)
     present(controller, animated: true, completion: nil)
   }
-  
 }
 

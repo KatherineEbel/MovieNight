@@ -26,7 +26,7 @@ class GenrePickerController: UITableViewController {
           return genres.flatMap { $0 as TMDBEntityProtocol }
           
         }
-        viewModel.errorMessage.signal.observeValues { message in
+        viewModel.errorMessage.signal.take(last: 1).observeValues { message in
           if let message = message {
             DispatchQueue.main.async {
               self.alertForError(message: message)

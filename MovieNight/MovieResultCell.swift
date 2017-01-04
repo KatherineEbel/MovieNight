@@ -17,25 +17,21 @@ class MovieResultCell: UITableViewCell {
   
   var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
-      viewModel!.getThumbnailImage()
+      viewModel!.getThumbnailImage()?
         .take(until: self.reactive.prepareForReuse)
         .on { image in
           self.posterImageView.image = image.resizedImage(withBounds: self.contentView.bounds.size)
-          self.viewModel?.imageUpdated.value = true
           self.layoutIfNeeded()
       }.observe(on: UIScheduler()).start()
     }
   }
   
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+  override func awakeFromNib() {
+      super.awakeFromNib()
+  }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
+  override func setSelected(_ selected: Bool, animated: Bool) {
+      super.setSelected(selected, animated: animated)
+  }
     
 }

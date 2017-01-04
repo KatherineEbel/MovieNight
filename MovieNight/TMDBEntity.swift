@@ -33,7 +33,7 @@ public struct TMDBEntity {
    public struct Actor: Decodable, TMDBEntityProtocol {
     let name: String
     let popularity: Double
-    let profile_path: String
+    let profile_path: String?
     let id: Int
     let known_for: [Media]
     let adult: Bool
@@ -80,7 +80,7 @@ extension TMDBEntity.Actor {
     return curry(TMDBEntity.Actor.init)
       <^> json <| "name"
       <*> json <| "popularity"
-      <*> json <| "profile_path"
+      <*> json <|? "profile_path"
       <*> json <| "id"
       <*> json <|| "known_for"
       <*> json <| "adult"

@@ -22,6 +22,14 @@ class RatingPickerController: UITableViewController {
     super.viewDidLoad()
     self.clearsSelectionOnViewWillAppear = false
     if let viewModel = viewModel {
+      viewModel.errorMessage.signal.take(first: 1).observeValues { message in
+        if let message = message {
+          DispatchQueue.main.async {
+            self.alertForError(message: message)
+            self.refreshControl?.endRefreshing()
+          }
+        }
+      }
       let ratingCellProducer = viewModel.ratingModelData.producer.map { ratings in
         return ratings.flatMap { $0 as TMDBEntityProtocol }
       }
@@ -47,6 +55,13 @@ class RatingPickerController: UITableViewController {
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
       // Dispose of any resources that can be recreated.
+  }
+  
+  func alertForError(message: String) {
+    let alertController = UIAlertController(title: "Sorry! Something went wrong.", message: message, preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+    alertController.addAction(okAction)
+    present(alertController, animated: true, completion: nil)
   }
   
   func configureNavBarWithSignal(watcherReady: Signal<Bool, NoError>) {
