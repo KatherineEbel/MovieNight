@@ -17,6 +17,17 @@ public enum TMDBEndpointError: Error {
   case createPhotoError(Error)
   case none
 }
+
+extension TMDBEndpointError: LocalizedError {
+  public var errorDescription: String? {
+    switch self {
+      case .incorrectURLString(let error): return error.localizedDescription
+      case .parsingError(let error): return error.localizedDescription
+      case .createPhotoError(let error): return error.localizedDescription
+      case .none: return "Error fetching TMDB configuration"
+    }
+  }
+}
 public enum TMDBEndpoint: URLRequestConvertible {
   case configuration
   case popularPeople(page: Int)

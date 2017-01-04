@@ -26,6 +26,14 @@ class GenrePickerController: UITableViewController {
           return genres.flatMap { $0 as TMDBEntityProtocol }
           
         }
+        viewModel.errorMessage.signal.observeValues { message in
+          if let message = message {
+            DispatchQueue.main.async {
+              self.alertForError(message: message)
+              self.refreshControl?.endRefreshing()
+            }
+          }
+        }
         tableViewDataSource = MNightTableviewDataSource(tableView: self.tableView, sourceSignal: genreCellModelProducer, nibName: "PreferenceCell")
         tableViewDataSource.configureTableView()
         watcherSignal = movieWatcherViewModel.watchers.signal
@@ -47,6 +55,13 @@ class GenrePickerController: UITableViewController {
         }
       }
     }
+  
+  func alertForError(message: String) {
+    let alertController = UIAlertController(title: "Sorry! Something went wrong.", message: message, preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+    alertController.addAction(okAction)
+    present(alertController, animated: true, completion: nil)
+  }
   
   func configureNavBarWithSignal(watcherReady: Signal<Bool, NoError>) {
     // FIXME: Implement navbar actions

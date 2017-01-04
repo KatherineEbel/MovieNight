@@ -113,10 +113,14 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
         return response.genres
       }
       .observe(on: UIScheduler())
-      .on { genres in
-        self._genreModelData.value = genres
-      }
-    .start()
+      .on(event: { event in
+        switch event {
+          case .value(let value):
+            self._genreModelData.value = value
+          case .failed(let error): self._errorMessage.value = error.localizedDescription
+          default: break
+        }
+      }).start()
   }
   
   public func getRatings() {

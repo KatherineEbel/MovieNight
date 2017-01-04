@@ -32,6 +32,14 @@ enum TMDBClientError: Error {
   case invalidJson(Error)
 }
 
+extension TMDBClientError: LocalizedError {
+  var errorDescription: String? {
+    switch self {
+      case .invalidJson(let error): return error.localizedDescription
+    }
+  }
+}
+
 
 public protocol TMDBClientPrototcol {
   func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBResponseEntity.PopularPeople, TMDBEndpointError>
@@ -64,6 +72,7 @@ public final class TMDBClient: TMDBClientPrototcol {
   
   public func searchMovieGenres() -> SignalProducer<TMDBResponseEntity.MovieGenreResponse, TMDBEndpointError> {
     return network.requestJSON(search: .movieGenres)
+      .retry(upTo: 2)
       .attemptMap { json in
         let result: Decoded<TMDBResponseEntity.MovieGenreResponse> = decode(json)
         switch result {

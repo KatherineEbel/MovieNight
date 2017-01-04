@@ -6,14 +6,9 @@
 //  Copyright © 2016 Katherine Ebel. All rights reserved.
 //
 
-import Foundation
 import Argo
 import Runes
 import Curry
-import Alamofire
-import Keys
-import ReactiveSwift
-import Result
 
 public struct TMDBConfiguration: Decodable {
   let images: TMDBImageConfiguration
