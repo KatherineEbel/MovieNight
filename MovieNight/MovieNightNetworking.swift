@@ -18,7 +18,7 @@ public protocol MovieNightNetworkProtocol {
 public final class MovieNightNetwork: MovieNightNetworkProtocol {
   public func requestImage(search: TMDBEndpoint) -> SignalProducer<UIImage, TMDBEndpointError> {
     return SignalProducer { observer, disposable in
-      Alamofire.request(search).responseData { response in
+      Alamofire.request(search).validate().responseData { response in
         switch response.result {
           case .success(let data):
             if let image = UIImage(data: data) {
@@ -38,7 +38,7 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
   public init() { }
    public func requestJSON(search: TMDBEndpoint) -> SignalProducer<Any, TMDBEndpointError> {
     return SignalProducer { observer, disposable in
-      Alamofire.request(search).responseJSON(queue: self.queue, options: JSONSerialization.ReadingOptions.mutableContainers) { response in
+      Alamofire.request(search).validate().responseJSON(queue: self.queue, options: JSONSerialization.ReadingOptions.mutableContainers) { response in
         switch response.result {
           case .success(let value):
               observer.send(value: value)

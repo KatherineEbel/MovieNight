@@ -50,6 +50,7 @@ public final class TMDBClient: TMDBClientPrototcol {
   
   public func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBResponseEntity.PopularPeople, TMDBEndpointError> {
     return network.requestJSON(search: .popularPeople(page: pageNumber))
+      .retry(upTo: 2)
       .attemptMap { json in
           let result: Decoded<TMDBResponseEntity.PopularPeople> = decode(json)
           switch result {

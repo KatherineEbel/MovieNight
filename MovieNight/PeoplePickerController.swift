@@ -50,6 +50,12 @@ class PeoplePickerController: UITableViewController {
           }
         }
       }
+      viewModel.errorMessage.signal.observeValues { message in
+        if let message = message {
+          self.alertForError(message: message)
+          self.refreshControl?.endRefreshing()
+        }
+      }
       // set datasource using the above producer
       tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: actorCellModelProducer, nibName: "PreferenceCell")
       tableViewDataSource.configureTableView()
@@ -69,6 +75,13 @@ class PeoplePickerController: UITableViewController {
       autoSearchStarted = true
       viewModel?.getNextPage()
     }
+  }
+  
+  func alertForError(message: String) {
+    let alertController = UIAlertController(title: "Sorry! Something went wrong.", message: message, preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+    alertController.addAction(okAction)
+    present(alertController, animated: true, completion: nil)
   }
   
   func observeForTableViewReload() {
