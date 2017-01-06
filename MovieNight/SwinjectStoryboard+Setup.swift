@@ -36,7 +36,7 @@ extension SwinjectStoryboard {
     defaultContainer.register(DetailViewModelProtocol.self) { _ in DetailViewModel() }
     
     // registers all of the controllers
-    defaultContainer.storyboardInitCompleted(UINavigationController.self){ _, _ in }
+    defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "HomeNav"){ _, _ in }
     defaultContainer.storyboardInitCompleted(HomeViewController.self) { resolver, controller in
       controller.viewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
@@ -49,19 +49,22 @@ extension SwinjectStoryboard {
     defaultContainer.storyboardInitCompleted(UITabBarController.self){ _, _ in }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "RatingNav"){ _, _ in
     }
-    defaultContainer.storyboardInitCompleted(RatingPickerController.self) { resolver, controller in
+    defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "actors") { resolver, controller in
+      controller._entityType = .actor
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "GenreNav"){ _, _ in
     }
-    defaultContainer.storyboardInitCompleted(GenrePickerController.self) { resolver, controller in
+    defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "genres") { resolver, controller in
+      controller._entityType = .movieGenre
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "ActorNav"){ _, _ in
     }
-    defaultContainer.storyboardInitCompleted(PeoplePickerController.self) { resolver, controller in
+    defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "ratings") { resolver, controller in
+      controller._entityType = .rating
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }

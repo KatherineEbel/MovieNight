@@ -11,22 +11,12 @@ import UIKit
 class ViewResultsController: UITableViewController {
   private var autoSearchStarted = false
   public var tableViewModel: SearchResultsTableViewModeling!
-  private var movieDiscover: MovieDiscoverProtocol?
-  public var watcherViewModel: WatcherViewModelProtocol! {
-    didSet {
-      self.watcherViewModel.watchers.producer.map { _ in
-        return self.watcherViewModel.combineWatchersChoices()
-      }.startWithSignal { (observer, disposabel) in
-        observer.observe { event in
-          if let result = event.value, let value = result {
-            self.movieDiscover = MovieDiscover(actorIDs: value.actorIDs, genreIDs: value.genreIDs, maxRating: value.maxRating)
-            self.tableViewModel.getResultPage(discover: self.movieDiscover!)
-          }
-        }
-      }
-    }
+  private var movieDiscover: MovieDiscoverProtocol {
+    return watcherViewModel.movieDiscovery.value
   }
+  public var watcherViewModel: WatcherViewModelProtocol!
   private var tableViewDataSource: MNightTableviewDataSource!
+  
     override func viewDidLoad() {
       super.viewDidLoad()
       refreshControl?.addTarget(self, action: #selector(ViewResultsController.handleRefresh(refreshControl:)), for: .valueChanged)
@@ -36,6 +26,7 @@ class ViewResultsController: UITableViewController {
       }
       tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: "MovieResultCell")
       tableViewDataSource.configureTableView()
+      self.tableViewModel.getResultPage(discover: movieDiscover)
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,9 +36,6 @@ class ViewResultsController: UITableViewController {
   
   func handleRefresh(refreshControl: UIRefreshControl) {
     guard (tableViewModel?.resultPageCountTracker.page)! > 1 else {
-      return
-    }
-    guard let movieDiscover = movieDiscover else {
       return
     }
     self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker
@@ -64,7 +52,7 @@ class ViewResultsController: UITableViewController {
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "showDetails" {
       let detailController = segue.destination as! DetailController
-      if let sender = sender as? TMDBEntity.Media {
+      if let sender = sender as? TMDBEntityProtocol {
         detailController.viewModel.entity = sender
       }
     }

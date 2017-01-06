@@ -63,16 +63,12 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     return "Unknown"
   }
   
-  func handleRefresh(refreshControl: UIRefreshControl) {
-    refreshControl.beginRefreshing()
-    refreshControl.endRefreshing()
-  }
-  
   func configureTableView() {
     tableView.dataSource = self
     if getIdentifier() == "preferenceCell" {
       tableView.rowHeight = 60
     } else {
+      // FIXME: remove after final tableview decided for movie result cells
 //      tableView.rowHeight = UITableViewAutomaticDimension
 //      tableView.estimatedRowHeight = 200
       tableView.rowHeight = 470

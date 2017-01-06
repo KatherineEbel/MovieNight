@@ -12,15 +12,29 @@ import Curry
 import Result
 
 public protocol TMDBEntityProtocol {
+  var id: Int { get }
   var title: String { get }
   var details: String? { get }
   var imagePath: String? { get }
 }
 
+
 // Defines types of the responses from TMDB
-public struct TMDBEntity {
+public enum TMDBEntity {
+  case movieGenre
+  case rating
+  case actor
+  case media
+  
+  var isPageable: Bool {
+    switch self {
+      case .actor, .media: return true
+      case .movieGenre, .rating: return false
+    }
+  }
+  
   public struct MovieGenre: Decodable, TMDBEntityProtocol {
-    let id: Int
+    public let id: Int
     let name: String
   }
   
@@ -34,7 +48,7 @@ public struct TMDBEntity {
     let name: String
     let popularity: Double
     let profile_path: String?
-    let id: Int
+    public let id: Int
     let known_for: [Media]
     let adult: Bool
   }
@@ -43,7 +57,7 @@ public struct TMDBEntity {
   public struct Media: Decodable, TMDBEntityProtocol {
     let poster_path: String?
     let overview: String
-    let id: Int
+    public let id: Int
     let _title: String?
     let name: String?
   }
@@ -62,6 +76,10 @@ extension TMDBEntity.Media {
   
   public var imagePath: String? {
     return poster_path
+  }
+  
+  public var pageable: Bool {
+    return true
   }
   
   public static func decode(_ json: JSON) -> Decoded<TMDBEntity.Media> {
@@ -97,6 +115,7 @@ extension TMDBEntity.Actor {
   public var imagePath: String? {
     return profile_path
   }
+  
 }
 
 extension TMDBEntity.MovieGenre {
@@ -142,4 +161,7 @@ extension TMDBEntity.Rating {
     return nil
   }
   
+  public var id: Int {
+    return order
+  }
 }

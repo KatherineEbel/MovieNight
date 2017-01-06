@@ -12,9 +12,7 @@ import Argo
 import Result
 
 public protocol SearchResultsTableViewModeling {
-  var genreModelData: Property<[TMDBEntity.MovieGenre]> { get }
-  var actorModelData: Property<[TMDBEntity.Actor]> { get }
-  var ratingModelData: Property<[TMDBEntity.Rating]> { get }
+  var modelData: Property<[TMDBEntity: [TMDBEntityProtocol]]> { get }
   var resultsModelData: Property<[TMDBEntity.Media]> { get }
   var resultPageCountTracker: (page: Int, tracker: NSAttributedString) { get }
   var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) { get }
@@ -26,9 +24,7 @@ public protocol SearchResultsTableViewModeling {
 }
 
 public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
-  private let _genreModelData = MutableProperty<[TMDBEntity.MovieGenre]>([])
-  private let _actorModelData = MutableProperty<[TMDBEntity.Actor]>([])
-  private let _ratingModelData = MutableProperty<[TMDBEntity.Rating]>([])
+  private let _modelData = MutableProperty<[TMDBEntity: [TMDBEntityProtocol]]>([.actor: [], .movieGenre: [], .rating: [], .media: []])
   private let _resultsModelData = MutableProperty<[TMDBEntity.Media]>([])
   private let _errorMessage = MutableProperty<String?>(nil)
   private let client: TMDBClientPrototcol
@@ -37,20 +33,16 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   private var peoplePageCount = 0
   private var currentResultPage = 1
   
+  public var modelData: Property<[TMDBEntity : [TMDBEntityProtocol]]> {
+    return Property(_modelData)
+  }
+  
   public var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) {
     let result = "\(currentPeoplePage - 1) out of \(peoplePageCount)"
     return (peoplePageCount, NSAttributedString(string: result, attributes: nil))
   }
   public var resultPageCountTracker: (page: Int, tracker: NSAttributedString) {
     return (resultPageCount, NSAttributedString(string: "\(currentResultPage - 1) out of \(resultPageCount)", attributes: nil))
-  }
-  
-  public var genreModelData: Property<[TMDBEntity.MovieGenre]> { return Property(_genreModelData) }
-  
-  public var actorModelData: Property<[TMDBEntity.Actor]> { return Property(_actorModelData) }
-  
-  public var ratingModelData: Property<[TMDBEntity.Rating]> {
-    return Property(_ratingModelData)
   }
   
   public var resultsModelData: Property<[TMDBEntity.Media]> {
@@ -77,7 +69,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .on(event: { event in
         switch event {
           case .value(let value):
-            self._resultsModelData.value.append(contentsOf: value.results)
+            self._modelData.value[.media]?.append(contentsOf: value.results as [TMDBEntityProtocol])
             self.resultPageCount = value.totalPages
             self.currentResultPage += 1
           case .failed(let error): self._errorMessage.value = error.localizedDescription
@@ -98,7 +90,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     .on(event: { event in
       switch event {
         case .value(let value):
-          self._actorModelData.value.append(contentsOf: value.results)
+          self._modelData.value[.actor]?.append(contentsOf: value.results as [TMDBEntityProtocol])
           self.peoplePageCount = value.totalPages
           self.currentPeoplePage += 1
         case .failed(let error): self._errorMessage.value = error.localizedDescription
@@ -116,7 +108,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .on(event: { event in
         switch event {
           case .value(let value):
-            self._genreModelData.value = value
+            self._modelData.value[.movieGenre] = value as [TMDBEntityProtocol]
           case .failed(let error): self._errorMessage.value = error.localizedDescription
           default: break
         }
@@ -132,7 +124,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .on(event: { event in
         switch event {
           case .value(let value):
-            self._ratingModelData.value = value.certifications
+            self._modelData.value[.rating] = value.certifications as [TMDBEntityProtocol]
           case .failed(let error): self._errorMessage.value = error.localizedDescription
           default: break
         }

@@ -166,7 +166,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="I5r-fO-0iq" id="kgC-WF-CyO">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -214,7 +214,7 @@
         <!--Actor Preferences-->
         <scene sceneID="Iqu-T6-khk">
             <objects>
-                <tableViewController id="YLI-Qm-gUo" customClass="PeoplePickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="YLI-Qm-gUo" customClass="MovieNightSearchController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -225,7 +225,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NMh-9k-8aW" id="ksI-FL-XNU">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="EZ1-8o-7za">
@@ -261,7 +261,6 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="YLI-Qm-gUo" id="qgG-y3-Ihg"/>
                             <outlet property="delegate" destination="YLI-Qm-gUo" id="454-8Z-pE6"/>
                         </connections>
                     </tableView>
@@ -269,12 +268,12 @@
                         <barButtonItem key="leftBarButtonItem" image="gen-home" id="SD1-v5-3jm">
                             <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="goHome:" destination="YLI-Qm-gUo" id="UJL-gd-cxn"/>
+                                <action selector="goHome:" destination="YLI-Qm-gUo" id="qc4-SP-OfM"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="b8R-hG-QQy">
                             <connections>
-                                <action selector="preferencesComplete:" destination="YLI-Qm-gUo" id="Ww1-7z-1uX"/>
+                                <action selector="preferencesComplete:" destination="YLI-Qm-gUo" id="cZZ-rA-0lY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -283,9 +282,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <attributedString key="attributedTitle"/>
                     </refreshControl>
-                    <connections>
-                        <segue destination="7PJ-sf-e7d" kind="presentation" identifier="showDetails" id="Fvu-0u-xbL"/>
-                    </connections>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="actors"/>
+                    </userDefinedRuntimeAttributes>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -374,7 +373,7 @@
         <!--Genre Preferences-->
         <scene sceneID="aWX-6o-5aR">
             <objects>
-                <tableViewController id="lYE-rq-Wfz" customClass="GenrePickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="lYE-rq-Wfz" customClass="MovieNightSearchController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="XC8-hq-8u5">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -384,7 +383,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q48-wO-ecf" id="k5p-Nl-3rQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -396,15 +395,18 @@
                     <navigationItem key="navigationItem" title="Genre Preferences" id="NT3-nY-tBW">
                         <barButtonItem key="leftBarButtonItem" image="gen-home" id="yVP-Se-ST2">
                             <connections>
-                                <action selector="goHome:" destination="lYE-rq-Wfz" id="mxn-6v-CsK"/>
+                                <action selector="goHome:" destination="lYE-rq-Wfz" id="4iV-97-P9E"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="bdM-du-mbx">
                             <connections>
-                                <action selector="savePreferences:" destination="lYE-rq-Wfz" id="NKe-9e-xrq"/>
+                                <action selector="preferencesComplete:" destination="lYE-rq-Wfz" id="gyP-Qc-Cw7"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="genres"/>
+                    </userDefinedRuntimeAttributes>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3JD-C9-Si8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -427,6 +429,9 @@
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="HomeNav"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="fdR-h3-PA3" kind="relationship" relationship="rootViewController" id="ZC3-EN-Cz7"/>
                     </connections>
@@ -451,6 +456,9 @@
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="ActorNav"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="YLI-Qm-gUo" kind="relationship" relationship="rootViewController" id="2So-0c-EYP"/>
                     </connections>
@@ -475,6 +483,9 @@
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="GenreNav"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="lYE-rq-Wfz" kind="relationship" relationship="rootViewController" id="W0Z-Z9-pr2"/>
                     </connections>
@@ -496,18 +507,21 @@
                         <color key="barTintColor" red="0.031372549020000001" green="0.10980392160000001" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="RatingNav"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="6bp-y6-VB8" kind="relationship" relationship="rootViewController" id="AwG-f7-rd1"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jiq-o7-XKq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1142" y="1251"/>
+            <point key="canvasLocation" x="842" y="1305"/>
         </scene>
         <!--Rating Preference-->
         <scene sceneID="hG2-lW-vqh">
             <objects>
-                <tableViewController id="6bp-y6-VB8" customClass="RatingPickerController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="6bp-y6-VB8" customClass="MovieNightSearchController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="GD8-vC-WDt">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -517,7 +531,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kOh-Qg-49u" id="jG6-ro-rUI">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -527,19 +541,27 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Rating Preference" id="Bqr-yX-MeC">
+                        <barButtonItem key="leftBarButtonItem" image="gen-home" id="UtV-RG-u2c">
+                            <connections>
+                                <action selector="goHome:" destination="6bp-y6-VB8" id="THK-lC-1OW"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="Y0Y-uY-mYy">
                             <connections>
-                                <action selector="savePreferences:" destination="6bp-y6-VB8" id="Vun-AB-OVL"/>
+                                <action selector="preferencesComplete:" destination="6bp-y6-VB8" id="CkQ-ZJ-b23"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="ratings"/>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="7PJ-sf-e7d" kind="showDetail" identifier="showDetails" id="97x-Uv-9NV"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="22G-zU-lxv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1886" y="1251"/>
+            <point key="canvasLocation" x="1911" y="1305"/>
         </scene>
     </scenes>
     <resources>

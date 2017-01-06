@@ -20,6 +20,7 @@
 		442AA1711E0B759600D92378 /* ViewResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442AA1701E0B759600D92378 /* ViewResultsController.swift */; };
 		442AA1781E0EA41800D92378 /* MovieResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442AA1761E0EA41800D92378 /* MovieResultCell.swift */; };
 		442AA1791E0EA41800D92378 /* MovieResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 442AA1771E0EA41800D92378 /* MovieResultCell.xib */; };
+		444BF6FB1E1DCE8C006B0141 /* MovieNightSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444BF6FA1E1DCE8C006B0141 /* MovieNightSearchController.swift */; };
 		4459F6361E11CA7300991A32 /* UpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4459F6351E11CA7300991A32 /* UpdateView.swift */; };
 		4459F6381E11F11000991A32 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4459F6371E11F11000991A32 /* PopupView.swift */; };
 		4459F63A1E1212C800991A32 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4459F6391E1212C800991A32 /* DetailController.swift */; };
@@ -59,6 +60,7 @@
 		442AA1701E0B759600D92378 /* ViewResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewResultsController.swift; sourceTree = "<group>"; };
 		442AA1761E0EA41800D92378 /* MovieResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieResultCell.swift; sourceTree = "<group>"; };
 		442AA1771E0EA41800D92378 /* MovieResultCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MovieResultCell.xib; path = MovieNight/MovieResultCell.xib; sourceTree = "<group>"; };
+		444BF6FA1E1DCE8C006B0141 /* MovieNightSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieNightSearchController.swift; sourceTree = "<group>"; };
 		4459F6351E11CA7300991A32 /* UpdateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateView.swift; sourceTree = "<group>"; };
 		4459F6371E11F11000991A32 /* PopupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		4459F6391E1212C800991A32 /* DetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				44E2E21C1E08EB630072BB77 /* MoviePreferenceTabBarController.swift */,
 				442AA1701E0B759600D92378 /* ViewResultsController.swift */,
 				4459F6391E1212C800991A32 /* DetailController.swift */,
+				444BF6FA1E1DCE8C006B0141 /* MovieNightSearchController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				279F8DD71DFC2DE900436973 /* MovieNightPreference + Protocol.swift in Sources */,
 				44D9962B1E0951C000373B0C /* MNTableViewDataSource.swift in Sources */,
 				442AA1781E0EA41800D92378 /* MovieResultCell.swift in Sources */,
+				444BF6FB1E1DCE8C006B0141 /* MovieNightSearchController.swift in Sources */,
 				44E2E20F1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift in Sources */,
 				44B1EFED1E002E1F00B8485D /* PeoplePickerController.swift in Sources */,
 				44FF76E21E15500C006D39D7 /* MovieNightNetworking.swift in Sources */,
