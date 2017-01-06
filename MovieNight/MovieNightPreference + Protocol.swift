@@ -23,10 +23,6 @@ public protocol MoviePreferenceProtocol {
   func add(preference: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool
   func remove(preference: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool
   func clearAll()
-//  var actorChoices: [TMDBEntity.Actor] { get set }
-//  var genreChoices: [TMDBEntity.MovieGenre] { get set }
-//  var maxRating: TMDBEntity.Rating? { get set }
-//  var isSet: Bool { get }
 }
 
 public struct MovieNightPreference: MoviePreferenceProtocol {
@@ -85,8 +81,8 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
   }
   
   public func clearAll() {
-    _ = _preferences.value.keys.map { key in
-      self._preferences.value[key]!.removeAll()
-    }
+    _preferences.value[.actor]?.removeAll()
+    _preferences.value[.movieGenre]?.removeAll()
+    _preferences.value[.rating]?.removeAll()
   }
 }

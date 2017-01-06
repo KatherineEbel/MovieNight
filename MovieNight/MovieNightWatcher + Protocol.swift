@@ -11,26 +11,22 @@ import ReactiveSwift
 public protocol MovieWatcherProtocol {
   var name: MutableProperty<String> { get }
   var moviePreference: MoviePreferenceProtocol { get }
-  var isReady: MutableProperty<Bool> { get }
+  var isReady: Bool { get }
   var nameValid: MutableProperty<Bool> { get }
   func setName(value: String) -> Bool
 }
 
 public struct MovieNightWatcher: MovieWatcherProtocol {
   private var _moviePreference = MovieNightPreference()
-  internal var _name: MutableProperty<String> {
-    didSet {
-      // combine moviePreference isSet with nameValid to make one bool property
-      let isSet = moviePreference.isSet.combineLatest(with: nameValid)
-      // bind isReady to isSet
-      isReady <~ isSet.map { $0.0 && $0.1 }
-    }
-  }
+  internal var _name: MutableProperty<String>
   private var _nameValid: Bool  {
     return name.value.characters.count >= 2
   }
   
-  public let isReady = MutableProperty(false)
+  public var isReady: Bool {
+    let ready = nameValid.value && moviePreference.isSet.value
+    return ready
+  }
   public var name: MutableProperty<String> {
     return _name
   }
@@ -44,7 +40,7 @@ public struct MovieNightWatcher: MovieWatcherProtocol {
   
   public func setName(value: String) -> Bool {
     guard value.characters.count >= 2 else { return false }
-    _name.swap(value)
+    _name.swap(value.capitalized)
     return true
   }
   

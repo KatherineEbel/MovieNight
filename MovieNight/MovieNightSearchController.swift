@@ -23,11 +23,7 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   }
   private var autoSearchStarted = false
   public var movieWatcherViewModel: WatcherViewModelProtocol!
-  public var viewModel: SearchResultsTableViewModeling? {
-    didSet {
-      print("View Model!")
-    }
-  }
+  public var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
   private var watcherSignal: Signal<[MovieWatcherProtocol]?, NoError>!
   private var selectedRows: MutableProperty<Set<IndexPath>> = MutableProperty(Set<IndexPath>())
@@ -105,12 +101,7 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
         viewModel!.getNextPage()
       default: break
     }
-    guard (viewModel?.peoplePageCountTracker.page)! > 1 else {
-      return
-    }
     self.tableView.refreshControl?.attributedTitle = viewModel?.peoplePageCountTracker.tracker
-    refreshControl.beginRefreshing()
-    viewModel?.getNextPage()
     refreshControl.endRefreshing()
   }
   
@@ -154,15 +145,28 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   
   func configureNavBarForActiveWatcher() {
     // FIXME: Implement navbar actions
-    if let rightNavBarItem = navigationItem.rightBarButtonItem?.reactive {
-      rightNavBarItem.isEnabled <~ movieWatcherViewModel.activeWatcher.map { $0.isReady }.flatten(.merge)
-    }
+    MutableProperty(navigationItem.rightBarButtonItem?.isEnabled) <~ movieWatcherViewModel.watchers.map { $0![self.movieWatcherViewModel.activeWatcherIndex].isReady }
   }
   
   func configureTabBar() {
-    let preferenceStatus = movieWatcherViewModel.getStatusForActiveWatcherPreference(preferenceType: self.entityType)
-    MutableProperty(self.navigationController?.tabBarItem.badgeColor) <~ preferenceStatus.statusColor.producer
-    MutableProperty(self.navigationController?.tabBarItem.badgeValue) <~ preferenceStatus.statusMessage.producer
+   movieWatcherViewModel.activeWatcher.value
+    .moviePreference.preferences.map { $0[self.entityType]!.count }.signal.observeValues { count in
+      let readyColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)
+      let notReadyColor = UIColor.red
+      var statusText: String = ""
+      var statusColor = notReadyColor
+        switch self.entityType {
+          case .actor, .movieGenre:
+            statusText = "\(count)/5"
+            statusColor = count >= 1 && count <= 5 ? readyColor : notReadyColor
+          case .rating:
+            statusText = "\(count)/1"
+            statusColor = count == 1 ? readyColor : notReadyColor
+          default: break
+        }
+      self.navigationController?.tabBarItem.badgeColor = statusColor
+      self.navigationController?.tabBarItem.badgeValue = statusText
+    }
   }
   
   
@@ -182,15 +186,23 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
     
   }
   
+  override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    let entity = viewModel!.modelData.value[self.entityType]![indexPath.row] as TMDBEntityProtocol
+    performSegue(withIdentifier: "showDetails", sender: entity)
+  }
+  
   // MARK: - Navigation
 
   // In a storyboard-based application, you will often want to do a little preparation before navigation
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "showDetails" {
       let detailController = segue.destination as! DetailController
-      if let sender = sender as? TMDBEntityProtocol {
-        detailController.viewModel.entity = sender
+      switch sender {
+        case let actor where sender is TMDBEntity.Actor: detailController.viewModel.entity = actor as! TMDBEntity.Actor
+        case let rating where sender is TMDBEntity.Rating: detailController.viewModel.entity = rating as! TMDBEntity.Rating
+      default: break
       }
+      
     }
   }
   
@@ -199,7 +211,7 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   }
   
   @IBAction func preferencesComplete(_ sender: UIBarButtonItem) {
-    if movieWatcherViewModel.activeWatcher.value.isReady.value {
+    if movieWatcherViewModel.activeWatcher.value.isReady {
       self.navigationController?.tabBarController?.dismiss(animated: true) { self.movieWatcherViewModel.updateActiveWatcher() }
     } else {
       print("Not finished yet!")

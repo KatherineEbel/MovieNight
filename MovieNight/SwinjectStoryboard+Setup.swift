@@ -42,8 +42,9 @@ extension SwinjectStoryboard {
     }
     
     defaultContainer.storyboardInitCompleted(ViewResultsController.self) { resolver, controller in
-        controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)
-        controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)
+      controller._entityType = .media
+      controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)
+      controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)
     }
     
     defaultContainer.storyboardInitCompleted(UITabBarController.self){ _, _ in }
