@@ -49,7 +49,6 @@ class ViewResultsController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-    
     let entity = tableViewModel!.modelData.value[self.entityType]![indexPath.row] as TMDBEntityProtocol
     performSegue(withIdentifier: "showDetails", sender: entity)
   }

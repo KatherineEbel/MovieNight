@@ -16,10 +16,10 @@ fileprivate let MAX_RATING_PREFERENCES = 1
 
 public protocol MoviePreferenceProtocol {
   var preferences: Property<[TMDBEntity:[TMDBEntityProtocol]]> { get }
-  var maxActorPreferences: MutableProperty<Int> { get }
-  var maxGenrePreferences: MutableProperty<Int> { get }
-  var maxRatingPreferences: MutableProperty<Int> { get }
-  var isSet: MutableProperty<Bool> { get }
+  var maxActorPreferences: Int { get }
+  var maxGenrePreferences: Int { get }
+  var maxRatingPreferences: Int { get }
+  var isSet: Property<Bool> { get }
   func add(preference: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool
   func remove(preference: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool
   func clearAll()
@@ -32,15 +32,16 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
     return Property(_preferences)
   }
   
-  public var isSet: MutableProperty<Bool> {
-    let actorsSet = (preferences.value[.actor]?.count)! <= maxActorPreferences.value && (preferences.value[.actor]?.count)! > 0
-    let genresSet = (preferences.value[.movieGenre]?.count)! <= maxGenrePreferences.value && (preferences.value[.movieGenre]?.count)! > 0
-    let ratingSet = preferences.value[.rating]?.count == maxRatingPreferences.value
-    return MutableProperty(actorsSet && genresSet && ratingSet)
+  public var isSet: Property<Bool> {
+    return preferences.map { preferences in
+      preferences[.actor]!.count > 0 &&
+      preferences[.movieGenre]!.count > 0 &&
+      preferences[.rating]!.count == self.maxRatingPreferences
+    }
   }
-  public var maxActorPreferences = MutableProperty(MAX_ACTOR_PREFERENCES)
-  public var maxGenrePreferences = MutableProperty(MAX_GENRE_PREFERENCES)
-  public var maxRatingPreferences = MutableProperty(MAX_RATING_PREFERENCES)
+  public var maxActorPreferences = MAX_ACTOR_PREFERENCES
+  public var maxGenrePreferences = MAX_GENRE_PREFERENCES
+  public var maxRatingPreferences = MAX_RATING_PREFERENCES
   
   public init() {}
   public func add(preference: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool {
@@ -48,17 +49,17 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
       let shouldAdd = !entities.contains(where: {$0.id == preference.id})
       switch entityType {
         case .actor:
-          guard entities.count < maxActorPreferences.value else { return false }
+          guard entities.count < maxActorPreferences else { return false }
           if shouldAdd {
             _preferences.value[.actor]?.append(preference)
           }
         case .movieGenre:
-          guard entities.count < maxGenrePreferences.value else { return false }
+          guard entities.count < maxGenrePreferences else { return false }
           if shouldAdd {
             _preferences.value[.movieGenre]?.append(preference)
           }
         case .rating:
-          guard entities.count < maxRatingPreferences.value else { return false }
+          guard entities.count < maxRatingPreferences else { return false }
           if shouldAdd {
             _preferences.value[.rating]?.append(preference)
           }

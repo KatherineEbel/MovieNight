@@ -16,6 +16,7 @@ public protocol MovieNightSearchControllerProtocol {
 }
 
 class MovieNightSearchController: UITableViewController, MovieNightSearchControllerProtocol {
+  @IBOutlet weak var savePreferenceButton: UIBarButtonItem!
 
   internal var _entityType: TMDBEntity!
   public var entityType: TMDBEntity {
@@ -27,9 +28,6 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   private var tableViewDataSource: MNightTableviewDataSource!
   private var watcherSignal: Signal<[MovieWatcherProtocol]?, NoError>!
   private var selectedRows: MutableProperty<Set<IndexPath>> = MutableProperty(Set<IndexPath>())
-  private var activeWatcherSignal: Signal<MovieWatcherProtocol, NoError> {
-    return movieWatcherViewModel.activeWatcher.signal
-  }
   private var cellModelProducer: SignalProducer<[TMDBEntityProtocol], NoError>? {
     guard let viewModel = viewModel else { return nil }
     switch entityType {
@@ -48,10 +46,12 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   }
   
   override func viewDidLoad() {
+    print(self.entityType)
     refreshControl?.addTarget(self, action: #selector(MovieNightSearchController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     if let viewModel = viewModel {
 //      data source takes TMDBEntityProtocol types, so map viewModel data to required type
+      savePreferenceButton.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady.producer
       selectUserRowSelections()
       viewModel.errorMessage.signal.take(last: 1).observeValues { message in
         if let message = message {
@@ -64,11 +64,9 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
       // set datasource using the above producer
       tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
       tableViewDataSource.configureTableView()
-//      watcherSignal = movieWatcherViewModel.watchers.signal
-      configureNavBarForActiveWatcher()
-      configureTabBar()
       // reselect rows when user refreshes tableview
       observeForTableViewReload()
+      configureTabBar()
     } else {
       print("No viewModel")
     }
@@ -85,6 +83,10 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
         default: break
       }
     }
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    configureNavBarForActiveWatcher()
   }
 
   override func didReceiveMemoryWarning() {
@@ -145,7 +147,7 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   
   func configureNavBarForActiveWatcher() {
     // FIXME: Implement navbar actions
-    MutableProperty(navigationItem.rightBarButtonItem?.isEnabled) <~ movieWatcherViewModel.watchers.map { $0![self.movieWatcherViewModel.activeWatcherIndex].isReady }
+//    savePreferenceButton.reactive.isEnabled <~ movieWatcherViewModel.activeWatcher.map { $0.isReady }
   }
   
   func configureTabBar() {
@@ -211,9 +213,11 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   }
   
   @IBAction func preferencesComplete(_ sender: UIBarButtonItem) {
-    if movieWatcherViewModel.activeWatcher.value.isReady {
+    let ready = movieWatcherViewModel.activeWatcher.value.isReady.map { $0.0 && $0.1 }.value
+    if ready {
       self.navigationController?.tabBarController?.dismiss(animated: true) { self.movieWatcherViewModel.updateActiveWatcher() }
     } else {
+      
       print("Not finished yet!")
     }
   }

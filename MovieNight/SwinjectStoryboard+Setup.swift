@@ -41,6 +41,7 @@ extension SwinjectStoryboard {
       controller.viewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     
+    // MARK: Inject ViewResultsController
     defaultContainer.storyboardInitCompleted(ViewResultsController.self) { resolver, controller in
       controller._entityType = .media
       controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)
@@ -62,6 +63,7 @@ extension SwinjectStoryboard {
       controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
+    
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "ActorNav"){ _, _ in
     }
     defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "ratings") { resolver, controller in

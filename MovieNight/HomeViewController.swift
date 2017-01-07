@@ -23,14 +23,12 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var popupView: PopupView!
   
   var updateWatcherNameAction: Action<Int,Bool,NoError>!
-  var watchersReadyProducer: SignalProducer<Bool, NoError>!
+  var watchersReadyProducer: SignalProducer<(Bool, Bool), NoError>!
   var viewModel: WatcherViewModelProtocol!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    watchersReadyProducer = viewModel.watchers.producer.map { _ in
-      self.viewModel.watcher1Ready() && self.viewModel.watcher2Ready()
-    }
+    watchersReadyProducer = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).producer
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -49,7 +47,7 @@ class HomeViewController: UIViewController {
     // wanted to use for practice with ReactiveSwift framework
     updateWatcherNameAction = Action { input in
       return SignalProducer { observer, disposable in
-        let watcherName = self.viewModel.activeWatcher.value.name.value
+        let watcherName = self.viewModel.activeWatcher.value.name
         let alert = UIAlertController(title: "\(watcherName)'s Name", message: "Update your name?", preferredStyle: .alert)
         alert.addTextField { textField in
           textField.placeholder = "Name"
@@ -69,32 +67,24 @@ class HomeViewController: UIViewController {
     // change image for when watchers have completed choosing preferences
     viewModel.watchers.signal.observeValues { watchers in
       let (readyImage, undecidedImage) = (UIImage(named: "bubble-filled")!, UIImage(named: "bubble-empty-1")!)
-      if let watcher1 = watchers?.first, let watcher2 = watchers?.last {
-        self.watcher1Button.setBackgroundImage(watcher1.isReady ? readyImage : undecidedImage, for: .normal)
-        self.watcher2Button.setBackgroundImage(watcher2.isReady ? readyImage : undecidedImage, for: .normal)
-      }
+      let (watcher1Ready, watcher2Ready) = (self.viewModel.watcher1Ready(), self.viewModel.watcher2Ready())
+        self.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
+        self.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
     }
-    watcher1Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 0)
-    watcher2Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 1)
-    watcher2StackView.reactive.isHidden <~ viewModel.watchers.map { !$0!.first!.isReady }
-    
     guard viewModel.watchers.value != nil && viewModel.watchers.value?.count == 2 else {
       return
     }
-    watcher1Button.reactive.isEnabled <~ viewModel.watchers.map { !$0!.first!.isReady }
-    watcher2Button.reactive.isEnabled <~ viewModel.watchers.map { !$0!.last!.isReady }
+    watcher1Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 0)
+    watcher2Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 1)
+    watcher2StackView.reactive.isHidden <~ viewModel.watcher1Ready().map { !$0 }
+    watcher1Button.reactive.isEnabled <~ viewModel.watcher1Ready().map { !$0 }
   }
   
   func configureWatcherLabels() {
-    watcher1ReadyLabel.reactive.text <~ viewModel.watchers.map { watchers in
-      (watchers?.first?.isReady)! ? "Ready" : "Undecided"
-    }
-    
-    watcher2ReadyLabel.reactive.text <~ viewModel.watchers.map { watchers in
-      (watchers?.last?.isReady)! ? "Ready" : "Undecided"
-    }
-    watcher1NameLabel.reactive.text <~ viewModel.watchers.map { $0?.first?.name.value }
-    watcher2NameLabel.reactive.text <~ viewModel.watchers.map {$0?.last?.name.value }
+    watcher1ReadyLabel.reactive.text <~ viewModel.watcher1Ready().map { $0 ? "Ready" : "Undecided" }
+    watcher2ReadyLabel.reactive.text <~ viewModel.watcher2Ready().map { $0 ? "Ready" : "Undecided" }
+    watcher1NameLabel.reactive.text <~ viewModel.watchers.map { $0?.first?.name }
+    watcher2NameLabel.reactive.text <~ viewModel.watchers.map {$0?.last?.name }
   }
   
   func configureObservers() {
@@ -104,7 +94,7 @@ class HomeViewController: UIViewController {
       self.performSegue(withIdentifier: "choosePreferences", sender: self)
       }
     }
-    self.viewResultsButton.reactive.isEnabled <~ watchersReadyProducer
+    self.viewResultsButton.reactive.isEnabled <~ watchersReadyProducer.map { $0.0 && $0.1 }
   }
   
   @IBAction func clearPreferencesButtonPressed(_ sender: UIBarButtonItem) {

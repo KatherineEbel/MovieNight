@@ -285,6 +285,9 @@
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="actors"/>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="savePreferenceButton" destination="b8R-hG-QQy" id="AG0-Us-iuB"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -407,6 +410,9 @@
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="genres"/>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="savePreferenceButton" destination="bdM-du-mbx" id="Hp4-v5-K7w"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3JD-C9-Si8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -556,6 +562,7 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="ratings"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <outlet property="savePreferenceButton" destination="Y0Y-uY-mYy" id="9c3-WS-JoE"/>
                         <segue destination="7PJ-sf-e7d" kind="showDetail" identifier="showDetails" id="97x-Uv-9NV"/>
                     </connections>
                 </tableViewController>

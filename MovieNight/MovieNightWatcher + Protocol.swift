@@ -9,33 +9,33 @@
 import ReactiveSwift
 
 public protocol MovieWatcherProtocol {
-  var name: MutableProperty<String> { get }
+  var name: String { get }
   var moviePreference: MoviePreferenceProtocol { get }
-  var isReady: Bool { get }
-  var nameValid: MutableProperty<Bool> { get }
+  var isReady: Property<(Bool, Bool)> { get }
+  var nameValid: Property<Bool> { get }
   func setName(value: String) -> Bool
 }
 
 public struct MovieNightWatcher: MovieWatcherProtocol {
   private var _moviePreference = MovieNightPreference()
   internal var _name: MutableProperty<String>
-  private var _nameValid: Bool  {
-    return name.value.characters.count >= 2
+  private var _nameValid: Property<Bool>  {
+    return _name.map { $0.characters.count >= 2 }
   }
   
-  public var isReady: Bool {
-    let ready = nameValid.value && moviePreference.isSet.value
-    return ready
+  public var isReady: Property<(Bool, Bool)> {
+    return nameValid.combineLatest(with: moviePreference.isSet)
   }
-  public var name: MutableProperty<String> {
-    return _name
+  
+  public var name: String {
+    return _name.value
   }
   public var moviePreference: MoviePreferenceProtocol {
     return _moviePreference
   }
   
-  public var nameValid: MutableProperty<Bool> {
-    return MutableProperty(_nameValid)
+  public var nameValid: Property<Bool> {
+    return Property(_nameValid)
   }
   
   public func setName(value: String) -> Bool {

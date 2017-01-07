@@ -20,7 +20,7 @@ protocol WatcherViewModelProtocol {
   var watchers: Property<[MovieWatcherProtocol]?> { get }
   var activeWatcherIndex: Int { get }
   var activeWatcher: Property<MovieWatcherProtocol> { get }
-  var readyToSaveActiveWatcherPreferences: SignalProducer<Bool, NoError> { get }
+  var activeWatcherReady: Property<Bool> { get }
   var movieDiscovery: Property<MovieDiscoverProtocol> { get }
   func setActiveWatcherName(name: String) -> Bool
   func addWalker(watcher: MovieWatcherProtocol) -> Bool
@@ -30,8 +30,8 @@ protocol WatcherViewModelProtocol {
   func activeWatcherRemove(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
   func clearAllPreferences()
   func updateActiveWatcher()
-  func watcher1Ready() -> Bool
-  func watcher2Ready() -> Bool
+  func watcher1Ready() -> Property<Bool>
+  func watcher2Ready() -> Property<Bool>
 }
 
 public class WatcherViewModel: WatcherViewModelProtocol {
@@ -44,10 +44,11 @@ public class WatcherViewModel: WatcherViewModelProtocol {
   var activeWatcher: Property<MovieWatcherProtocol> {
     return watchers.map { $0![self.activeWatcherIndex]}
   }
-  var readyToSaveActiveWatcherPreferences: SignalProducer<Bool, NoError> {
-    return activeWatcher.map { $0.isReady }.producer
+  var activeWatcherReady: Property<Bool> {
+    return activeWatcher
+      .map { $0.isReady.map { $0.0 && $0.1 }}
+      .flatten(.latest)
   }
-  
   var movieDiscovery: Property<MovieDiscoverProtocol> {
     let watcher1Preferences = watchers.value?[0].moviePreference.preferences
     let watcher2Preferences = watchers.value?[1].moviePreference.preferences
@@ -64,12 +65,12 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     self._watchers = MutableProperty(watchers)
   }
   
-  func watcher1Ready() -> Bool {
-    return watchers.value!.first!.isReady
+  func watcher1Ready() -> Property<Bool> {
+    return watchers.value!.first!.isReady.map { $0.0 && $0.1 }
   }
   
-  func watcher2Ready() -> Bool {
-    return watchers.value!.last!.isReady
+  func watcher2Ready() -> Property<Bool> {
+    return watchers.value!.last!.isReady.map { $0.0 && $0.1 }
   }
   
   func getPreferenceForActiveWatcher(preferenceType: TMDBEntity) -> Property<[TMDBEntityProtocol]?> {
