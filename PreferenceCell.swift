@@ -20,16 +20,11 @@ class PreferenceCell: UITableViewCell {
   }
   @IBOutlet weak var nameLabel: UILabel!
   @IBOutlet weak var selectionImage: UIImageView!
-
-  enum SelectionImage: String {
-    case selected = "circle-checked"
-    case unselected = "circle-empty"
-  }
   
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
-    let selectedImage = UIImage(named: SelectionImage.selected.rawValue)!
-    let unselectedImage = UIImage(named: SelectionImage.unselected.rawValue)!
+    let selectedImage = UIImage(named: ImageAssetName.cellSelected.rawValue)!
+    let unselectedImage = UIImage(named: ImageAssetName.cellUnselected.rawValue)!
     selectionImage.image = selected ? selectedImage : unselectedImage
     self.layoutIfNeeded()
   }

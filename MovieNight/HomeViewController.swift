@@ -11,6 +11,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import Result
 
+
 class HomeViewController: UIViewController {
   @IBOutlet weak var watcher1Button: UIButton!
   @IBOutlet weak var watcher2Button: UIButton!
@@ -28,6 +29,10 @@ class HomeViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    guard viewModel != nil else {
+      alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
+      fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
+    }
     watchersReadyProducer = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).producer
   }
   
@@ -42,17 +47,24 @@ class HomeViewController: UIViewController {
     // Dispose of any resources that can be recreated.
   }
   
+  public func alertForError(message: String) {
+      let alertController = UIAlertController(title: MovieNightControllerAlert.somethingWentWrong.rawValue, message: message, preferredStyle: .alert)
+      let okAction = UIAlertAction(title: MovieNightControllerAlert.ok.rawValue, style: .default, handler: nil)
+      alertController.addAction(okAction)
+      present(alertController, animated: true, completion: nil)
+    }
+
   func configureWatcherButtons() {
     // action to be performed when user presses one of the watcher buttons (could have just been IBAction but
     // wanted to use for practice with ReactiveSwift framework
     updateWatcherNameAction = Action { input in
       return SignalProducer { observer, disposable in
         let watcherName = self.viewModel.activeWatcher.value.name
-        let alert = UIAlertController(title: "\(watcherName)'s Name", message: "Update your name?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "\(watcherName)'s Name", message: MovieNightControllerAlert.updateNameMessage.rawValue, preferredStyle: .alert)
         alert.addTextField { textField in
           textField.placeholder = "Name"
         }
-        let updateNameAction = UIAlertAction(title: "Update Name", style: .default) { _ in
+        let updateNameAction = UIAlertAction(title: MovieNightControllerAlert.updateName.rawValue, style: .default) { _ in
           let prospectiveName = alert.textFields?[0].text ?? watcherName
           let success = self.viewModel.setActiveWatcherName(name: prospectiveName)
           DispatchQueue.main.async {
@@ -60,13 +72,20 @@ class HomeViewController: UIViewController {
             observer.sendCompleted()
           }
         }
+        let cancelAction = UIAlertAction(title: MovieNightControllerAlert.keepDefaultName.rawValue, style: .cancel) { _ in
+          DispatchQueue.main.async {
+            observer.send(value: true)
+            observer.sendCompleted()
+          }
+        }
         alert.addAction(updateNameAction)
+        alert.addAction(cancelAction)
         self.present(alert, animated: true)
       }
     }
     // change image for when watchers have completed choosing preferences
     viewModel.watchers.signal.observeValues { watchers in
-      let (readyImage, undecidedImage) = (UIImage(named: "bubble-filled")!, UIImage(named: "bubble-empty-1")!)
+      let (readyImage, undecidedImage) = (UIImage(named: ImageAssetName.ready.rawValue )!, UIImage(named: ImageAssetName.undecided.rawValue)!)
       let (watcher1Ready, watcher2Ready) = (self.viewModel.watcher1Ready(), self.viewModel.watcher2Ready())
         self.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
         self.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
@@ -81,8 +100,10 @@ class HomeViewController: UIViewController {
   }
   
   func configureWatcherLabels() {
-    watcher1ReadyLabel.reactive.text <~ viewModel.watcher1Ready().map { $0 ? "Ready" : "Undecided" }
-    watcher2ReadyLabel.reactive.text <~ viewModel.watcher2Ready().map { $0 ? "Ready" : "Undecided" }
+    let ready = MovieNightControllerAlert.ready.rawValue
+    let undecided = MovieNightControllerAlert.undecided.rawValue
+    watcher1ReadyLabel.reactive.text <~ viewModel.watcher1Ready().map { $0 ? ready : undecided }
+    watcher2ReadyLabel.reactive.text <~ viewModel.watcher2Ready().map { $0 ? ready : undecided }
     watcher1NameLabel.reactive.text <~ viewModel.watchers.map { $0?.first?.name }
     watcher2NameLabel.reactive.text <~ viewModel.watchers.map {$0?.last?.name }
   }
@@ -91,20 +112,20 @@ class HomeViewController: UIViewController {
     updateWatcherNameAction.values.observeValues { value in
       self.popupView.success = MutableProperty(value)
       self.popupView.popUp() {
-      self.performSegue(withIdentifier: "choosePreferences", sender: self)
+      self.performSegue(withIdentifier: Identifiers.choosePreferencesSegue.rawValue, sender: self)
       }
     }
     self.viewResultsButton.reactive.isEnabled <~ watchersReadyProducer.map { $0.0 && $0.1 }
   }
   
   @IBAction func clearPreferencesButtonPressed(_ sender: UIBarButtonItem) {
-    let controller = UIAlertController(title: "Proceeding, will clear all selected preferences", message: "Are you sure you want to continue?", preferredStyle: .alert)
-    let resetAction = UIAlertAction(title: "Reset", style: .destructive) { _ in
+    let controller = UIAlertController(title: MovieNightControllerAlert.clearSelectionsMessage.rawValue, message: MovieNightControllerAlert.clearSelectionsConfirmation.rawValue, preferredStyle: .alert)
+    let resetAction = UIAlertAction(title: MovieNightControllerAlert.reset.rawValue, style: .destructive) { _ in
       DispatchQueue.main.async {
         self.viewModel.clearAllPreferences()
       }
     }
-    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+    let cancelAction = UIAlertAction(title: MovieNightControllerAlert.cancel.rawValue, style: .cancel, handler: nil)
     controller.addAction(resetAction)
     controller.addAction(cancelAction)
     present(controller, animated: true, completion: nil)

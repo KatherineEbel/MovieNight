@@ -15,7 +15,7 @@
 		27234F141E0B3138002BA4C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27234F131E0B3138002BA4C0 /* Assets.xcassets */; };
 		279F8DD71DFC2DE900436973 /* MovieNightPreference + Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F8DD61DFC2DE900436973 /* MovieNightPreference + Protocol.swift */; };
 		27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB981DFE362B0060E98F /* TMDBClient.swift */; };
-		27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */; };
+		27D6BB9B1DFF1CE40060E98F /* Utitlites+Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D6BB9A1DFF1CE40060E98F /* Utitlites+Enums.swift */; };
 		2FDB5991AD474002E570CB96 /* Pods_MovieNight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C67D8993F1C1F726DF5BD1 /* Pods_MovieNight.framework */; };
 		442AA1711E0B759600D92378 /* ViewResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442AA1701E0B759600D92378 /* ViewResultsController.swift */; };
 		442AA1781E0EA41800D92378 /* MovieResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442AA1761E0EA41800D92378 /* MovieResultCell.swift */; };
@@ -53,7 +53,7 @@
 		27234F131E0B3138002BA4C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		279F8DD61DFC2DE900436973 /* MovieNightPreference + Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MovieNightPreference + Protocol.swift"; sourceTree = "<group>"; };
 		27D6BB981DFE362B0060E98F /* TMDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBClient.swift; sourceTree = "<group>"; };
-		27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utitlites.swift; sourceTree = "<group>"; };
+		27D6BB9A1DFF1CE40060E98F /* Utitlites+Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Utitlites+Enums.swift"; sourceTree = "<group>"; };
 		442AA1701E0B759600D92378 /* ViewResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewResultsController.swift; sourceTree = "<group>"; };
 		442AA1761E0EA41800D92378 /* MovieResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieResultCell.swift; sourceTree = "<group>"; };
 		442AA1771E0EA41800D92378 /* MovieResultCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MovieResultCell.xib; path = MovieNight/MovieResultCell.xib; sourceTree = "<group>"; };
@@ -153,7 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				44E2E20E1E05DF3E0072BB77 /* SwinjectStoryboard+Setup.swift */,
-				27D6BB9A1DFF1CE40060E98F /* Utitlites.swift */,
+				27D6BB9A1DFF1CE40060E98F /* Utitlites+Enums.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -198,9 +198,9 @@
 			children = (
 				2717F7571DFB237600FFEA5F /* HomeViewController.swift */,
 				44E2E21C1E08EB630072BB77 /* MoviePreferenceTabBarController.swift */,
-				442AA1701E0B759600D92378 /* ViewResultsController.swift */,
-				4459F6391E1212C800991A32 /* DetailController.swift */,
 				444BF6FA1E1DCE8C006B0141 /* MovieNightSearchController.swift */,
+				4459F6391E1212C800991A32 /* DetailController.swift */,
+				442AA1701E0B759600D92378 /* ViewResultsController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -344,7 +344,7 @@
 				44E2E21A1E0809E70072BB77 /* PreferenceCell.swift in Sources */,
 				2709C85D1E01CB1F00F21D60 /* MovieNightWatcher + Protocol.swift in Sources */,
 				27D6BB991DFE362B0060E98F /* TMDBClient.swift in Sources */,
-				27D6BB9B1DFF1CE40060E98F /* Utitlites.swift in Sources */,
+				27D6BB9B1DFF1CE40060E98F /* Utitlites+Enums.swift in Sources */,
 				442AA1711E0B759600D92378 /* ViewResultsController.swift in Sources */,
 				2709C85F1E01CEF900F21D60 /* WatcherViewModel.swift in Sources */,
 				44E2E21D1E08EB630072BB77 /* MoviePreferenceTabBarController.swift in Sources */,

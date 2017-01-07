@@ -6,8 +6,8 @@
 //  Copyright © 2016 Katherine Ebel. All rights reserved.
 //
 
+// this is used for TMDBEndpoint in creating a search for watcher results
 import Foundation
-//actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String
 public protocol MovieDiscoverProtocol {
   var actorIDs: Set<Int> { get }
   var genreIDs: Set<Int> { get }

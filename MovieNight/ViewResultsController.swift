@@ -28,9 +28,9 @@ class ViewResultsController: UITableViewController {
       self.clearsSelectionOnViewWillAppear = false
       
       let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]! }
-      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: "MovieResultCell")
+      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
       tableViewDataSource.configureTableView()
-      self.tableViewModel.getResultPage(discover: movieDiscover)
+      self.tableViewModel.getNextMovieResultPage(discover: movieDiscover)
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,17 +44,17 @@ class ViewResultsController: UITableViewController {
     }
     self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker
     refreshControl.beginRefreshing()
-    tableViewModel?.getResultPage(discover: movieDiscover)
+    tableViewModel?.getNextMovieResultPage(discover: movieDiscover)
     refreshControl.endRefreshing()
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
     let entity = tableViewModel!.modelData.value[self.entityType]![indexPath.row] as TMDBEntityProtocol
-    performSegue(withIdentifier: "showDetails", sender: entity)
+    performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
   }
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "showDetails" {
+    if segue.identifier == Identifiers.showDetailsSegue.rawValue {
       let detailController = segue.destination as! DetailController
       if let sender = sender as? TMDBEntity.Media {
         detailController.viewModel.entity = sender
