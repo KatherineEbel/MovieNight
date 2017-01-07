@@ -140,26 +140,24 @@ public func alertForError(message: String) {
   // used for if user goes to home page and then resumes searching, their previous selections
   // will already be highlighted
   func selectUserRowSelections() {
-    if viewModel != nil {
-      let activeWatcher = movieWatcherViewModel.activeWatcher
-      cellModelProducer?.combineLatest(with: activeWatcher.producer).on(value: { (models, currentWatcher) in
-        guard self.tableView.indexPathsForSelectedRows == nil else { return }
-        let watcherSelections = self.movieWatcherViewModel.getPreferenceForActiveWatcher(preferenceType: self.entityType)
-        guard (watcherSelections.value?.count)! > 0 else { return }
-        let indexes = models.enumerated().reduce(Set<IndexPath>()) { (result, nextResult: (idx: Int, selection: TMDBEntityProtocol)) in
-          var copy = result
-          if (watcherSelections.value?.contains(where: {$0.title == nextResult.selection.title}))! {
-            copy.insert(IndexPath(row: nextResult.idx, section: 0))
-          }
-          return copy
+    let activeWatcher = movieWatcherViewModel.activeWatcher
+    cellModelProducer?.combineLatest(with: activeWatcher.producer).on(value: { (models, currentWatcher) in
+      guard self.tableView.indexPathsForSelectedRows == nil else { return }
+      let watcherSelections = self.movieWatcherViewModel.getPreferenceForActiveWatcher(preferenceType: self.entityType)
+      guard (watcherSelections.value?.count)! > 0 else { return }
+      let indexes = models.enumerated().reduce(Set<IndexPath>()) { (result, nextResult: (idx: Int, selection: TMDBEntityProtocol)) in
+        var copy = result
+        if (watcherSelections.value?.contains(where: {$0.title == nextResult.selection.title}))! {
+          copy.insert(IndexPath(row: nextResult.idx, section: 0))
         }
-        _ = indexes.map { row in
-          self.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
-          self.tableView(self.tableView, didSelectRowAt: row)
-        }
-      })
-        .take(first: 1).observe(on: UIScheduler()).start()
-    }
+        return copy
+      }
+      indexes.forEach { indexPath in
+        self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        self.tableView(self.tableView, didSelectRowAt: indexPath)
+      }
+    })
+    .take(first: 1).observe(on: UIScheduler()).start()
   }
   
   // activate or deactivate barbutton items depending on state of active watcher selections
@@ -170,24 +168,12 @@ public func alertForError(message: String) {
   }
   
   func configureTabBar() {
-   movieWatcherViewModel.activeWatcher.value
-    .moviePreference.preferences.map { $0[self.entityType]!.count }.signal.observeValues { count in
-      let readyColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)
-      let notReadyColor = UIColor.red
-      var statusText: String = ""
-      var statusColor = notReadyColor
-        switch self.entityType {
-          case .actor, .movieGenre:
-            statusText = "\(count)/5"
-            statusColor = count >= 1 && count <= 5 ? readyColor : notReadyColor
-          case .rating:
-            statusText = "\(count)/1"
-            statusColor = count == 1 ? readyColor : notReadyColor
-          default: break
-        }
-      self.navigationController?.tabBarItem.badgeColor = statusColor
-      self.navigationController?.tabBarItem.badgeValue = statusText
-    }
+    // tried binding properties to tabBar, but only worked using producer
+    let preferenceStatus = movieWatcherViewModel.getStatusForActiveWatcherPreference(preferenceType: entityType)
+    preferenceStatus.producer.on { status in
+      self.navigationController?.tabBarItem.badgeColor = status.statusColor
+      self.navigationController?.tabBarItem.badgeValue = status.statusMessage
+    }.observe(on: UIScheduler()).start()
   }
   
   
@@ -203,6 +189,7 @@ public func alertForError(message: String) {
   
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     selectedRows.value.remove(indexPath)
+    // fetch the model data for the type that matches the controller's entity
     if let preference = viewModel!.modelData.value[self.entityType]?[indexPath.row] {
       // activeWatcherRemove returns a bool. Not currently using value, but might be useful when adding
       // diff features
@@ -212,6 +199,7 @@ public func alertForError(message: String) {
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    // view details for the specified entity (only actors and ratings have details)
     let entity = viewModel!.modelData.value[self.entityType]![indexPath.row] as TMDBEntityProtocol
     performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
   }
@@ -240,8 +228,10 @@ public func alertForError(message: String) {
     // isReady property is a tuple of bools assigned to nameValid and moviePreference.isSet
     let ready = movieWatcherViewModel.activeWatcher.value.isReady.map { $0.0 && $0.1 }.value
     if ready {
+      // dismiss controller and have viewmodel update activeWatcher property
       self.navigationController?.tabBarController?.dismiss(animated: true) { self.movieWatcherViewModel.updateActiveWatcher() }
     } else {
+      // should not get here since save button should be disabled until preferences set
       alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
     }
   }

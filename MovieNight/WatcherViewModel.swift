@@ -25,7 +25,7 @@ protocol WatcherViewModelProtocol {
   func setActiveWatcherName(name: String) -> Bool
   func addWalker(watcher: MovieWatcherProtocol) -> Bool
   func getPreferenceForActiveWatcher(preferenceType: TMDBEntity) -> Property<[TMDBEntityProtocol]?>
-  func getStatusForActiveWatcherPreference(preferenceType: TMDBEntity) -> (statusColor: MutableProperty<UIColor>, statusMessage: MutableProperty<String>)
+ func getStatusForActiveWatcherPreference(preferenceType: TMDBEntity) -> Property<(statusMessage: String, statusColor: UIColor)>
   func activeWatcherAdd(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
   func activeWatcherRemove(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
   func clearAllPreferences()
@@ -81,23 +81,25 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     }
   }
   
-  func getStatusForActiveWatcherPreference(preferenceType: TMDBEntity) -> (statusColor: MutableProperty<UIColor>, statusMessage: MutableProperty<String>) {
+  func getStatusForActiveWatcherPreference(preferenceType: TMDBEntity) -> Property<(statusMessage: String, statusColor: UIColor)> {
     let readyColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)
     let notReadyColor = UIColor.red
     var statusText: String = ""
     var statusColor = notReadyColor
-    if let count = activeWatcher.value.moviePreference.preferences.map({ $0[preferenceType]?.count }).value {
+    let preferenceCount = activeWatcher.value.moviePreference.preferences.map { $0[preferenceType]!.count }
+    return preferenceCount.map { count -> (String, UIColor) in
       switch preferenceType {
-        case .actor, .movieGenre:
-          statusText = "\(count)/5"
-          statusColor = count >= 1 && count <= 5 ? readyColor : notReadyColor
         case .rating:
           statusText = "\(count)/1"
           statusColor = count == 1 ? readyColor : notReadyColor
-        default: break
+          return (statusText, statusColor)
+        default:
+          // should trigger for .actor and .genre
+          statusText = "\(count)/5"
+          statusColor = count >= 1 && count <= 5 ? readyColor : notReadyColor
+          return (statusText, statusColor)
       }
     }
-    return (MutableProperty(statusColor), MutableProperty(statusText))
   }
   
   func setActiveWatcherName(name: String) -> Bool {

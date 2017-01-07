@@ -136,11 +136,11 @@
 		27234F101E0AE812002BA4C0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
 				44E2E2141E06CBD10072BB77 /* TMDBEntity.swift */,
 				44C57A4A1E01A9460023417D /* TMDBResponseEntity.swift */,
 				2709C85C1E01CB1F00F21D60 /* MovieNightWatcher + Protocol.swift */,
 				279F8DD61DFC2DE900436973 /* MovieNightPreference + Protocol.swift */,
-				27D6BB981DFE362B0060E98F /* TMDBClient.swift */,
 				44FF76E11E15500C006D39D7 /* MovieNightNetworking.swift */,
 				44FF76E31E1550CC006D39D7 /* TMDBEndpoint.swift */,
 				44FF76E51E155151006D39D7 /* TMDBConfiguration.swift */,
