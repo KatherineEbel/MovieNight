@@ -105,6 +105,9 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
     switch self.entityType {
       case .actor:
         guard viewModel!.peoplePageCountTracker.page > 1 else { return }
+        if let indexPaths = tableView.indexPathsForSelectedRows {
+          selectedRows.value = Set(indexPaths)
+        }
         refreshControl.beginRefreshing()
         viewModel!.getNextPopularPeoplePage()
       default: break
@@ -179,7 +182,6 @@ public func alertForError(message: String) {
   
   // MARK: TableViewDelegate
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    selectedRows.value.insert(indexPath)
     if let preference = viewModel?.modelData.value[self.entityType]?[indexPath.row] {
       // activeWatcherAdd returns a bool. Not currently using value, but might be useful when adding
       // diff features
@@ -188,7 +190,6 @@ public func alertForError(message: String) {
   }
   
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-    selectedRows.value.remove(indexPath)
     // fetch the model data for the type that matches the controller's entity
     if let preference = viewModel!.modelData.value[self.entityType]?[indexPath.row] {
       // activeWatcherRemove returns a bool. Not currently using value, but might be useful when adding
@@ -227,12 +228,15 @@ public func alertForError(message: String) {
   @IBAction func preferencesComplete(_ sender: UIBarButtonItem) {
     // isReady property is a tuple of bools assigned to nameValid and moviePreference.isSet
     let ready = movieWatcherViewModel.activeWatcher.value.isReady.map { $0.0 && $0.1 }.value
-    if ready {
-      // dismiss controller and have viewmodel update activeWatcher property
-      self.navigationController?.tabBarController?.dismiss(animated: true) { self.movieWatcherViewModel.updateActiveWatcher() }
-    } else {
-      // should not get here since save button should be disabled until preferences set
-      alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
-    }
+    ready ? self.navigationController?.tabBarController?.dismiss(animated: true, completion: nil) : alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
+//    if ready {
+//      // dismiss controller and have viewmodel update activeWatcher property
+//      self.navigationController?.tabBarController?.dismiss(animated: true) {
+//        //self.movieWatcherViewModel.updateActiveWatcher()
+//      }
+//    } else {
+//      // should not get here since save button should be disabled until preferences set
+//      alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
+//    }
   }
 }

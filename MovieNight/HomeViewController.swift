@@ -23,7 +23,7 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var watcher2StackView: UIStackView!
   @IBOutlet weak var popupView: PopupView!
   
-  var updateWatcherNameAction: Action<Int,Bool,NoError>!
+  var updateActiveWatcherAction: Action<Int,Bool,NoError>!
   var watchersReadyProducer: SignalProducer<(Bool, Bool), NoError>!
   var viewModel: WatcherViewModelProtocol!
   
@@ -57,8 +57,9 @@ class HomeViewController: UIViewController {
   func configureWatcherButtons() {
     // action to be performed when user presses one of the watcher buttons (could have just been IBAction but
     // wanted to use for practice with ReactiveSwift framework
-    updateWatcherNameAction = Action { input in
+    updateActiveWatcherAction = Action { input in
       return SignalProducer { observer, disposable in
+        self.viewModel.updateActiveWatcher(index: input)
         let watcherName = self.viewModel.activeWatcher.value.name
         let alert = UIAlertController(title: "\(watcherName)'s Name", message: MovieNightControllerAlert.updateNameMessage.rawValue, preferredStyle: .alert)
         alert.addTextField { textField in
@@ -93,10 +94,8 @@ class HomeViewController: UIViewController {
     guard viewModel.watchers.value != nil && viewModel.watchers.value?.count == 2 else {
       return
     }
-    watcher1Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 0)
-    watcher2Button.reactive.pressed = CocoaAction(updateWatcherNameAction, input: 1)
-    watcher2StackView.reactive.isHidden <~ viewModel.watcher1Ready().map { !$0 }
-    watcher1Button.reactive.isEnabled <~ viewModel.watcher1Ready().map { !$0 }
+    watcher1Button.reactive.pressed = CocoaAction(updateActiveWatcherAction, input: 0)
+    watcher2Button.reactive.pressed = CocoaAction(updateActiveWatcherAction, input: 1)
   }
   
   func configureWatcherLabels() {
@@ -109,7 +108,7 @@ class HomeViewController: UIViewController {
   }
   
   func configureObservers() {
-    updateWatcherNameAction.values.observeValues { value in
+    updateActiveWatcherAction.values.observeValues { value in
       self.popupView.success = MutableProperty(value)
       self.popupView.popUp() {
       self.performSegue(withIdentifier: Identifiers.choosePreferencesSegue.rawValue, sender: self)

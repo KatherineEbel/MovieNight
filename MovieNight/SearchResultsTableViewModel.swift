@@ -36,11 +36,11 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   }
   
   public var peoplePageCountTracker: (page: Int, tracker: NSAttributedString) {
-    let result = "\(currentPeopleResultPage) out of \(peoplePageCount) result pages"
+    let result = "Fetching \(currentPeopleResultPage) out of \(peoplePageCount) result pages"
     return (peoplePageCount, NSAttributedString(string: result, attributes: nil))
   }
   public var resultPageCountTracker: (page: Int, tracker: NSAttributedString) {
-    return (movieResultPageCount, NSAttributedString(string: "\(currentMovieResultPage) out of \(movieResultPageCount) result pages", attributes: nil))
+    return (movieResultPageCount, NSAttributedString(string: "Fetching \(currentMovieResultPage) out of \(movieResultPageCount) result pages", attributes: nil))
   }
   
   public var errorMessage: Property<String?> {

@@ -18,7 +18,7 @@ enum WatcherViewModelError: Error {
 
 protocol WatcherViewModelProtocol {
   var watchers: Property<[MovieWatcherProtocol]?> { get }
-  var activeWatcherIndex: Int { get }
+  var activeWatcherIndex: Property<Int> { get }
   var activeWatcher: Property<MovieWatcherProtocol> { get }
   var activeWatcherReady: Property<Bool> { get }
   var movieDiscovery: Property<MovieDiscoverProtocol> { get }
@@ -29,7 +29,7 @@ protocol WatcherViewModelProtocol {
   func activeWatcherAdd(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
   func activeWatcherRemove(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
   func clearAllPreferences()
-  func updateActiveWatcher()
+  func updateActiveWatcher(index: Int)
   func watcher1Ready() -> Property<Bool>
   func watcher2Ready() -> Property<Bool>
 }
@@ -40,9 +40,12 @@ public class WatcherViewModel: WatcherViewModelProtocol {
   var watchers: Property<[MovieWatcherProtocol]?> {
     return Property(_watchers)
   }
-  var activeWatcherIndex: Int = 0
+  private let _activeWatcherIndex = MutableProperty(0)
+  var activeWatcherIndex: Property<Int> {
+    return Property(_activeWatcherIndex)
+  }
   var activeWatcher: Property<MovieWatcherProtocol> {
-    return watchers.map { $0![self.activeWatcherIndex]}
+    return watchers.map { $0![self.activeWatcherIndex.value]}
   }
   var activeWatcherReady: Property<Bool> {
     return activeWatcher
@@ -122,8 +125,8 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return activeWatcher.value.moviePreference.remove(preference: preference, with: type)
   }
   
-  func updateActiveWatcher() {
-    activeWatcherIndex = activeWatcherIndex == 0 ? 1 : 0
+  func updateActiveWatcher(index: Int) {
+    _activeWatcherIndex.swap(index)
   }
   
   
