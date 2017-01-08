@@ -36,9 +36,11 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
 
   private let queue = DispatchQueue(label: "MovieNight.MovieNightNetworking.Queue")
   public init() { }
-   public func requestJSON(search: TMDBEndpoint) -> SignalProducer<Any, TMDBEndpointError> {
+  public func requestJSON(search: TMDBEndpoint) -> SignalProducer<Any, TMDBEndpointError> {
     return SignalProducer { observer, disposable in
-      Alamofire.request(search).validate().responseJSON(queue: self.queue, options: JSONSerialization.ReadingOptions.mutableContainers) { response in
+      Alamofire.request(search)
+        .validate()
+        .responseJSON(queue: self.queue, options: JSONSerialization.ReadingOptions.mutableContainers) { response in
         switch response.result {
           case .success(let value):
               observer.send(value: value)

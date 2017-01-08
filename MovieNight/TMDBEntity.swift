@@ -138,8 +138,6 @@ extension TMDBEntity.MovieGenre {
   }
 }
 
-
-
 extension TMDBEntity.Rating {
   public static func decode(_ json: JSON) -> Decoded<TMDBEntity.Rating> {
     return curry(TMDBEntity.Rating.init)

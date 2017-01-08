@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ReactiveSwift
 
 class ViewResultsController: UITableViewController {
   
@@ -45,7 +46,14 @@ class ViewResultsController: UITableViewController {
     self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker
     refreshControl.beginRefreshing()
     tableViewModel?.getNextMovieResultPage(discover: movieDiscover)
-    refreshControl.endRefreshing()
+    // observe when network activity ends to end refreshing
+    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { value in
+      if let value = value as? Bool {
+        if value == false {
+          self.refreshControl?.endRefreshing()
+        }
+      }
+    }.start(on: UIScheduler()).start()
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {

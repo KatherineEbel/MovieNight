@@ -57,12 +57,12 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
     refreshControl?.addTarget(self, action: #selector(MovieNightSearchController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     // data source takes TMDBEntityProtocol types, so map viewModel data to required type
-      selectUserRowSelections()
       configureErrorSignal()
       // set datasource using the above producer
       tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
       tableViewDataSource.configureTableView()
       // reselect rows when user refreshes tableview
+      selectUserRowSelections()
       observeForTableViewReload()
       configureNavBarForActiveWatcher()
       configureTabBar()
@@ -214,7 +214,7 @@ public func alertForError(message: String) {
         // only the actor and rating entities have details
         case let actor where sender is TMDBEntity.Actor: detailController.viewModel.entity = actor as! TMDBEntity.Actor
         case let rating where sender is TMDBEntity.Rating: detailController.viewModel.entity = rating as! TMDBEntity.Rating
-      default: break
+        default: break
       }
       
     }

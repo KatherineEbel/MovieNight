@@ -56,7 +56,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
       let actorsIDs = Set([preference1[.actor]!.map { $0.id }, preference2[.actor]!.map { $0.id }].flatMap {$0})
       let genreIDs = Set([preference1[.movieGenre]!.map { $0.id }, preference2[.movieGenre]!.map { $0.id }].flatMap {$0})
       let maxRating = preference1[.rating]!.first!.id > preference2[.rating]!.first!.id ?
-        preference1[.rating]!.first!.title : preference2[.rating]!.first!.title
+        preference2[.rating]!.first!.title : preference1[.rating]!.first!.title
       return MovieDiscover(actorIDs: actorsIDs, genreIDs: genreIDs, maxRating: maxRating)
     }
   }
