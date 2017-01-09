@@ -17,14 +17,15 @@ public protocol MovieNightSearchControllerProtocol {
 
 
 
-class MovieNightSearchController: UITableViewController, MovieNightSearchControllerProtocol {
-  @IBOutlet weak var savePreferenceButton: UIBarButtonItem!
-
+class MovieNightSearchController: UITableViewController, UITextFieldDelegate, MovieNightSearchControllerProtocol {
+  
+  @IBOutlet weak var searchTextField: UITextField!
+  @IBOutlet weak var textFieldView: UIView!
+  
   internal var _entityType: TMDBEntity!
   public var entityType: TMDBEntity {
     return _entityType
   }
-  private var autoSearchStarted = false
   public var movieWatcherViewModel: WatcherViewModelProtocol!
   public var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
@@ -53,19 +54,20 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
     }
-    
+    configureHeaderView()
+    setupSearchTextField()
     refreshControl?.addTarget(self, action: #selector(MovieNightSearchController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     // data source takes TMDBEntityProtocol types, so map viewModel data to required type
-      configureErrorSignal()
-      // set datasource using the above producer
-      tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
-      tableViewDataSource.configureTableView()
-      // reselect rows when user refreshes tableview
-      selectUserRowSelections()
-      observeForTableViewReload()
-      configureNavBarForActiveWatcher()
-      configureTabBar()
+    configureErrorSignal()
+    // set datasource using the above producer
+    tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
+    tableViewDataSource.configureTableView()
+    // reselect rows when user refreshes tableview
+    selectUserRowSelections()
+    observeForTableViewReload()
+    configureNavBarForActiveWatcher()
+    configureTabBar()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -73,7 +75,7 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
     // fetch data if viewModel hasn't already fetched self.entity's cellModels
     if (viewModel!.modelData.map { ($0[self.entityType]!).isEmpty }).value {
       switch entityType {
-        case .actor: viewModel?.getNextPopularPeoplePage()
+        case .actor: viewModel?.getPopularPeoplePage(pageNumber: viewModel!.currentPeopleResultPage.value + 1)
         case .movieGenre: viewModel?.getGenres()
         case .rating: viewModel?.getRatings()
         default: break
@@ -81,14 +83,51 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
     }
   }
 
+  func configureHeaderView() {
+    guard entityType == .actor else { return }
+    viewModel!.peoplePageCountTracker().map { (numPages, tracker) in
+      return "Go to (?) of \(numPages) Result Pages"
+      }.signal.observeValues { text in
+        self.searchTextField.placeholder = text
+      }
+    textFieldView = tableView.tableHeaderView
+    tableView.tableHeaderView?.frame.size.height = 60.0
+    tableView.tableHeaderView = nil
+    tableView.addSubview(textFieldView)
+    tableView.contentInset = UIEdgeInsets(top: 60.0, left: 0, bottom: 0, right: 0)
+    tableView.contentOffset = CGPoint(x: 0, y: -60.0)
+    updateHeaderView()
+  }
+
+  func updateHeaderView() {
+    guard !searchTextField.isEditing else { return }
+    var headerRect = CGRect(x: 0, y: -60.0, width: tableView.bounds.width, height: 60.0)
+    headerRect.origin.y = tableView.contentOffset.y
+    textFieldView.frame = headerRect
+  }
+  
+  override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard entityType == .actor else { return }
+    updateHeaderView()
+  }
+  
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
       // Dispose of any resources that can be recreated.
   }
   
+  func setupSearchTextField() {
+    guard entityType == .actor else { return }
+    let search = searchTextField.reactive.continuousTextValues
+    search.throttle(0.5, on: QueueScheduler.main).observeValues { value in
+      guard let pageNumber = Int(value!) else { return }
+      self.viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
+    }
+  }
+  
   func configureErrorSignal() {
     // if viewModel receives error when fetching cellModel data, show error message
-    viewModel!.errorMessage.signal.take(last: 1).observeValues { message in
+    viewModel!.errorMessage.signal.observeValues { message in
       if let message = message {
         DispatchQueue.main.async {
           self.alertForError(message: message)
@@ -104,15 +143,15 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
     guard self.entityType.isPageable else { return }
     switch self.entityType {
       case .actor:
-        guard viewModel!.peoplePageCountTracker.page > 1 else { return }
+        guard (viewModel!.peoplePageCountTracker().map { $0.page }).value > 1 else { return }
         if let indexPaths = tableView.indexPathsForSelectedRows {
           selectedRows.value = Set(indexPaths)
         }
         refreshControl.beginRefreshing()
-        viewModel!.getNextPopularPeoplePage()
+        viewModel!.getPopularPeoplePage(pageNumber: viewModel!.currentPeopleResultPage.value)
       default: break
     }
-    self.tableView.refreshControl?.attributedTitle = viewModel?.peoplePageCountTracker.tracker
+    self.tableView.refreshControl?.attributedTitle = viewModel!.peoplePageCountTracker().map { $0.tracker }.value
     // observe when network activity ends to end refreshing
     UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { value in
       if let value = value as? Bool {
@@ -166,7 +205,7 @@ public func alertForError(message: String) {
   // activate or deactivate barbutton items depending on state of active watcher selections
   // forces save if user meets minimum preference requirements
   func configureNavBarForActiveWatcher() {
-    savePreferenceButton.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady
+    navigationItem.rightBarButtonItem!.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady
     navigationItem.leftBarButtonItem!.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady.map { !$0 }
   }
   
@@ -181,6 +220,10 @@ public func alertForError(message: String) {
   
   
   // MARK: TableViewDelegate
+  
+  override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    return textFieldView
+  }
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let preference = viewModel?.modelData.value[self.entityType]?[indexPath.row] {
       // activeWatcherAdd returns a bool. Not currently using value, but might be useful when adding
@@ -229,14 +272,28 @@ public func alertForError(message: String) {
     // isReady property is a tuple of bools assigned to nameValid and moviePreference.isSet
     let ready = movieWatcherViewModel.activeWatcher.value.isReady.map { $0.0 && $0.1 }.value
     ready ? self.navigationController?.tabBarController?.dismiss(animated: true, completion: nil) : alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
-//    if ready {
-//      // dismiss controller and have viewmodel update activeWatcher property
-//      self.navigationController?.tabBarController?.dismiss(animated: true) {
-//        //self.movieWatcherViewModel.updateActiveWatcher()
-//      }
-//    } else {
-//      // should not get here since save button should be disabled until preferences set
-//      alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
-//    }
+  }
+  
+  @IBAction func editTextfieldEdit(_ sender: UITapGestureRecognizer) {
+    if searchTextField.isEditing {
+      searchTextField.resignFirstResponder()
+    }
+  }
+  
+}
+
+extension MovieNightSearchController {
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    textField.resignFirstResponder()
+    return true
+  }
+  
+  func textFieldDidBeginEditing(_ textField: UITextField) {
+    tableView.contentInset = UIEdgeInsets(top: 25.0, left: 0, bottom: 0, right: 0)
+  }
+  
+  func textFieldDidEndEditing(_ textField: UITextField) {
+    tableView.contentInset = UIEdgeInsets(top: 60.0, left: 0, bottom: 0, right: 0)
+    updateHeaderView()
   }
 }

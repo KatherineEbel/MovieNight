@@ -40,10 +40,10 @@ class ViewResultsController: UITableViewController {
     }
   
   func handleRefresh(refreshControl: UIRefreshControl) {
-    guard (tableViewModel?.resultPageCountTracker.page)! > 1 else {
+    guard (tableViewModel?.resultPageCountTracker().map { $0.page }.value)! > 1 else {
       return
     }
-    self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker.tracker
+    self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker().map { $0.tracker }.value
     refreshControl.beginRefreshing()
     tableViewModel?.getNextMovieResultPage(discover: movieDiscover)
     // observe when network activity ends to end refreshing
