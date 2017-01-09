@@ -11,6 +11,8 @@ import ReactiveSwift
 import ReactiveCocoa
 import Result
 
+fileprivate let kTableHeaderViewHeight: CGFloat = 80.0
+
 public protocol MovieNightSearchControllerProtocol {
   var entityType: TMDBEntity { get }
 }
@@ -19,6 +21,7 @@ public protocol MovieNightSearchControllerProtocol {
 
 class MovieNightSearchController: UITableViewController, UITextFieldDelegate, MovieNightSearchControllerProtocol {
   
+  @IBOutlet weak var searchFieldStackView: UIStackView!
   @IBOutlet weak var searchTextField: UITextField!
   @IBOutlet weak var textFieldView: UIView!
   
@@ -54,8 +57,8 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
     }
-    configureHeaderView()
     setupSearchTextField()
+    configureHeaderView()
     refreshControl?.addTarget(self, action: #selector(MovieNightSearchController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     // data source takes TMDBEntityProtocol types, so map viewModel data to required type
@@ -91,17 +94,17 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
         self.searchTextField.placeholder = text
       }
     textFieldView = tableView.tableHeaderView
-    tableView.tableHeaderView?.frame.size.height = 60.0
+    tableView.tableHeaderView?.frame.size.height = kTableHeaderViewHeight
     tableView.tableHeaderView = nil
     tableView.addSubview(textFieldView)
-    tableView.contentInset = UIEdgeInsets(top: 60.0, left: 0, bottom: 0, right: 0)
-    tableView.contentOffset = CGPoint(x: 0, y: -60.0)
+    tableView.contentInset = UIEdgeInsets(top: kTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
+    tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
     updateHeaderView()
   }
 
   func updateHeaderView() {
     guard !searchTextField.isEditing else { return }
-    var headerRect = CGRect(x: 0, y: -60.0, width: tableView.bounds.width, height: 60.0)
+    var headerRect = CGRect(x: 0, y: -kTableHeaderViewHeight, width: tableView.bounds.width, height: kTableHeaderViewHeight)
     headerRect.origin.y = tableView.contentOffset.y
     textFieldView.frame = headerRect
   }
@@ -123,6 +126,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       guard let pageNumber = Int(value!) else { return }
       self.viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
     }
+    searchTextField.isHidden = true
   }
   
   func configureErrorSignal() {
@@ -264,6 +268,18 @@ public func alertForError(message: String) {
     }
   }
   
+  func toggleTextField() {
+      UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
+        if self.searchTextField.isHidden {
+          self.searchFieldStackView.addArrangedSubview(self.searchTextField)
+          self.searchTextField.isHidden = false
+        } else {
+          self.searchFieldStackView.removeArrangedSubview(self.searchTextField)
+          self.searchTextField.isHidden = true
+        }
+      }, completion: nil)
+  }
+  
   @IBAction func goHome(_ sender: UIBarButtonItem) {
     dismiss(animated: true, completion: nil)
   }
@@ -280,6 +296,9 @@ public func alertForError(message: String) {
     }
   }
   
+  @IBAction func showSearchButtonPressed(_ sender: UIButton) {
+    toggleTextField()
+  }
 }
 
 extension MovieNightSearchController {
@@ -289,11 +308,15 @@ extension MovieNightSearchController {
   }
   
   func textFieldDidBeginEditing(_ textField: UITextField) {
-    tableView.contentInset = UIEdgeInsets(top: 25.0, left: 0, bottom: 0, right: 0)
+    let top = kTableHeaderViewHeight / 2.0
+    tableView.contentInset = UIEdgeInsets(top: CGFloat(top), left: 0, bottom: 0, right: 0)
   }
   
   func textFieldDidEndEditing(_ textField: UITextField) {
-    tableView.contentInset = UIEdgeInsets(top: 60.0, left: 0, bottom: 0, right: 0)
+    tableView.contentInset = UIEdgeInsets(top: kTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
     updateHeaderView()
+    searchTextField.text = ""
   }
+  
+  
 }

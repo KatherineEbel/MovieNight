@@ -161,9 +161,38 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="j2t-yA-bzc">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Xvj-oS-ey2">
+                                    <rect key="frame" x="8" y="8" width="359" height="60"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OsO-kg-DL1">
+                                            <rect key="frame" x="0.0" y="0.0" width="359" height="30"/>
+                                            <state key="normal" title="Search Pages">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fvs-Tr-wHt">
+                                            <rect key="frame" x="0.0" y="30" width="359" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="Xvj-oS-ey2" firstAttribute="top" secondItem="j2t-yA-bzc" secondAttribute="top" constant="8" id="aex-Rl-lSy"/>
+                                <constraint firstItem="Xvj-oS-ey2" firstAttribute="leading" secondItem="j2t-yA-bzc" secondAttribute="leading" constant="8" id="kSA-SY-KR2"/>
+                                <constraint firstAttribute="trailing" secondItem="Xvj-oS-ey2" secondAttribute="trailing" constant="8" id="pZU-lK-UfE"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="movieResultCell" id="I5r-fO-0iq" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="128" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="I5r-fO-0iq" id="kgC-WF-CyO">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -222,31 +251,45 @@
                         <gestureRecognizers/>
                         <color key="separatorColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="bTl-P6-cRf">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="go to page number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zeb-VM-SF5">
-                                    <rect key="frame" x="8" y="15" width="359" height="30"/>
-                                    <nil key="textColor"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="YLI-Qm-gUo" id="Xbf-Lm-pgP"/>
-                                    </connections>
-                                </textField>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="TOV-FA-dtd">
+                                    <rect key="frame" x="8" y="8" width="359" height="62"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u36-WD-UVx">
+                                            <rect key="frame" x="126.5" y="0.0" width="106" height="32"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                            <state key="normal" title="Search Pages">
+                                                <color key="titleColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="showSearchButtonPressed:" destination="YLI-Qm-gUo" eventType="touchUpInside" id="8MY-rA-IZo"/>
+                                            </connections>
+                                        </button>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="go to page number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zeb-VM-SF5">
+                                            <rect key="frame" x="107.5" y="32" width="144" height="30"/>
+                                            <nil key="textColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="YLI-Qm-gUo" id="Xbf-Lm-pgP"/>
+                                            </connections>
+                                        </textField>
+                                    </subviews>
+                                </stackView>
                             </subviews>
                             <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="tintColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstItem="zeb-VM-SF5" firstAttribute="leading" secondItem="bTl-P6-cRf" secondAttribute="leading" constant="8" id="2g8-da-x4q"/>
-                                <constraint firstItem="zeb-VM-SF5" firstAttribute="centerX" secondItem="bTl-P6-cRf" secondAttribute="centerX" id="9ox-Qg-aCL"/>
-                                <constraint firstAttribute="trailing" secondItem="zeb-VM-SF5" secondAttribute="trailing" constant="8" id="b04-75-jZT"/>
-                                <constraint firstItem="zeb-VM-SF5" firstAttribute="centerY" secondItem="bTl-P6-cRf" secondAttribute="centerY" id="dHF-2H-8U1"/>
+                                <constraint firstItem="TOV-FA-dtd" firstAttribute="leading" secondItem="bTl-P6-cRf" secondAttribute="leading" constant="8" id="KzZ-Aa-Lb1"/>
+                                <constraint firstItem="TOV-FA-dtd" firstAttribute="top" secondItem="bTl-P6-cRf" secondAttribute="top" constant="8" id="NIk-xo-ENl"/>
+                                <constraint firstAttribute="trailing" secondItem="TOV-FA-dtd" secondAttribute="trailing" constant="8" id="up2-8V-sWn"/>
                             </constraints>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="redraw" selectionStyle="none" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="defaultSearchCell" id="NMh-9k-8aW" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="88" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="128" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NMh-9k-8aW" id="ksI-FL-XNU">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -305,25 +348,26 @@
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="CNu-4k-ec5">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                         <attributedString key="attributedTitle"/>
                     </refreshControl>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="actors"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <outlet property="searchFieldStackView" destination="TOV-FA-dtd" id="KY6-zh-EKa"/>
                         <outlet property="searchTextField" destination="zeb-VM-SF5" id="A2Y-GI-fh3"/>
                         <outlet property="textFieldView" destination="bTl-P6-cRf" id="p1h-Wq-T2y"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer delaysTouchesBegan="YES" numberOfTapsRequired="2" id="KK7-bD-fvh">
+                <tapGestureRecognizer delaysTouchesBegan="YES" id="KK7-bD-fvh">
                     <connections>
                         <action selector="editTextfieldEdit:" destination="YLI-Qm-gUo" id="OFT-z4-TNS"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1885.5999999999999" y="-134.48275862068968"/>
+            <point key="canvasLocation" x="2090" y="-134"/>
         </scene>
         <!--Detail Controller-->
         <scene sceneID="gmO-P1-Imy">
@@ -615,6 +659,6 @@
         <image name="ok" width="120" height="120"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QgT-nU-sMx"/>
+        <segue reference="Ss5-pB-H7J"/>
     </inferredMetricsTieBreakers>
 </document>
