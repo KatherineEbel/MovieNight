@@ -150,7 +150,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVT-vA-jcv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-460" y="133.5832083958021"/>
+            <point key="canvasLocation" x="-460" y="51"/>
         </scene>
         <!--Your Results-->
         <scene sceneID="ggd-4q-bzl">
@@ -161,38 +161,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="j2t-yA-bzc">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Xvj-oS-ey2">
-                                    <rect key="frame" x="8" y="8" width="359" height="60"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OsO-kg-DL1">
-                                            <rect key="frame" x="0.0" y="0.0" width="359" height="30"/>
-                                            <state key="normal" title="Search Pages">
-                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            </state>
-                                        </button>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fvs-Tr-wHt">
-                                            <rect key="frame" x="0.0" y="30" width="359" height="30"/>
-                                            <nil key="textColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </textField>
-                                    </subviews>
-                                </stackView>
-                            </subviews>
-                            <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <constraints>
-                                <constraint firstItem="Xvj-oS-ey2" firstAttribute="top" secondItem="j2t-yA-bzc" secondAttribute="top" constant="8" id="aex-Rl-lSy"/>
-                                <constraint firstItem="Xvj-oS-ey2" firstAttribute="leading" secondItem="j2t-yA-bzc" secondAttribute="leading" constant="8" id="kSA-SY-KR2"/>
-                                <constraint firstAttribute="trailing" secondItem="Xvj-oS-ey2" secondAttribute="trailing" constant="8" id="pZU-lK-UfE"/>
-                            </constraints>
-                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="movieResultCell" id="I5r-fO-0iq" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="128" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="I5r-fO-0iq" id="kgC-WF-CyO">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -211,10 +182,51 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </refreshControl>
                     <connections>
+                        <outlet property="searchTextField" destination="jTb-O7-Lb9" id="OSq-oQ-m5i"/>
+                        <outlet property="tableHeaderStackView" destination="Yam-UP-kCF" id="BVx-AG-3pr"/>
+                        <outlet property="tableHeaderView" destination="aHD-hR-A6P" id="xIr-zw-gCH"/>
                         <segue destination="7PJ-sf-e7d" kind="presentation" identifier="showDetails" id="Ss5-pB-H7J"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HLg-Bl-xtr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view clipsSubviews="YES" contentMode="scaleToFill" id="aHD-hR-A6P">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Yam-UP-kCF">
+                            <rect key="frame" x="8" y="8" width="359" height="62"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-s0-Ifs">
+                                    <rect key="frame" x="126.5" y="0.0" width="106" height="32"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                    <state key="normal" title="Search Pages">
+                                        <color key="titleColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="showSearchButtonPressed:" destination="YLI-Qm-gUo" eventType="touchUpInside" id="ynV-fv-1nE"/>
+                                        <action selector="showSearchResultsButtonPressed:" destination="6EX-ED-DEW" eventType="touchUpInside" id="Dq8-lo-FTW"/>
+                                    </connections>
+                                </button>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="go to page number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="jTb-O7-Lb9">
+                                    <rect key="frame" x="107.5" y="32" width="144" height="30"/>
+                                    <nil key="textColor"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="YLI-Qm-gUo" id="5tv-7t-aCh"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="Yam-UP-kCF" firstAttribute="leading" secondItem="aHD-hR-A6P" secondAttribute="leading" constant="8" id="4qz-CU-EUN"/>
+                        <constraint firstAttribute="trailing" secondItem="Yam-UP-kCF" secondAttribute="trailing" constant="8" id="Jxl-V4-ViX"/>
+                        <constraint firstItem="Yam-UP-kCF" firstAttribute="top" secondItem="aHD-hR-A6P" secondAttribute="top" constant="8" id="XX9-dZ-v05"/>
+                    </constraints>
+                </view>
             </objects>
             <point key="canvasLocation" x="-460" y="863"/>
         </scene>
@@ -244,52 +256,15 @@
         <scene sceneID="Iqu-T6-khk">
             <objects>
                 <tableViewController clearsSelectionOnViewWillAppear="NO" id="YLI-Qm-gUo" customClass="MovieNightSearchController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <color key="separatorColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="bTl-P6-cRf">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="TOV-FA-dtd">
-                                    <rect key="frame" x="8" y="8" width="359" height="62"/>
-                                    <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u36-WD-UVx">
-                                            <rect key="frame" x="126.5" y="0.0" width="106" height="32"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                            <state key="normal" title="Search Pages">
-                                                <color key="titleColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            </state>
-                                            <connections>
-                                                <action selector="showSearchButtonPressed:" destination="YLI-Qm-gUo" eventType="touchUpInside" id="8MY-rA-IZo"/>
-                                            </connections>
-                                        </button>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="go to page number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zeb-VM-SF5">
-                                            <rect key="frame" x="107.5" y="32" width="144" height="30"/>
-                                            <nil key="textColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
-                                            <connections>
-                                                <outlet property="delegate" destination="YLI-Qm-gUo" id="Xbf-Lm-pgP"/>
-                                            </connections>
-                                        </textField>
-                                    </subviews>
-                                </stackView>
-                            </subviews>
-                            <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <color key="tintColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <constraints>
-                                <constraint firstItem="TOV-FA-dtd" firstAttribute="leading" secondItem="bTl-P6-cRf" secondAttribute="leading" constant="8" id="KzZ-Aa-Lb1"/>
-                                <constraint firstItem="TOV-FA-dtd" firstAttribute="top" secondItem="bTl-P6-cRf" secondAttribute="top" constant="8" id="NIk-xo-ENl"/>
-                                <constraint firstAttribute="trailing" secondItem="TOV-FA-dtd" secondAttribute="trailing" constant="8" id="up2-8V-sWn"/>
-                            </constraints>
-                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="redraw" selectionStyle="none" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="defaultSearchCell" id="NMh-9k-8aW" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="128" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NMh-9k-8aW" id="ksI-FL-XNU">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -329,7 +304,6 @@
                         </prototypes>
                         <connections>
                             <outlet property="delegate" destination="YLI-Qm-gUo" id="454-8Z-pE6"/>
-                            <outletCollection property="gestureRecognizers" destination="KK7-bD-fvh" appends="YES" id="Huq-f7-Zcc"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Actor Preferences" id="LWL-Mg-Yym">
@@ -361,11 +335,43 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer delaysTouchesBegan="YES" id="KK7-bD-fvh">
-                    <connections>
-                        <action selector="editTextfieldEdit:" destination="YLI-Qm-gUo" id="OFT-z4-TNS"/>
-                    </connections>
-                </tapGestureRecognizer>
+                <view clipsSubviews="YES" contentMode="scaleToFill" id="bTl-P6-cRf">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="TOV-FA-dtd">
+                            <rect key="frame" x="8" y="8" width="359" height="62"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u36-WD-UVx">
+                                    <rect key="frame" x="126.5" y="0.0" width="106" height="32"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                    <state key="normal" title="Search Pages">
+                                        <color key="titleColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="showSearchButtonPressed:" destination="YLI-Qm-gUo" eventType="touchUpInside" id="8MY-rA-IZo"/>
+                                    </connections>
+                                </button>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="go to page number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zeb-VM-SF5">
+                                    <rect key="frame" x="107.5" y="32" width="144" height="30"/>
+                                    <nil key="textColor"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="YLI-Qm-gUo" id="Xbf-Lm-pgP"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="TOV-FA-dtd" firstAttribute="leading" secondItem="bTl-P6-cRf" secondAttribute="leading" constant="8" id="KzZ-Aa-Lb1"/>
+                        <constraint firstItem="TOV-FA-dtd" firstAttribute="top" secondItem="bTl-P6-cRf" secondAttribute="top" constant="8" id="NIk-xo-ENl"/>
+                        <constraint firstAttribute="trailing" secondItem="TOV-FA-dtd" secondAttribute="trailing" constant="8" id="up2-8V-sWn"/>
+                    </constraints>
+                </view>
             </objects>
             <point key="canvasLocation" x="2090" y="-134"/>
         </scene>
@@ -521,7 +527,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P4D-LV-evE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1361" y="134"/>
+            <point key="canvasLocation" x="-1354" y="51"/>
         </scene>
         <!--Actor Preference Navigation Controller Scene-->
         <scene sceneID="PjN-7a-Gh3">

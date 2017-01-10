@@ -11,7 +11,6 @@ import ReactiveSwift
 import ReactiveCocoa
 import Result
 
-fileprivate let kTableHeaderViewHeight: CGFloat = 80.0
 
 public protocol MovieNightSearchControllerProtocol {
   var entityType: TMDBEntity { get }
@@ -57,11 +56,11 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
     }
-    setupSearchTextField()
-    configureHeaderView()
     refreshControl?.addTarget(self, action: #selector(MovieNightSearchController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     // data source takes TMDBEntityProtocol types, so map viewModel data to required type
+    setupSearchTextField()
+    configureHeaderView()
     configureErrorSignal()
     // set datasource using the above producer
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
@@ -88,30 +87,34 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
 
   func configureHeaderView() {
     guard entityType == .actor else { return }
-    viewModel!.peoplePageCountTracker().map { (numPages, tracker) in
+    // get the number of pages to guide user when searching pages
+    viewModel!.peoplePageCountTracker().map { (numPages, _) in
       return "Go to (?) of \(numPages) Result Pages"
       }.signal.observeValues { text in
         self.searchTextField.placeholder = text
       }
-    textFieldView = tableView.tableHeaderView
-    tableView.tableHeaderView?.frame.size.height = kTableHeaderViewHeight
-    tableView.tableHeaderView = nil
-    tableView.addSubview(textFieldView)
-    tableView.contentInset = UIEdgeInsets(top: kTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
     tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
     updateHeaderView()
   }
 
   func updateHeaderView() {
-    guard !searchTextField.isEditing else { return }
+    // make the searchfield scroll with the tableview
     var headerRect = CGRect(x: 0, y: -kTableHeaderViewHeight, width: tableView.bounds.width, height: kTableHeaderViewHeight)
-    headerRect.origin.y = tableView.contentOffset.y
+    headerRect.origin.y = max(0, tableView.contentOffset.y)
     textFieldView.frame = headerRect
   }
   
   override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    // return if not .actor type
     guard entityType == .actor else { return }
+    // updateHeader when scrolled
     updateHeaderView()
+  }
+  
+  override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    // unfocus textfield when user scrolls
+    guard entityType == .actor else { return }
+    searchTextField.resignFirstResponder()
   }
   
   override func didReceiveMemoryWarning() {
@@ -121,17 +124,19 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   func setupSearchTextField() {
     guard entityType == .actor else { return }
+    // map user input to search viewmodels people result pages
     let search = searchTextField.reactive.continuousTextValues
     search.throttle(0.5, on: QueueScheduler.main).observeValues { value in
       guard let pageNumber = Int(value!) else { return }
       self.viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
     }
+    searchFieldStackView.removeArrangedSubview(searchTextField)
     searchTextField.isHidden = true
   }
   
   func configureErrorSignal() {
     // if viewModel receives error when fetching cellModel data, show error message
-    viewModel!.errorMessage.signal.observeValues { message in
+    viewModel!.errorMessage.signal.throttle(0.5, on: QueueScheduler.main).observeValues { message in
       if let message = message {
         DispatchQueue.main.async {
           self.alertForError(message: message)
@@ -226,8 +231,13 @@ public func alertForError(message: String) {
   // MARK: TableViewDelegate
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    return textFieldView
+    return textFieldView ?? nil
   }
+  
+  override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    return entityType == .actor ? kTableHeaderViewHeight : 0
+  }
+  
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let preference = viewModel?.modelData.value[self.entityType]?[indexPath.row] {
       // activeWatcherAdd returns a bool. Not currently using value, but might be useful when adding
@@ -268,17 +278,6 @@ public func alertForError(message: String) {
     }
   }
   
-  func toggleTextField() {
-      UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
-        if self.searchTextField.isHidden {
-          self.searchFieldStackView.addArrangedSubview(self.searchTextField)
-          self.searchTextField.isHidden = false
-        } else {
-          self.searchFieldStackView.removeArrangedSubview(self.searchTextField)
-          self.searchTextField.isHidden = true
-        }
-      }, completion: nil)
-  }
   
   @IBAction func goHome(_ sender: UIBarButtonItem) {
     dismiss(animated: true, completion: nil)
@@ -290,15 +289,11 @@ public func alertForError(message: String) {
     ready ? self.navigationController?.tabBarController?.dismiss(animated: true, completion: nil) : alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
   }
   
-  @IBAction func editTextfieldEdit(_ sender: UITapGestureRecognizer) {
-    if searchTextField.isEditing {
-      searchTextField.resignFirstResponder()
-    }
-  }
-  
   @IBAction func showSearchButtonPressed(_ sender: UIButton) {
     toggleTextField()
   }
+  
+  
 }
 
 extension MovieNightSearchController {
@@ -307,16 +302,21 @@ extension MovieNightSearchController {
     return true
   }
   
-  func textFieldDidBeginEditing(_ textField: UITextField) {
-    let top = kTableHeaderViewHeight / 2.0
-    tableView.contentInset = UIEdgeInsets(top: CGFloat(top), left: 0, bottom: 0, right: 0)
-  }
-  
   func textFieldDidEndEditing(_ textField: UITextField) {
-    tableView.contentInset = UIEdgeInsets(top: kTableHeaderViewHeight, left: 0, bottom: 0, right: 0)
-    updateHeaderView()
     searchTextField.text = ""
   }
   
+  func toggleTextField() {
+      UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
+        if self.searchTextField.isHidden {
+          self.searchFieldStackView.addArrangedSubview(self.searchTextField)
+          self.searchTextField.isHidden = false
+          self.searchTextField.becomeFirstResponder()
+        } else {
+          self.searchFieldStackView.removeArrangedSubview(self.searchTextField)
+          self.searchTextField.isHidden = true
+        }
+      }, completion: nil)
+  }
   
 }

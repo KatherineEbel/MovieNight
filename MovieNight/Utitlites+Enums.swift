@@ -8,6 +8,9 @@
 
 import UIKit
 
+// MovieNightSearchController constant
+let kTableHeaderViewHeight: CGFloat = 80.0
+
 public enum ImageAssetName: String {
   case undecided = "bubble-empty-1"
   case ready = "bubble-filled"

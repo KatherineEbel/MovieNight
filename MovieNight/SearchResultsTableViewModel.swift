@@ -16,7 +16,7 @@ public protocol SearchResultsTableViewModeling {
   var currentPeopleResultPage: Property<Int> { get }
   var currentMovieResultPage: Property<Int> { get }
   var errorMessage: Property<String?> { get }
-  func getNextMovieResultPage(discover: MovieDiscoverProtocol)
+  func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol)
   func getPopularPeoplePage(pageNumber: Int)
   func peoplePageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)>
   func resultPageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)>
@@ -66,7 +66,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     self.client = client
   }
   
-  public func getNextMovieResultPage(discover: MovieDiscoverProtocol) {
+  public func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol) {
     if currentMovieResultPage.value > 1 {
       guard movieResultPageCount > currentMovieResultPage.value else {
         return
