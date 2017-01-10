@@ -13,7 +13,6 @@ import ReactiveCocoa
 class DetailController: UIViewController {
   
   @IBOutlet weak var detailView: UIView!
-  @IBOutlet weak var titleLabel: UILabel!
   @IBOutlet weak var detailLabel: UILabel!
   var viewModel: DetailViewModelProtocol!
   
@@ -21,7 +20,8 @@ class DetailController: UIViewController {
     super.viewDidLoad()
     detailView.isHidden = true
     detailView.layer.cornerRadius = 8.0
-    titleLabel.text = viewModel.entity?.title
+    navigationItem.title = viewModel.entity?.title
+    navigationItem.hidesBackButton = true
     detailLabel.text = viewModel.entity?.details ?? "No Details"
   }
   
@@ -41,7 +41,16 @@ class DetailController: UIViewController {
     UIView.transition(with: detailView, duration: 0.33, options: [.curveEaseOut, .transitionFlipFromRight], animations: {
         self.detailView.isHidden = true
     }, completion: { success in
-      self.dismiss(animated: true, completion: nil)
+      _ = self.navigationController?.popViewController(animated: true)
+//      switch self.viewModel.entity {
+//      case _ as TMDBEntity.Actor:
+//        _ = self.navigationController?.popToRootViewController(animated: true)
+//      case _ as TMDBEntity.Rating:
+//        _ = self.navigationController?.popToRootViewController(animated: true)
+//      case _ as TMDBEntity.Media:
+//        _ = self.navigationController?.popViewController(animated: true)
+//      default: break
+//      }
     })
   }
 }

@@ -58,6 +58,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     }
     refreshControl?.addTarget(self, action: #selector(MovieNightSearchController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
+    self.navigationItem.setHidesBackButton(true, animated: false)
     // data source takes TMDBEntityProtocol types, so map viewModel data to required type
     setupSearchTextField()
     configureHeaderView()
