@@ -17,7 +17,7 @@ public protocol SearchResultsTableViewCellModeling {
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
   public var _data: MutableProperty<TMDBEntityProtocol>
-  private let network: MovieNightNetworkProtocol! = MovieNightNetwork()
+  private var network: MovieNightNetworkProtocol! = MovieNightNetwork.networking
   public var imageUpdated = MutableProperty<Bool>(false)
   public var data: Property<TMDBEntityProtocol> {
     return Property(_data)
@@ -32,6 +32,10 @@ public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellMo
       return nil
     }
     return network.requestImage(search: .image(size: size, imagePath: path))
-      .flatMapError { _ in SignalProducer<UIImage, NoError>.empty }
+      .flatMapError { _ in SignalProducer<UIImage, NoError>.empty }.take(first: 1)
+  }
+  
+  deinit {
+    network = nil
   }
 }

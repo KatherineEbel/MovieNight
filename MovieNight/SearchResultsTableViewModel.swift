@@ -44,6 +44,16 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     return Property(_modelData)
   }
   
+  
+  public var errorMessage: Property<String?> {
+    return Property(_errorMessage)
+  }
+  
+  public init(client: TMDBClientPrototcol) {
+    print("Initializing tableviewModel")
+    self.client = client
+  }
+  
   public func peoplePageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)> {
     return currentPeopleResultPage.map { pageNumber in
       let result = NSAttributedString(string: "Fetching \(pageNumber) out of \(self.peoplePageCount) result pages")
@@ -58,14 +68,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     }
   }
   
-  public var errorMessage: Property<String?> {
-    return Property(_errorMessage)
-  }
-  
-  public init(client: TMDBClientPrototcol) {
-    self.client = client
-  }
-  
   public func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol) {
     if currentMovieResultPage.value > 1 {
       guard movieResultPageCount > currentMovieResultPage.value else {
@@ -73,9 +75,10 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
     }
     client.searchMovieDiscover(page: currentMovieResultPage.value, discover: discover)
+      .take(first: 1)
       .map { $0 }
       .observe(on: UIScheduler())
-      .on(event: { event in
+      .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
             self._modelData.value[.media]?.append(contentsOf: value.results as [TMDBEntityProtocol])
@@ -94,10 +97,10 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
     }
     client.searchPopularPeople(pageNumber: pageNumber)
+      .take(first: 1)
      .map { $0 }
     .observe(on: UIScheduler())
-    .on(event: { event in
-      print(pageNumber)
+    .on(event: { [unowned self] event in
       switch event {
         case .value(let value):
           self._modelData.value[.actor]?.append(contentsOf: value.results as [TMDBEntityProtocol])
@@ -111,11 +114,12 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   
   public func getGenres() {
     client.searchMovieGenres()
+      .take(first: 1)
       .map { response in
         return response.genres
       }
       .observe(on: UIScheduler())
-      .on(event: { event in
+      .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
             self._modelData.value[.movieGenre] = value as [TMDBEntityProtocol]
@@ -127,11 +131,12 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   
   public func getRatings() {
     client.searchUSRatings()
+      .take(first: 1)
       .map { response in
           return response
       }
       .observe(on: UIScheduler())
-      .on(event: { event in
+      .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
             self._modelData.value[.rating] = value.certifications as [TMDBEntityProtocol]

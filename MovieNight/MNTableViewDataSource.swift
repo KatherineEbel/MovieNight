@@ -19,7 +19,7 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   //private var data: [SearchResultsTableViewCellModeling] = []
   private var _cellModels = MutableProperty<[SearchResultsTableViewCellModeling]>([])
   private var network: MovieNightNetworkProtocol!
-  var tableView: UITableView
+  weak var tableView: UITableView?
   let sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>!
   var nibName: String
   public var cellModels: Property<[SearchResultsTableViewCellModeling]> {
@@ -64,6 +64,7 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   }
   
   func configureTableView() {
+    guard let tableView = tableView else { return }
     tableView.dataSource = self
     if getIdentifier() == "preferenceCell" {
       tableView.rowHeight = 60
@@ -73,12 +74,17 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
 //      tableView.estimatedRowHeight = 200
       tableView.rowHeight = 470
     }
-    self.tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: getIdentifier())
-    sourceSignal.producer.on { value in
+    tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: getIdentifier())
+     sourceSignal.producer.on { [weak self] value in
+      guard let strongSelf = self else { return }
       let models = value.flatMap { SearchResultsTableViewCellModel(model: $0 ) as SearchResultsTableViewCellModeling }
-      self._cellModels.value = models
-      self.tableView.reloadData()
+      strongSelf._cellModels.value = models
+      strongSelf.tableView!.reloadData()
     }.observe(on: UIScheduler())
     .start()
+  }
+  
+  deinit {
+    print("Data source deinit")
   }
 }

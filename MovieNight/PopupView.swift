@@ -20,6 +20,7 @@ class PopupView: UIView {
   @IBOutlet weak var successImageView: UIImageView!
   
   required init?(coder aDecoder: NSCoder) {
+    print("Popup initialized")
     super.init(coder: aDecoder)
     self.alpha = 0
   }
@@ -38,5 +39,9 @@ class PopupView: UIView {
         completion()
       })
     })
+  }
+  
+  deinit {
+    print("Popup deinit")
   }
 }

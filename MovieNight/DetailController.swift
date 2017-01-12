@@ -42,15 +42,10 @@ class DetailController: UIViewController {
         self.detailView.isHidden = true
     }, completion: { success in
       _ = self.navigationController?.popViewController(animated: true)
-//      switch self.viewModel.entity {
-//      case _ as TMDBEntity.Actor:
-//        _ = self.navigationController?.popToRootViewController(animated: true)
-//      case _ as TMDBEntity.Rating:
-//        _ = self.navigationController?.popToRootViewController(animated: true)
-//      case _ as TMDBEntity.Media:
-//        _ = self.navigationController?.popViewController(animated: true)
-//      default: break
-//      }
     })
+  }
+  
+  deinit {
+    print("Detail controller deinit : \(viewModel.entity)")
   }
 }

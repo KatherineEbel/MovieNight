@@ -53,6 +53,7 @@ public protocol TMDBClientPrototcol {
 public final class TMDBClient: TMDBClientPrototcol {
   private let network: MovieNightNetworkProtocol
   public init(network: MovieNightNetworkProtocol) {
+    print("Client init")
     self.network = network
   }
   
@@ -67,7 +68,7 @@ public final class TMDBClient: TMDBClientPrototcol {
             case .failure(let error):
               return Result(error: .parsingError(error))
           }
-      }
+      }.take(first: 1)
   }
   
   public func searchMovieGenres() -> SignalProducer<TMDBResponseEntity.MovieGenreResponse, TMDBEndpointError> {
@@ -79,7 +80,7 @@ public final class TMDBClient: TMDBClientPrototcol {
           case .success(let value): return Result(value: value)
           case .failure(let error): return Result(error: .parsingError(error))
         }
-    }
+    }.take(first: 1)
   }
   
   public func searchUSRatings() -> SignalProducer<TMDBResponseEntity.USCertifications, TMDBEndpointError> {
@@ -90,7 +91,7 @@ public final class TMDBClient: TMDBClientPrototcol {
           case .success(let value): return Result(value: value)
           case .failure(let error): return Result(error: .parsingError(error))
         }
-    }
+    }.take(first: 1)
   }
   
   public func searchMovieDiscover(page: Int, discover: MovieDiscoverProtocol) -> SignalProducer<TMDBResponseEntity.MovieDiscover, TMDBEndpointError> {
@@ -101,6 +102,6 @@ public final class TMDBClient: TMDBClientPrototcol {
           case .success(let value): return Result(value: value)
           case .failure(let error): return Result(error: .parsingError(error))
         }
-      }
+      }.take(first: 1)
   }
 }

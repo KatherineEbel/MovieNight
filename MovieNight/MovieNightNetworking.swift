@@ -35,7 +35,8 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
   }
 
   private let queue = DispatchQueue(label: "MovieNight.MovieNightNetworking.Queue")
-  public init() { }
+  static let networking = MovieNightNetwork()
+  public init() {}
   public func requestJSON(search: TMDBEndpoint) -> SignalProducer<Any, TMDBEndpointError> {
     return SignalProducer { observer, disposable in
       Alamofire.request(search)
@@ -50,5 +51,9 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
         }
       }
     }
+  }
+  
+  deinit {
+    print("Networking deinit")
   }
 }

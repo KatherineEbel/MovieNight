@@ -101,7 +101,7 @@ public enum TMDBEndpoint: URLRequestConvertible {
   }
   
   public func asURLRequest() throws -> URLRequest {
-    let result: (path: String, parameters: Parameters?) = {
+    let result: (path: String, parameters: Parameters?) = { 
       switch self {
         case .configuration: return ("configuration", params)
         case .popularPeople: return ("person/popular", params)
@@ -143,7 +143,7 @@ extension TMDBEndpoint {
   
   public static func getConfigJSON() -> Any? {
     let network = MovieNightNetwork()
-    let result = network.requestJSON(search: .configuration).single()
+    let result = network.requestJSON(search: .configuration).take(first: 1).single()
     switch result?.value {
       case .some(let json): return json
       case .none: return nil

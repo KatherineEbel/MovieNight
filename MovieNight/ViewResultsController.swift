@@ -30,14 +30,13 @@ class ViewResultsController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     refreshControl?.addTarget(self, action: #selector(ViewResultsController.handleRefresh(refreshControl:)), for: .valueChanged)
-    self.clearsSelectionOnViewWillAppear = false
-    
+    clearsSelectionOnViewWillAppear = false
     setupSearchTextField()
     configureHeaderView()
     let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]! }
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
     tableViewDataSource.configureTableView()
-    self.tableViewModel.getNextMovieResultPage(page: self.tableViewModel.currentMovieResultPage.value, discover: movieDiscover)
+    tableViewModel.getNextMovieResultPage(page: tableViewModel.currentMovieResultPage.value, discover: movieDiscover)
   }
 
   override func didReceiveMemoryWarning() {
@@ -48,10 +47,11 @@ class ViewResultsController: UITableViewController {
   
   func configureHeaderView() {
     guard entityType == .media else { return }
-    tableViewModel!.resultPageCountTracker().map { (numPages, tracker) in
+    tableViewModel!.resultPageCountTracker().map {  (numPages, tracker) in
       return "Go to (?) of \(numPages) Result Pages"
-      }.signal.observeValues { text in
-        self.searchTextField.placeholder = text
+      }.signal.observeValues { [weak self] text in
+        guard let strongSelf = self else { return }
+        strongSelf.searchTextField.placeholder = text
       }
     tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
     updateHeaderView()
@@ -67,9 +67,10 @@ class ViewResultsController: UITableViewController {
   func setupSearchTextField() {
     guard entityType == .media else { return }
     let search = searchTextField.reactive.continuousTextValues
-    search.throttle(0.5, on: QueueScheduler.main).observeValues { value in
+    search.throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] value in
+      guard let strongSelf = self else { return }
       guard let pageNumber = Int(value!) else { return }
-      self.tableViewModel.getNextMovieResultPage(page: pageNumber, discover: self.movieDiscover)
+      strongSelf.tableViewModel.getNextMovieResultPage(page: pageNumber, discover: strongSelf.movieDiscover)
     }
     searchTextField.isHidden = true
   }
@@ -83,10 +84,11 @@ class ViewResultsController: UITableViewController {
     refreshControl.beginRefreshing()
     tableViewModel?.getNextMovieResultPage(page: self.tableViewModel.currentMovieResultPage.value ,discover: movieDiscover)
     // observe when network activity ends to end refreshing
-    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { value in
+    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
+      guard let strongSelf = self else { return }
       if let value = value as? Bool {
         if value == false {
-          self.refreshControl?.endRefreshing()
+          strongSelf.refreshControl?.endRefreshing()
         }
       }
     }.start(on: UIScheduler()).start()
@@ -130,6 +132,10 @@ class ViewResultsController: UITableViewController {
   
   @IBAction func showSearchResultsButtonPressed(_ sender: UIButton) {
     toggleTextField()
+  }
+  
+  deinit {
+    print("Results controller deinit")
   }
   
 }

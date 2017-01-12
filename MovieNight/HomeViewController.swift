@@ -24,8 +24,9 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var popupView: PopupView!
   
   var updateActiveWatcherAction: Action<Int,Bool,NoError>!
-  var watchersReadyProducer: SignalProducer<(Bool, Bool), NoError>!
+//  var watchersReadyProducer: SignalProducer<(Bool, Bool), NoError>!
   var viewModel: WatcherViewModelProtocol!
+  var disposables: [Disposable] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -33,7 +34,8 @@ class HomeViewController: UIViewController {
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
     }
-    watchersReadyProducer = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).producer
+//    watchersReadyProducer = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).producer
+    
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -57,17 +59,18 @@ class HomeViewController: UIViewController {
   func configureWatcherButtons() {
     // action to be performed when user presses one of the watcher buttons (could have just been IBAction but
     // wanted to use for practice with ReactiveSwift framework
-    updateActiveWatcherAction = Action { input in
-      return SignalProducer { observer, disposable in
-        self.viewModel.updateActiveWatcher(index: input)
-        let watcherName = self.viewModel.activeWatcher.value.name
+    updateActiveWatcherAction = Action { [weak self] input in
+      guard let strongSelf = self else { return SignalProducer.empty }
+      return SignalProducer<Bool, NoError> { (observer, disposable) in
+        strongSelf.viewModel.updateActiveWatcher(index: input)
+        let watcherName = strongSelf.viewModel.activeWatcher.value.name
         let alert = UIAlertController(title: "\(watcherName)'s Name", message: MovieNightControllerAlert.updateNameMessage.rawValue, preferredStyle: .alert)
         alert.addTextField { textField in
           textField.placeholder = "Name"
         }
         let updateNameAction = UIAlertAction(title: MovieNightControllerAlert.updateName.rawValue, style: .default) { _ in
           let prospectiveName = alert.textFields?[0].text ?? watcherName
-          let success = self.viewModel.setActiveWatcherName(name: prospectiveName)
+          let success = strongSelf.viewModel.setActiveWatcherName(name: prospectiveName)
           DispatchQueue.main.async {
             observer.send(value: success)
             observer.sendCompleted()
@@ -81,16 +84,19 @@ class HomeViewController: UIViewController {
         }
         alert.addAction(updateNameAction)
         alert.addAction(cancelAction)
-        self.present(alert, animated: true)
-      }
+        strongSelf.present(alert, animated: true)
+      }.take(first: 1)
     }
     // change image for when watchers have completed choosing preferences
-    viewModel.watchers.signal.observeValues { watchers in
+    let disposable = viewModel.watchers.signal.observeValues { [weak self] watchers in
+      guard let strongSelf = self else { return }
       let (readyImage, undecidedImage) = (UIImage(named: ImageAssetName.ready.rawValue )!, UIImage(named: ImageAssetName.undecided.rawValue)!)
-      let (watcher1Ready, watcher2Ready) = (self.viewModel.watcher1Ready(), self.viewModel.watcher2Ready())
-        self.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
-        self.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
+      let (watcher1Ready, watcher2Ready) = (strongSelf.viewModel.watcher1Ready(), strongSelf.viewModel.watcher2Ready())
+        strongSelf.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
+        strongSelf.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
     }
+    guard let value = disposable else { return }
+    disposables.append(value)
     guard viewModel.watchers.value != nil && viewModel.watchers.value?.count == 2 else {
       return
     }
@@ -108,13 +114,18 @@ class HomeViewController: UIViewController {
   }
   
   func configureObservers() {
-    updateActiveWatcherAction.values.observeValues { value in
-      self.popupView.success = MutableProperty(value)
-      self.popupView.popUp() {
-      self.performSegue(withIdentifier: Identifiers.choosePreferencesSegue.rawValue, sender: self)
+    let disposable = updateActiveWatcherAction.values.observeValues { [weak self] value in
+      guard let strongSelf = self else { return }
+      strongSelf.popupView.success = MutableProperty(value)
+      strongSelf.popupView.popUp() {
+      strongSelf.performSegue(withIdentifier: Identifiers.choosePreferencesSegue.rawValue, sender: strongSelf)
       }
     }
-    self.viewResultsButton.reactive.isEnabled <~ watchersReadyProducer.map { $0.0 && $0.1 }
+    guard let value = disposable else { return }
+    disposables.append(value)
+    let watchersReady = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).map { $0.0 && $0.1 }
+//    watchersReadyProducer.map { $0.0 && $0.1 }.take(during: viewResultsButton.reactive.lifetime)
+    viewResultsButton.reactive.isEnabled <~ watchersReady
   }
   
   @IBAction func clearPreferencesButtonPressed(_ sender: UIBarButtonItem) {
@@ -128,6 +139,11 @@ class HomeViewController: UIViewController {
     controller.addAction(resetAction)
     controller.addAction(cancelAction)
     present(controller, animated: true, completion: nil)
+  }
+  
+  deinit {
+    disposables.forEach { $0.dispose() }
+    print("HomeViewController deinit")
   }
 }
 

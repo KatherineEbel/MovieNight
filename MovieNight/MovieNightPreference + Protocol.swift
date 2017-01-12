@@ -43,7 +43,7 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
   public var maxGenrePreferences = MAX_GENRE_PREFERENCES
   public var maxRatingPreferences = MAX_RATING_PREFERENCES
   
-  public init() {}
+  public init() { print("Movie preference init") }
   public func add(preference: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool {
     if let entities = _preferences.value[entityType] {
       let shouldAdd = !entities.contains(where: {$0.id == preference.id})

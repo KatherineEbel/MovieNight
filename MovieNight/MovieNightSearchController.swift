@@ -28,6 +28,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   public var entityType: TMDBEntity {
     return _entityType
   }
+  private var disposables: [Disposable] = []
   public var movieWatcherViewModel: WatcherViewModelProtocol!
   public var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
@@ -91,8 +92,9 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     // get the number of pages to guide user when searching pages
     viewModel!.peoplePageCountTracker().map { (numPages, _) in
       return "Go to (?) of \(numPages) Result Pages"
-      }.signal.observeValues { text in
-        self.searchTextField.placeholder = text
+      }.signal.observeValues { [weak self] text in
+        guard let strongSelf = self else { return }
+        strongSelf.searchTextField.placeholder = text
       }
     tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
     updateHeaderView()
@@ -126,22 +128,24 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   func setupSearchTextField() {
     guard entityType == .actor else { return }
     // map user input to search viewmodels people result pages
-    let search = searchTextField.reactive.continuousTextValues
-    search.throttle(0.5, on: QueueScheduler.main).observeValues { value in
-      guard let pageNumber = Int(value!) else { return }
-      self.viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
-    }
+    let search = searchTextField.reactive.continuousTextValues.flatMap(.latest) { [weak self] text -> SignalProducer<Void,NoError> in
+      guard let strongSelf = self else { return SignalProducer.empty }
+      guard let pageNumber = Int(text!) else { return SignalProducer.empty }
+      strongSelf.viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
+      return SignalProducer.empty
+      }.throttle(0.5, on: QueueScheduler.main)
     searchFieldStackView.removeArrangedSubview(searchTextField)
     searchTextField.isHidden = true
   }
   
   func configureErrorSignal() {
     // if viewModel receives error when fetching cellModel data, show error message
-    viewModel!.errorMessage.signal.throttle(0.5, on: QueueScheduler.main).observeValues { message in
+    viewModel!.errorMessage.signal.throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
+      guard let strongSelf = self else { return }
       if let message = message {
         DispatchQueue.main.async {
-          self.alertForError(message: message)
-          self.refreshControl?.endRefreshing()
+          strongSelf.alertForError(message: message)
+          strongSelf.refreshControl?.endRefreshing()
         }
       }
     }
@@ -163,22 +167,27 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     }
     self.tableView.refreshControl?.attributedTitle = viewModel!.peoplePageCountTracker().map { $0.tracker }.value
     // observe when network activity ends to end refreshing
-    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { value in
+    let disposable = UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
+      guard let strongSelf = self else { return }
       if let value = value as? Bool {
         if value == false {
-          self.refreshControl?.endRefreshing()
+          strongSelf.refreshControl?.endRefreshing()
         }
       }
     }.start(on: UIScheduler()).start()
+    disposables.append(disposable)
   }
   
   func observeForTableViewReload() {
     // remember users selections when they refresh the tableview with more people results
-    _ = tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues {
-      _ = self.selectedRows.value.map { row in
-        self.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
+    let disposable = tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues { [weak self] in
+      guard let strongSelf = self else { return }
+      _ = strongSelf.selectedRows.value.map { row in
+        strongSelf.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
       }
     }
+    guard let value = disposable else { return }
+    disposables.append(value)
   }
   
 public func alertForError(message: String) {
@@ -193,9 +202,10 @@ public func alertForError(message: String) {
   // will already be highlighted
   func selectUserRowSelections() {
     let activeWatcher = movieWatcherViewModel.activeWatcher
-    cellModelProducer?.combineLatest(with: activeWatcher.producer).on(value: { (models, currentWatcher) in
-      guard self.tableView.indexPathsForSelectedRows == nil else { return }
-      let watcherSelections = self.movieWatcherViewModel.getPreferenceForActiveWatcher(preferenceType: self.entityType)
+    if let disposable = cellModelProducer?.combineLatest(with: activeWatcher.producer).on(value: { [weak self] (models, currentWatcher) in
+      guard let strongSelf = self else { return }
+      guard strongSelf.tableView.indexPathsForSelectedRows == nil else { return }
+      let watcherSelections = strongSelf.movieWatcherViewModel.getPreferenceForActiveWatcher(preferenceType: strongSelf.entityType)
       guard (watcherSelections.value?.count)! > 0 else { return }
       let indexes = models.enumerated().reduce(Set<IndexPath>()) { (result, nextResult: (idx: Int, selection: TMDBEntityProtocol)) in
         var copy = result
@@ -205,11 +215,13 @@ public func alertForError(message: String) {
         return copy
       }
       indexes.forEach { indexPath in
-        self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-        self.tableView(self.tableView, didSelectRowAt: indexPath)
+        strongSelf.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        strongSelf.tableView(strongSelf.tableView, didSelectRowAt: indexPath)
       }
     })
-    .take(first: 1).observe(on: UIScheduler()).start()
+      .take(first: 1).observe(on: UIScheduler()).start() {
+      disposables.append(disposable)
+    }
   }
   
   // activate or deactivate barbutton items depending on state of active watcher selections
@@ -222,9 +234,10 @@ public func alertForError(message: String) {
   func configureTabBar() {
     // tried binding properties to tabBar, but only worked using producer
     let preferenceStatus = movieWatcherViewModel.getStatusForActiveWatcherPreference(preferenceType: entityType)
-    preferenceStatus.producer.on { status in
-      self.navigationController?.tabBarItem.badgeColor = status.statusColor
-      self.navigationController?.tabBarItem.badgeValue = status.statusMessage
+    preferenceStatus.producer.on { [weak self] status in
+      guard let strongSelf = self else { return }
+      strongSelf.navigationController?.tabBarItem.badgeColor = status.statusColor
+      strongSelf.navigationController?.tabBarItem.badgeValue = status.statusMessage
     }.observe(on: UIScheduler()).start()
   }
   
@@ -294,7 +307,12 @@ public func alertForError(message: String) {
     toggleTextField()
   }
   
-  
+  deinit {
+    disposables.forEach { disposable in
+      disposable.dispose()
+    }
+    print("Search Controller Deinit: \(self.entityType)")
+  }
 }
 
 extension MovieNightSearchController {
@@ -319,5 +337,4 @@ extension MovieNightSearchController {
         }
       }, completion: nil)
   }
-  
 }
