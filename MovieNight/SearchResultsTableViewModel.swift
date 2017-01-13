@@ -78,13 +78,14 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .take(first: 1)
       .map { $0 }
       .observe(on: UIScheduler())
-      .on(event: { [unowned self] event in
+      .on(event: { [weak self] event in
+        guard let strongSelf = self else { return }
         switch event {
           case .value(let value):
-            self._modelData.value[.media]?.append(contentsOf: value.results as [TMDBEntityProtocol])
-            self.movieResultPageCount = value.totalPages
-            self._currentMovieResultPage.value += 1
-          case .failed(let error): self._errorMessage.value = error.localizedDescription
+            strongSelf._modelData.value[.media]?.append(contentsOf: value.results as [TMDBEntityProtocol])
+            strongSelf.movieResultPageCount = value.totalPages
+            strongSelf._currentMovieResultPage.value += 1
+          case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
           default: break
         }
       }).start()
@@ -100,13 +101,14 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .take(first: 1)
      .map { $0 }
     .observe(on: UIScheduler())
-    .on(event: { [unowned self] event in
+    .on(event: { [weak self] event in
+      guard let strongSelf = self else { return }
       switch event {
         case .value(let value):
-          self._modelData.value[.actor]?.append(contentsOf: value.results as [TMDBEntityProtocol])
-          self.peoplePageCount = value.totalPages
-          self._currentPeopleResultPage.value = pageNumber + 1
-        case .failed(let error): self._errorMessage.value = error.localizedDescription
+          strongSelf._modelData.value[.actor]?.append(contentsOf: value.results as [TMDBEntityProtocol])
+          strongSelf.peoplePageCount = value.totalPages
+          strongSelf._currentPeopleResultPage.value = pageNumber + 1
+        case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
         default: break
       }
     }).start()
@@ -119,11 +121,12 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
         return response.genres
       }
       .observe(on: UIScheduler())
-      .on(event: { [unowned self] event in
+      .on(event: { [weak self] event in
+        guard let strongSelf = self else { return }
         switch event {
           case .value(let value):
-            self._modelData.value[.movieGenre] = value as [TMDBEntityProtocol]
-          case .failed(let error): self._errorMessage.value = error.localizedDescription
+            strongSelf._modelData.value[.movieGenre] = value as [TMDBEntityProtocol]
+          case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
           default: break
         }
       }).start()
@@ -136,11 +139,12 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
           return response
       }
       .observe(on: UIScheduler())
-      .on(event: { [unowned self] event in
+      .on(event: { [weak self] event in
+        guard let strongSelf = self else { return }
         switch event {
           case .value(let value):
-            self._modelData.value[.rating] = value.certifications as [TMDBEntityProtocol]
-          case .failed(let error): self._errorMessage.value = error.localizedDescription
+            strongSelf._modelData.value[.rating] = value.certifications as [TMDBEntityProtocol]
+          case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
           default: break
         }
       }).start()

@@ -85,6 +85,7 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   }
   
   deinit {
+    _cellModels.value = []
     print("Data source deinit")
   }
 }

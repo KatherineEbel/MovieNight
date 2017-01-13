@@ -37,5 +37,6 @@ public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellMo
   
   deinit {
     network = nil
+    print("Cell model deinit")
   }
 }
