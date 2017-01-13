@@ -143,7 +143,7 @@ extension TMDBEndpoint {
   
   public static func getConfigJSON() -> Any? {
     let network = MovieNightNetwork()
-    let result = network.requestJSON(search: .configuration).take(first: 1).single()
+    let result = network.requestJSON(search: .configuration).single()
     switch result?.value {
       case .some(let json): return json
       case .none: return nil

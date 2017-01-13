@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,24 +22,39 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="movie-night-bg" translatesAutoresizingMaskIntoConstraints="NO" id="Cgl-dM-qpC">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-night-bg" translatesAutoresizingMaskIntoConstraints="NO" id="Cgl-dM-qpC">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </imageView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="upw-tC-V3U">
-                                <rect key="frame" x="67" y="103" width="240" height="148"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="upw-tC-V3U">
+                                <rect key="frame" x="26" y="80" width="323" height="212"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="293x302-powered-by-square-green" translatesAutoresizingMaskIntoConstraints="NO" id="fT2-aC-1Fn">
-                                        <rect key="frame" x="35" y="10" width="170" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="293x302-powered-by-square-green" translatesAutoresizingMaskIntoConstraints="NO" id="fT2-aC-1Fn">
+                                        <rect key="frame" x="58" y="25" width="206" height="163"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="163" id="69b-Qs-0Ll"/>
+                                            <constraint firstAttribute="width" constant="206" id="CJJ-E5-3Xp"/>
+                                        </constraints>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="212" id="2OI-yB-2X8"/>
+                                    <constraint firstItem="fT2-aC-1Fn" firstAttribute="centerY" secondItem="upw-tC-V3U" secondAttribute="centerY" id="JHp-cj-Nbi"/>
+                                    <constraint firstItem="fT2-aC-1Fn" firstAttribute="centerX" secondItem="upw-tC-V3U" secondAttribute="centerX" id="pOm-G5-ACp"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Cgl-dM-qpC" secondAttribute="trailing" id="Q5Y-cW-g7F"/>
+                            <constraint firstItem="upw-tC-V3U" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="10" id="WHw-5Z-8FH"/>
+                            <constraint firstItem="Cgl-dM-qpC" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Z1f-oY-m72"/>
+                            <constraint firstItem="upw-tC-V3U" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="60" id="faR-cE-lp3"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="upw-tC-V3U" secondAttribute="trailing" constant="10" id="lj3-5i-wgI"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Cgl-dM-qpC" secondAttribute="bottom" id="p64-Kb-JCW"/>
+                            <constraint firstItem="Cgl-dM-qpC" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="ppP-H6-VeA"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -23,15 +23,17 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
           case .success(let data):
             if let image = UIImage(data: data) {
               observer.send(value: image)
+              observer.sendCompleted()
             } else {
               let defaultImage = UIImage(named: "mov-clapper")!
               observer.send(value: defaultImage)
+              observer.sendCompleted()
             }
           case .failure(let dataError):
             observer.send(error: .createPhotoError(dataError))
         }
       }
-    }
+    }.take(first: 1)
   }
 
   private let queue = DispatchQueue(label: "MovieNight.MovieNightNetworking.Queue")
@@ -48,9 +50,10 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
               observer.sendCompleted()
           case .failure(let error):
             observer.send(error: TMDBEndpointError.incorrectURLString(error))
+            observer.sendCompleted()
         }
       }
-    }
+    }.take(first: 1)
   }
   
   deinit {

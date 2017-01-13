@@ -28,7 +28,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   public var entityType: TMDBEntity {
     return _entityType
   }
-  private var disposables: [Disposable] = []
   public var movieWatcherViewModel: WatcherViewModelProtocol!
   public var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
@@ -128,12 +127,12 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   func setupSearchTextField() {
     guard entityType == .actor else { return }
     // map user input to search viewmodels people result pages
-    let search = searchTextField.reactive.continuousTextValues.flatMap(.latest) { [weak self] text -> SignalProducer<Void,NoError> in
+    _ = searchTextField.reactive.continuousTextValues.flatMap(.latest) { [weak self] text -> SignalProducer<Void,NoError> in
       guard let strongSelf = self else { return SignalProducer.empty }
       guard let pageNumber = Int(text!) else { return SignalProducer.empty }
       strongSelf.viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
       return SignalProducer.empty
-      }.throttle(0.5, on: QueueScheduler.main)
+      }
     searchFieldStackView.removeArrangedSubview(searchTextField)
     searchTextField.isHidden = true
   }
@@ -167,7 +166,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     }
     self.tableView.refreshControl?.attributedTitle = viewModel!.peoplePageCountTracker().map { $0.tracker }.value
     // observe when network activity ends to end refreshing
-    let disposable = UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
+    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
       guard let strongSelf = self else { return }
       if let value = value as? Bool {
         if value == false {
@@ -175,19 +174,16 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
         }
       }
     }.start(on: UIScheduler()).start()
-    disposables.append(disposable)
   }
   
   func observeForTableViewReload() {
     // remember users selections when they refresh the tableview with more people results
-    let disposable = tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues { [weak self] in
+    tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues { [weak self] in
       guard let strongSelf = self else { return }
       _ = strongSelf.selectedRows.value.map { row in
         strongSelf.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
       }
     }
-    guard let value = disposable else { return }
-    disposables.append(value)
   }
   
 public func alertForError(message: String) {
@@ -202,7 +198,7 @@ public func alertForError(message: String) {
   // will already be highlighted
   func selectUserRowSelections() {
     let activeWatcher = movieWatcherViewModel.activeWatcher
-    if let disposable = cellModelProducer?.combineLatest(with: activeWatcher.producer).on(value: { [weak self] (models, currentWatcher) in
+    cellModelProducer?.combineLatest(with: activeWatcher.producer).on(value: { [weak self] (models, currentWatcher) in
       guard let strongSelf = self else { return }
       guard strongSelf.tableView.indexPathsForSelectedRows == nil else { return }
       let watcherSelections = strongSelf.movieWatcherViewModel.getPreferenceForActiveWatcher(preferenceType: strongSelf.entityType)
@@ -219,9 +215,8 @@ public func alertForError(message: String) {
         strongSelf.tableView(strongSelf.tableView, didSelectRowAt: indexPath)
       }
     })
-      .take(first: 1).observe(on: UIScheduler()).start() {
-      disposables.append(disposable)
-    }
+    .take(first: 1).observe(on: UIScheduler()).start()
+
   }
   
   // activate or deactivate barbutton items depending on state of active watcher selections
@@ -305,13 +300,6 @@ public func alertForError(message: String) {
   
   @IBAction func showSearchButtonPressed(_ sender: UIButton) {
     toggleTextField()
-  }
-  
-  deinit {
-    disposables.forEach { disposable in
-      disposable.dispose()
-    }
-    print("Search Controller Deinit: \(self.entityType)")
   }
 }
 

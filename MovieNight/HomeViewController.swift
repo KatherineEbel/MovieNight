@@ -24,9 +24,7 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var popupView: PopupView!
   
   var updateActiveWatcherAction: Action<Int,Bool,NoError>!
-//  var watchersReadyProducer: SignalProducer<(Bool, Bool), NoError>!
   var viewModel: WatcherViewModelProtocol!
-  var disposables: [Disposable] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -34,7 +32,6 @@ class HomeViewController: UIViewController {
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
     }
-//    watchersReadyProducer = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).producer
     
   }
   
@@ -87,16 +84,6 @@ class HomeViewController: UIViewController {
         strongSelf.present(alert, animated: true)
       }.take(first: 1)
     }
-    // change image for when watchers have completed choosing preferences
-    let disposable = viewModel.watchers.signal.observeValues { [weak self] watchers in
-      guard let strongSelf = self else { return }
-      let (readyImage, undecidedImage) = (UIImage(named: ImageAssetName.ready.rawValue )!, UIImage(named: ImageAssetName.undecided.rawValue)!)
-      let (watcher1Ready, watcher2Ready) = (strongSelf.viewModel.watcher1Ready(), strongSelf.viewModel.watcher2Ready())
-        strongSelf.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
-        strongSelf.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
-    }
-    guard let value = disposable else { return }
-    disposables.append(value)
     guard viewModel.watchers.value != nil && viewModel.watchers.value?.count == 2 else {
       return
     }
@@ -114,17 +101,22 @@ class HomeViewController: UIViewController {
   }
   
   func configureObservers() {
-    let disposable = updateActiveWatcherAction.values.observeValues { [weak self] value in
+    // change image for when watchers have completed choosing preferences
+    viewModel.watchers.signal.observeValues { [weak self] watchers in
+      guard let strongSelf = self else { return }
+      let (readyImage, undecidedImage) = (UIImage(named: ImageAssetName.ready.rawValue )!, UIImage(named: ImageAssetName.undecided.rawValue)!)
+      let (watcher1Ready, watcher2Ready) = (strongSelf.viewModel.watcher1Ready(), strongSelf.viewModel.watcher2Ready())
+        strongSelf.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
+        strongSelf.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
+    }
+    updateActiveWatcherAction.values.observeValues { [weak self] value in
       guard let strongSelf = self else { return }
       strongSelf.popupView.success = MutableProperty(value)
       strongSelf.popupView.popUp() {
       strongSelf.performSegue(withIdentifier: Identifiers.choosePreferencesSegue.rawValue, sender: strongSelf)
       }
     }
-    guard let value = disposable else { return }
-    disposables.append(value)
     let watchersReady = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).map { $0.0 && $0.1 }
-//    watchersReadyProducer.map { $0.0 && $0.1 }.take(during: viewResultsButton.reactive.lifetime)
     viewResultsButton.reactive.isEnabled <~ watchersReady
   }
   
@@ -139,11 +131,6 @@ class HomeViewController: UIViewController {
     controller.addAction(resetAction)
     controller.addAction(cancelAction)
     present(controller, animated: true, completion: nil)
-  }
-  
-  deinit {
-    disposables.forEach { $0.dispose() }
-    print("HomeViewController deinit")
   }
 }
 
