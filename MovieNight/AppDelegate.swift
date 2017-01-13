@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let appearance = UINavigationBar.appearance()
     appearance.titleTextAttributes = [NSForegroundColorAttributeName: TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)]
     // setup TMDB config for images
-    _ = TMDBEndpoint.setConfig()
+//    let configGetter = TMDBEndpoint.setConfig()
     return true
   }
 

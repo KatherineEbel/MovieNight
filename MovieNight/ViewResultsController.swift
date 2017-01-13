@@ -33,7 +33,7 @@ class ViewResultsController: UITableViewController {
     clearsSelectionOnViewWillAppear = false
     setupSearchTextField()
     configureHeaderView()
-    let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]! }
+    let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.value } }
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
     tableViewDataSource.configureTableView()
     tableViewModel.getNextMovieResultPage(page: tableViewModel.currentMovieResultPage.value, discover: movieDiscover)
@@ -117,7 +117,8 @@ class ViewResultsController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-    let entity = tableViewModel!.modelData.value[self.entityType]![indexPath.row] as TMDBEntityProtocol
+    let entities = tableViewModel!.modelData.value[self.entityType]!.flatMap { $0.value }
+    let entity = entities[indexPath.row] as TMDBEntityProtocol
     performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
   }
   
@@ -147,6 +148,7 @@ extension ViewResultsController: UITextFieldDelegate {
   }
   
   func textFieldDidEndEditing(_ textField: UITextField) {
+    textField.resignFirstResponder()
     searchTextField.text = ""
   }
   

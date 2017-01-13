@@ -53,7 +53,6 @@ public protocol TMDBClientPrototcol {
 public final class TMDBClient: TMDBClientPrototcol {
   private let network: MovieNightNetworkProtocol
   public init(network: MovieNightNetworkProtocol) {
-    print("Client init")
     self.network = network
   }
   

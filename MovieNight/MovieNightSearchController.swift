@@ -36,10 +36,13 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   private var cellModelProducer: SignalProducer<[TMDBEntityProtocol], NoError>? {
     guard let viewModel = viewModel else { return nil }
     switch entityType {
-      case .movieGenre: return viewModel.modelData.producer.map { $0[.movieGenre]! }
-      case .rating: return viewModel.modelData.producer.map { $0[.rating]! }
-      default: return viewModel.modelData.producer.map { $0[.actor]! } 
+      case .movieGenre: return viewModel.modelData.producer.map { $0[.movieGenre]!.flatMap { $0.value } }
+      case .rating: return viewModel.modelData.producer.map { $0[.rating]!.flatMap { $0.value } }
+      default: return viewModel.modelData.producer.map { $0[.actor]!.flatMap { $0.value } }
     }
+  }
+  private var needInitialFetch: Bool {
+    return (viewModel?.modelData.map { $0[self.entityType]!.flatMap { $0.value }})?.value.isEmpty ?? false
   }
   
   private var cellNibName: String {
@@ -76,7 +79,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     // fetch data if viewModel hasn't already fetched self.entity's cellModels
-    if (viewModel!.modelData.map { ($0[self.entityType]!).isEmpty }).value {
+    if needInitialFetch {
       switch entityType {
         case .actor: viewModel?.getPopularPeoplePage(pageNumber: viewModel!.currentPeopleResultPage.value + 1)
         case .movieGenre: viewModel?.getGenres()
@@ -127,12 +130,11 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   func setupSearchTextField() {
     guard entityType == .actor else { return }
     // map user input to search viewmodels people result pages
-    _ = searchTextField.reactive.continuousTextValues.flatMap(.latest) { [weak self] text -> SignalProducer<Void,NoError> in
-      guard let strongSelf = self else { return SignalProducer.empty }
-      guard let pageNumber = Int(text!) else { return SignalProducer.empty }
+    searchTextField.reactive.textValues.observeValues { [weak self] text in
+      guard let strongSelf = self else { return }
+      guard let pageNumber = Int(text!) else { return }
       strongSelf.viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
-      return SignalProducer.empty
-      }
+    }
     searchFieldStackView.removeArrangedSubview(searchTextField)
     searchTextField.isHidden = true
   }
@@ -248,7 +250,8 @@ public func alertForError(message: String) {
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if let preference = viewModel?.modelData.value[self.entityType]?[indexPath.row] {
+    let entities = viewModel?.modelData.value[self.entityType]!.flatMap { $0.value }
+    if let preference = entities?[indexPath.row] {
       // activeWatcherAdd returns a bool. Not currently using value, but might be useful when adding
       // diff features
       _ = movieWatcherViewModel.activeWatcherAdd(preference: preference, with: self.entityType)
@@ -256,8 +259,9 @@ public func alertForError(message: String) {
   }
   
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    let entities = viewModel?.modelData.value[self.entityType]!.flatMap { $0.value }
     // fetch the model data for the type that matches the controller's entity
-    if let preference = viewModel!.modelData.value[self.entityType]?[indexPath.row] {
+    if let preference = entities?[indexPath.row] {
       // activeWatcherRemove returns a bool. Not currently using value, but might be useful when adding
       // diff features
       _ = movieWatcherViewModel.activeWatcherRemove(preference: preference, with: self.entityType)
@@ -266,9 +270,11 @@ public func alertForError(message: String) {
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    let entities = viewModel?.modelData.value[self.entityType]!.flatMap { $0.value }
     // view details for the specified entity (only actors and ratings have details)
-    let entity = viewModel!.modelData.value[self.entityType]![indexPath.row] as TMDBEntityProtocol
-    performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
+    if let entity = entities?[indexPath.row] {
+      performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
+    }
   }
   
   // MARK: - Navigation
@@ -310,6 +316,7 @@ extension MovieNightSearchController {
   }
   
   func textFieldDidEndEditing(_ textField: UITextField) {
+    textField.resignFirstResponder()
     searchTextField.text = ""
   }
   
