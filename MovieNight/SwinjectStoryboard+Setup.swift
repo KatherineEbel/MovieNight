@@ -37,12 +37,12 @@ extension SwinjectStoryboard {
     
     // registers all of the controllers
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "HomeNav"){ _, _ in }
-    defaultContainer.storyboardInitCompleted(HomeViewController.self) { resolver, controller in
+    defaultContainer.storyboardInitCompleted(HomeViewController.self, name: "home") { resolver, controller in
       controller.viewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     
     // MARK: Inject ViewResultsController
-    defaultContainer.storyboardInitCompleted(ViewResultsController.self) { resolver, controller in
+    defaultContainer.storyboardInitCompleted(ViewResultsController.self, name: "results") { resolver, controller in
       controller._entityType = .media
       controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)
       controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)
