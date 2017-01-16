@@ -28,10 +28,9 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   public var entityType: TMDBEntity {
     return _entityType
   }
-  public var movieWatcherViewModel: WatcherViewModelProtocol!
-  public var viewModel: SearchResultsTableViewModeling?
+  public weak var movieWatcherViewModel: WatcherViewModelProtocol!
+  public weak var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
-  private var watcherSignal: Signal<[MovieWatcherProtocol]?, NoError>!
   private var selectedRows: MutableProperty<Set<IndexPath>> = MutableProperty(Set<IndexPath>())
   private var cellModelProducer: SignalProducer<[TMDBEntityProtocol], NoError>? {
     guard let viewModel = viewModel else { return nil }
@@ -124,6 +123,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
+    print("Memory warning")
       // Dispose of any resources that can be recreated.
   }
   
@@ -180,22 +180,22 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     }
     self.tableView.refreshControl?.attributedTitle = viewModel!.peoplePageCountTracker().map { $0.tracker }.value
     // observe when network activity ends to end refreshing
-    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
-      guard let strongSelf = self else { return }
+    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [unowned self] value in
       if let value = value as? Bool {
         if value == false {
-          strongSelf.refreshControl?.endRefreshing()
+          self.refreshControl?.endRefreshing()
         }
       }
-    }.start(on: UIScheduler()).start()
+    }
+      .take(during: self.reactive.lifetime)
+      .start(on: UIScheduler()).start()
   }
   
   private func observeForTableViewReload() {
     // remember users selections when they refresh the tableview with more people results
-    tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues { [weak self] in
-      guard let strongSelf = self else { return }
-      _ = strongSelf.selectedRows.value.map { row in
-        strongSelf.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
+    tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues { [unowned self] in
+      _ = self.selectedRows.value.map { row in
+        self.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
       }
     }
   }
@@ -215,8 +215,8 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       .getPreferenceForActiveWatcher(preferenceType: entityType).value else { return }
     let titles = currentPreferences.map { $0.title }
     guard let indexPaths = viewModel?.indexesForTitles(ofEntityType: entityType, titles: titles) else { return }
-    indexPaths.forEach { indexPath in
-      tableView.selectRow(at: indexPath, animated: false, scrollPosition: .bottom)
+    indexPaths.forEach { [unowned self] indexPath in
+      self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: .bottom)
       self.tableView(self.tableView, didSelectRowAt: indexPath)
     }
   }
@@ -224,8 +224,8 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   // activate or deactivate barbutton items depending on state of active watcher selections
   // forces save if user meets minimum preference requirements
   func configureNavBarForActiveWatcher() {
-    navigationItem.rightBarButtonItem!.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady
-    navigationItem.leftBarButtonItem!.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady.map { !$0 }
+    navigationItem.rightBarButtonItem!.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady.skipRepeats().producer.take(during: self.reactive.lifetime)
+    navigationItem.leftBarButtonItem!.reactive.isEnabled <~ movieWatcherViewModel.activeWatcherReady.map { !$0 }.skipRepeats().producer.take(during: self.reactive.lifetime)
   }
   
   func configureTabBar() {
@@ -235,7 +235,9 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       guard let strongSelf = self else { return }
       strongSelf.navigationController?.tabBarItem.badgeColor = status.statusColor
       strongSelf.navigationController?.tabBarItem.badgeValue = status.statusMessage
-    }.observe(on: UIScheduler()).start()
+    }
+      .take(during: self.reactive.lifetime)
+      .observe(on: UIScheduler()).start()
   }
   
   
@@ -306,6 +308,10 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   @IBAction func showSearchButtonPressed(_ sender: UIButton) {
     toggleTextField()
+  }
+  
+  deinit {
+    print("\(entityType) controller deinit")
   }
 }
 

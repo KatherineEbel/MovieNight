@@ -32,11 +32,7 @@ class HomeViewController: UIViewController {
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
     }
-    
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    configureWatcherButtons()
+    configureButtonBindings()
     configureWatcherLabels()
     configureObservers()
   }
@@ -53,7 +49,7 @@ class HomeViewController: UIViewController {
       present(alertController, animated: true, completion: nil)
     }
 
-  func configureWatcherButtons() {
+  func configureButtonBindings() {
     // action to be performed when user presses one of the watcher buttons (could have just been IBAction but
     // wanted to use for practice with ReactiveSwift framework
     updateActiveWatcherAction = Action { [weak self] input in
@@ -89,6 +85,7 @@ class HomeViewController: UIViewController {
     }
     watcher1Button.reactive.pressed = CocoaAction(updateActiveWatcherAction, input: 0)
     watcher2Button.reactive.pressed = CocoaAction(updateActiveWatcherAction, input: 1)
+    viewResultsButton.reactive.isEnabled <~ Property.combineLatest(viewModel.watcher1Ready(), viewModel.watcher2Ready()).map { $0.0 && $0.1 }
   }
   
   func configureWatcherLabels() {
@@ -116,13 +113,11 @@ class HomeViewController: UIViewController {
       strongSelf.performSegue(withIdentifier: Identifiers.choosePreferencesSegue.rawValue, sender: strongSelf)
       }
     }
-    let watchersReady = viewModel.watcher1Ready().combineLatest(with: viewModel.watcher2Ready()).map { $0.0 && $0.1 }
-    viewResultsButton.reactive.isEnabled <~ watchersReady
   }
   
   @IBAction func clearPreferencesButtonPressed(_ sender: UIBarButtonItem) {
     let controller = UIAlertController(title: MovieNightControllerAlert.clearSelectionsMessage.rawValue, message: MovieNightControllerAlert.clearSelectionsConfirmation.rawValue, preferredStyle: .alert)
-    let resetAction = UIAlertAction(title: MovieNightControllerAlert.reset.rawValue, style: .destructive) { _ in
+    let resetAction = UIAlertAction(title: MovieNightControllerAlert.reset.rawValue, style: .destructive) {  _ in
       DispatchQueue.main.async {
         self.viewModel.clearAllPreferences()
       }

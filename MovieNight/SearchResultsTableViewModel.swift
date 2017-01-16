@@ -11,7 +11,7 @@ import ReactiveSwift
 import Argo
 import Result
 
-public protocol SearchResultsTableViewModeling {
+public protocol SearchResultsTableViewModeling: class {
   var modelData: Property<[TMDBEntity: [(page: Int, entities: [TMDBEntityProtocol])]]> { get }
   var currentPeopleResultPage: Property<Int> { get }
   var currentMovieResultPage: Property<Int> { get }
@@ -58,14 +58,14 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   }
   
   public func peoplePageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)> {
-    return currentPeopleResultPage.map { pageNumber in
+    return currentPeopleResultPage.map { [unowned self] pageNumber in
       let result = NSAttributedString(string: "Fetching \(pageNumber) out of \(self.peoplePageCount) result pages")
       return (self.peoplePageCount, result)
     }
   }
   
   public func resultPageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)> {
-    return currentMovieResultPage.map { pageNumber in
+    return currentMovieResultPage.map { [unowned self] pageNumber in
       let result = NSAttributedString(string: "Fetching \(pageNumber) out of \(self.movieResultPageCount) result pages")
       return (self.movieResultPageCount, result)
     }
@@ -110,46 +110,36 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   }
   
   public func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol) {
-//    if currentMovieResultPage.value > 1 {
-//      guard movieResultPageCount > currentMovieResultPage.value else { return }
-//      guard !isPageCached(pageNumber: page, entityType: .media) else { return }
-//    }
     guard validatePageSearch(pageNumber: page, entityType: .media) else { return }
     client.searchMovieDiscover(page: currentMovieResultPage.value, discover: discover)
       .take(first: 1)
       .map { $0 }
       .observe(on: UIScheduler())
-      .on(event: { [weak self] event in
-        guard let strongSelf = self else { return }
+      .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
-            strongSelf._modelData.value[.media]?.append((page, value.results))
-            strongSelf.movieResultPageCount = value.totalPages
-            strongSelf._currentMovieResultPage.value += 1
-          case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
+            self._modelData.value[.media]?.append((page, value.results))
+            self.movieResultPageCount = value.totalPages
+            self._currentMovieResultPage.value += 1
+          case .failed(let error): self._errorMessage.value = error.localizedDescription
           default: break
         }
       }).start()
   }
 
   public func getPopularPeoplePage(pageNumber: Int) {
-//    if currentPeopleResultPage.value > 1 {
-//      guard currentPeopleResultPage.value < peoplePageCount else { return }
-//      guard !isPageCached(pageNumber: pageNumber, entityType: .actor) else { return }
-//    }
     guard validatePageSearch(pageNumber: pageNumber, entityType: .actor) else { return }
     client.searchPopularPeople(pageNumber: pageNumber)
       .take(first: 1)
       .map { $0 }
       .observe(on: UIScheduler())
-      .on(event: { [weak self] event in
-        guard let strongSelf = self else { return }
+      .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
-            strongSelf._modelData.value[.actor]?.append((pageNumber, value.results))
-            strongSelf.peoplePageCount = value.totalPages
-            strongSelf._currentPeopleResultPage.value = pageNumber + 1
-          case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
+            self._modelData.value[.actor]?.append((pageNumber, value.results))
+            self.peoplePageCount = value.totalPages
+            self._currentPeopleResultPage.value = pageNumber + 1
+          case .failed(let error): self._errorMessage.value = error.localizedDescription
           default: break
         }
     }).start()
@@ -164,12 +154,11 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
         return response.genres
       }
       .observe(on: UIScheduler())
-      .on(event: { [weak self] event in
-        guard let strongSelf = self else { return }
+      .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
-            strongSelf._modelData.value[.movieGenre] = [(1, value as [TMDBEntityProtocol])]
-          case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
+            self._modelData.value[.movieGenre] = [(1, value as [TMDBEntityProtocol])]
+          case .failed(let error): self._errorMessage.value = error.localizedDescription
           default: break
         }
       }).start()
@@ -184,12 +173,11 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
           return response
       }
       .observe(on: UIScheduler())
-      .on(event: { [weak self] event in
-        guard let strongSelf = self else { return }
+      .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
-            strongSelf._modelData.value[.rating]?.append((1, value.certifications as [TMDBEntityProtocol]))
-          case .failed(let error): strongSelf._errorMessage.value = error.localizedDescription
+            self._modelData.value[.rating]?.append((1, value.certifications as [TMDBEntityProtocol]))
+          case .failed(let error): self._errorMessage.value = error.localizedDescription
           default: break
         }
       }).start()

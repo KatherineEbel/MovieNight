@@ -9,7 +9,7 @@
 import ReactiveSwift
 import Result
 
-public protocol SearchResultsTableViewCellModeling {
+public protocol SearchResultsTableViewCellModeling: class {
   var data: Property<TMDBEntityProtocol> { get }
   var imageUpdated: MutableProperty<Bool> { get }
   func getThumbnailImage() -> SignalProducer<UIImage, NoError>?
@@ -17,7 +17,7 @@ public protocol SearchResultsTableViewCellModeling {
 
 public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellModeling {
   public var _data: MutableProperty<TMDBEntityProtocol>
-  private var network: MovieNightNetworkProtocol! = MovieNightNetwork.networking
+  private var network: MovieNightNetworkProtocol = MovieNightNetwork.networking
   public var imageUpdated = MutableProperty<Bool>(false)
   public var data: Property<TMDBEntityProtocol> {
     return Property(_data)
@@ -36,7 +36,6 @@ public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellMo
   }
   
   deinit {
-    network = nil
     print("Cell model deinit")
   }
 }

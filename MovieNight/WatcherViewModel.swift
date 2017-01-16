@@ -16,7 +16,7 @@ enum WatcherViewModelError: Error {
   case notReadyToUpdate(message: String)
 }
 
-protocol WatcherViewModelProtocol {
+protocol WatcherViewModelProtocol: class {
   var watchers: Property<[MovieWatcherProtocol]?> { get }
   var activeWatcherIndex: Property<Int> { get }
   var activeWatcher: Property<MovieWatcherProtocol> { get }
