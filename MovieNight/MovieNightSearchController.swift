@@ -19,15 +19,11 @@ public protocol MovieNightSearchControllerProtocol {
 
 
 class MovieNightSearchController: UITableViewController, UITextFieldDelegate, MovieNightSearchControllerProtocol {
-  
-  @IBOutlet weak var searchFieldStackView: UIStackView!
-  @IBOutlet weak var searchTextField: UITextField!
-  @IBOutlet weak var textFieldView: UIView!
-  
   internal var _entityType: TMDBEntity!
   public var entityType: TMDBEntity {
     return _entityType
   }
+  weak var searchHeaderView: SearchHeaderView!
   public weak var movieWatcherViewModel: WatcherViewModelProtocol!
   public weak var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
@@ -65,8 +61,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     self.clearsSelectionOnViewWillAppear = false
     self.navigationItem.setHidesBackButton(true, animated: false)
     // data source takes TMDBEntityProtocol types, so map viewModel data to required type
-    setupSearchTextField()
-    configureHeaderView()
     configureErrorSignal()
     // set datasource using the above producer
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
@@ -93,22 +87,22 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
 
   func configureHeaderView() {
     guard entityType == .actor else { return }
+    if let headerView = Bundle.main.loadNibNamed("SearchHeaderView", owner: self, options: nil)?[0] as? SearchHeaderView {
+      searchHeaderView = headerView
+      searchHeaderView.entityType = self.entityType
+      searchHeaderView.viewModel = self.viewModel
+    }
     // get the number of pages to guide user when searching pages
-    viewModel!.peoplePageCountTracker().map { (numPages, _) in
-      return "Go to (?) of \(numPages) Result Pages"
-      }.signal.observeValues { [weak self] text in
-        guard let strongSelf = self else { return }
-        strongSelf.searchTextField.placeholder = text
-      }
     tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
     updateHeaderView()
   }
 
   func updateHeaderView() {
+    guard let headerView = searchHeaderView else { return }
     // make the searchfield scroll with the tableview
     var headerRect = CGRect(x: 0, y: -kTableHeaderViewHeight, width: tableView.bounds.width, height: kTableHeaderViewHeight)
     headerRect.origin.y = max(0, tableView.contentOffset.y)
-    textFieldView.frame = headerRect
+    headerView.frame = headerRect
   }
   
   override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -121,37 +115,13 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
     // unfocus textfield when user scrolls
     guard entityType == .actor else { return }
-    searchTextField.resignFirstResponder()
+    searchHeaderView.searchTextField.resignFirstResponder()
   }
   
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
     print("Memory warning")
       // Dispose of any resources that can be recreated.
-  }
-  
-  private func setupSearchTextField() {
-    guard entityType == .actor else { return }
-    // map user input to search viewmodels people result pages
-    searchTextField.reactive.textValues.take(during: searchTextField.reactive.lifetime).observeValues { [weak self] text in
-      guard let strongSelf = self else { return }
-      guard let pageNumber = Int(text!) else { return }
-      strongSelf.handleSearch(pageNumber: pageNumber)
-    }
-    searchFieldStackView.removeArrangedSubview(searchTextField)
-    searchTextField.isHidden = true
-  }
-    
-  private func handleSearch(pageNumber: Int) {
-    searchTextField.layer.cornerRadius = 8.0
-    searchTextField.layer.borderWidth = 2.0
-    // check to make sure user submitted pageNumber is valid
-    guard viewModel!.validatePageSearch(pageNumber: pageNumber, entityType: entityType) else {
-      searchTextField.layer.borderColor = UIColor.red.cgColor
-      return
-    }
-    searchTextField.layer.borderColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0).cgColor
-    viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
   }
   
   private func configureErrorSignal() {
@@ -248,7 +218,18 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   // MARK: TableViewDelegate
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    return textFieldView ?? nil
+    guard entityType == .actor else { return nil }
+    if let headerView = Bundle.main.loadNibNamed("SearchHeaderView", owner: self, options: nil)?[0] as? SearchHeaderView {
+      print("HeaderView loaded!")
+      searchHeaderView = headerView
+      searchHeaderView.entityType = self.entityType
+      searchHeaderView.viewModel = self.viewModel
+      return searchHeaderView
+    }
+    // get the number of pages to guide user when searching pages
+    tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
+    updateHeaderView()
+    return searchHeaderView ?? nil
   }
   
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -299,7 +280,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     }
   }
   
-  
   @IBAction func goHome(_ sender: UIBarButtonItem) {
     dismiss(animated: true, completion: nil)
   }
@@ -310,38 +290,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     ready ? self.navigationController?.tabBarController?.dismiss(animated: true, completion: nil) : alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
   }
   
-  @IBAction func showSearchButtonPressed(_ sender: UIButton) {
-    toggleTextField()
-  }
-  
   deinit {
     print("\(entityType) controller deinit")
-  }
-}
-
-extension MovieNightSearchController {
-  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    textField.resignFirstResponder()
-    return true
-  }
-  
-  func textFieldDidEndEditing(_ textField: UITextField) {
-    textField.resignFirstResponder()
-    searchTextField.text = ""
-  }
-  
-  func toggleTextField() {
-      UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
-        [weak self] in
-        guard let strongSelf = self else { return }
-        if strongSelf.searchTextField.isHidden {
-          strongSelf.searchFieldStackView.addArrangedSubview(strongSelf.searchTextField)
-          strongSelf.searchTextField.isHidden = false
-          strongSelf.searchTextField.becomeFirstResponder()
-        } else {
-          strongSelf.searchFieldStackView.removeArrangedSubview(strongSelf.searchTextField)
-          strongSelf.searchTextField.isHidden = true
-        }
-      }, completion: nil)
   }
 }
