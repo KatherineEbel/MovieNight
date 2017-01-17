@@ -45,7 +45,11 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return Property(_activeWatcherIndex)
   }
   var activeWatcher: Property<MovieWatcherProtocol> {
-    return watchers.map { $0![self.activeWatcherIndex.value]}
+    return watchers.map {
+      [weak self] in
+      guard let strongSelf = self else { return $0!.first! }
+      return $0![strongSelf.activeWatcherIndex.value]
+    }
   }
   var activeWatcherReady: Property<Bool> {
     return activeWatcher

@@ -25,6 +25,7 @@ public protocol SearchResultsTableViewModeling: class {
   func resultPageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)>
   func getGenres()
   func getRatings()
+  func clearMediaData()
 }
 
 public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
@@ -107,6 +108,10 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }
       return copy
     }
+  }
+  
+  public func clearMediaData() {
+    _modelData.value[.media]!.removeAll()
   }
   
   public func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol) {

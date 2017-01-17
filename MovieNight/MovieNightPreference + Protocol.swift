@@ -14,7 +14,7 @@ fileprivate let MAX_ACTOR_PREFERENCES = 5
 fileprivate let MAX_GENRE_PREFERENCES = 5
 fileprivate let MAX_RATING_PREFERENCES = 1
 
-public protocol MoviePreferenceProtocol {
+public protocol MoviePreferenceProtocol: class {
   var preferences: Property<[TMDBEntity:[TMDBEntityProtocol]]> { get }
   var maxActorPreferences: Int { get }
   var maxGenrePreferences: Int { get }
@@ -25,7 +25,7 @@ public protocol MoviePreferenceProtocol {
   func clearAll()
 }
 
-public struct MovieNightPreference: MoviePreferenceProtocol {
+public class MovieNightPreference: MoviePreferenceProtocol {
   public let _preferences: MutableProperty<[TMDBEntity:[TMDBEntityProtocol]]> =
     MutableProperty([.actor: [], .movieGenre: [], .rating: []])
   public var preferences: Property<[TMDBEntity : [TMDBEntityProtocol]]> {
@@ -33,7 +33,7 @@ public struct MovieNightPreference: MoviePreferenceProtocol {
   }
   
   public var isSet: Property<Bool> {
-    return preferences.map { preferences in
+    return preferences.map { [unowned self] preferences in
       preferences[.actor]!.count > 0 &&
       preferences[.movieGenre]!.count > 0 &&
       preferences[.rating]!.count == self.maxRatingPreferences

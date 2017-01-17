@@ -17,7 +17,7 @@ public protocol MovieNightNetworkProtocol {
 
 public final class MovieNightNetwork: MovieNightNetworkProtocol {
   public func requestImage(search: TMDBEndpoint) -> SignalProducer<UIImage, TMDBEndpointError> {
-    return SignalProducer { [weak self] observer, disposable in
+    return SignalProducer { observer, disposable in
       Alamofire.request(search).validate().responseData { response in
         switch response.result {
           case .success(let data):

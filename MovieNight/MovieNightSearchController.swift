@@ -41,7 +41,10 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     }
   }
   private var needInitialFetch: Bool {
-    return (viewModel?.modelData.map { $0[self.entityType]!.flatMap { $0.entities }})?.value.isEmpty ?? false
+    return viewModel!.modelData.map { [weak self] data -> Bool in
+      guard let strongSelf = self else { return false }
+      return data[strongSelf.entityType]!.flatMap { $0.entities }.isEmpty
+    }.value
   }
   
   private var cellNibName: String {
@@ -130,7 +133,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   private func setupSearchTextField() {
     guard entityType == .actor else { return }
     // map user input to search viewmodels people result pages
-    searchTextField.reactive.textValues.observeValues { [weak self] text in
+    searchTextField.reactive.textValues.take(during: searchTextField.reactive.lifetime).observeValues { [weak self] text in
       guard let strongSelf = self else { return }
       guard let pageNumber = Int(text!) else { return }
       strongSelf.handleSearch(pageNumber: pageNumber)
@@ -153,7 +156,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   private func configureErrorSignal() {
     // if viewModel receives error when fetching cellModel data, show error message
-    viewModel!.errorMessage.signal.throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
+    viewModel!.errorMessage.signal.take(during: self.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
       guard let strongSelf = self else { return }
       if let message = message {
         DispatchQueue.main.async {
@@ -193,9 +196,10 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   private func observeForTableViewReload() {
     // remember users selections when they refresh the tableview with more people results
-    tableView.reactive.trigger(for: #selector(tableView.reloadData)).observeValues { [unowned self] in
-      _ = self.selectedRows.value.map { row in
-        self.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
+    tableView.reactive.trigger(for: #selector(tableView.reloadData)).take(during: self.reactive.lifetime).observeValues { [weak self] in
+      guard let strongSelf = self else { return }
+      _ = strongSelf.selectedRows.value.map { [] row in
+        strongSelf.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
       }
     }
   }
@@ -328,13 +332,15 @@ extension MovieNightSearchController {
   
   func toggleTextField() {
       UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
-        if self.searchTextField.isHidden {
-          self.searchFieldStackView.addArrangedSubview(self.searchTextField)
-          self.searchTextField.isHidden = false
-          self.searchTextField.becomeFirstResponder()
+        [weak self] in
+        guard let strongSelf = self else { return }
+        if strongSelf.searchTextField.isHidden {
+          strongSelf.searchFieldStackView.addArrangedSubview(strongSelf.searchTextField)
+          strongSelf.searchTextField.isHidden = false
+          strongSelf.searchTextField.becomeFirstResponder()
         } else {
-          self.searchFieldStackView.removeArrangedSubview(self.searchTextField)
-          self.searchTextField.isHidden = true
+          strongSelf.searchFieldStackView.removeArrangedSubview(strongSelf.searchTextField)
+          strongSelf.searchTextField.isHidden = true
         }
       }, completion: nil)
   }

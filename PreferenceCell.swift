@@ -14,7 +14,8 @@ import Result
 class PreferenceCell: UITableViewCell {
   internal var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
-      nameLabel.reactive.text <~ viewModel!.data.map { $0.title }
+      nameLabel.reactive.text <~ viewModel!.data.producer
+        .take(until: self.reactive.prepareForReuse).map { $0.title }
       self.accessoryType = viewModel!.data.value.details != nil ? .detailButton : .none
     }
   }

@@ -20,11 +20,11 @@ class ViewResultsController: UITableViewController {
   public var entityType: TMDBEntity {
     return _entityType
   }
-  public var tableViewModel: SearchResultsTableViewModeling!
+  public weak var tableViewModel: SearchResultsTableViewModeling!
   private var movieDiscover: MovieDiscoverProtocol {
     return watcherViewModel.movieDiscovery.value
   }
-  public var watcherViewModel: WatcherViewModelProtocol!
+  public weak var watcherViewModel: WatcherViewModelProtocol!
   private var tableViewDataSource: MNightTableviewDataSource!
   
   override func viewDidLoad() {
@@ -36,6 +36,7 @@ class ViewResultsController: UITableViewController {
     let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.entities } }
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
     tableViewDataSource.configureTableView()
+    tableViewModel.clearMediaData()
     tableViewModel.getNextMovieResultPage(page: tableViewModel.currentMovieResultPage.value, discover: movieDiscover)
   }
 
@@ -67,7 +68,7 @@ class ViewResultsController: UITableViewController {
   func setupSearchTextField() {
     guard entityType == .media else { return }
     let search = searchTextField.reactive.continuousTextValues
-    search.throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] value in
+    search.take(during: searchTextField.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] value in
       guard let strongSelf = self else { return }
       guard let pageNumber = Int(value!) else { return }
       strongSelf.tableViewModel.getNextMovieResultPage(page: pageNumber, discover: strongSelf.movieDiscover)
@@ -91,7 +92,9 @@ class ViewResultsController: UITableViewController {
           strongSelf.refreshControl?.endRefreshing()
         }
       }
-    }.start(on: UIScheduler()).start()
+    }
+    .take(during: self.reactive.lifetime)
+    .start(on: UIScheduler()).start()
   }
   
   override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -154,13 +157,15 @@ extension ViewResultsController: UITextFieldDelegate {
   
   func toggleTextField() {
       UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
-        if self.searchTextField.isHidden {
-          self.tableHeaderStackView.addArrangedSubview(self.searchTextField)
-          self.searchTextField.isHidden = false
-          self.searchTextField.becomeFirstResponder()
+        [weak self] in
+        guard let strongSelf = self else { return }
+        if strongSelf.searchTextField.isHidden {
+          strongSelf.tableHeaderStackView.addArrangedSubview(strongSelf.searchTextField)
+          strongSelf.searchTextField.isHidden = false
+          strongSelf.searchTextField.becomeFirstResponder()
         } else {
-          self.tableHeaderStackView.removeArrangedSubview(self.searchTextField)
-          self.searchTextField.isHidden = true
+          strongSelf.tableHeaderStackView.removeArrangedSubview(strongSelf.searchTextField)
+          strongSelf.searchTextField.isHidden = true
         }
       }, completion: nil)
   }

@@ -80,7 +80,6 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
     tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: cellIdentifier)
     sourceSignal.producer.take(during: self.reactive.lifetime).on { [weak self] value in
       guard let strongSelf = self else { return }
-//      let models = value.flatMap { SearchResultsTableViewCellModel(model: $0 ) as SearchResultsTableViewCellModeling }
       strongSelf._cellModels.value = strongSelf.dataToCellModels(data: value)
       strongSelf.tableView!.reloadData()
     }.observe(on: UIScheduler())
