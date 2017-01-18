@@ -34,6 +34,6 @@ public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellMo
   }
   
   deinit {
-    print("Cell model deinit")
+//    print("Cell model deinit")
   }
 }

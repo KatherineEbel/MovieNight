@@ -7,23 +7,40 @@
 //
 
 import UIKit
+import ReactiveSwift
 
-class SearchHeaderView: UIView {
+class SearchHeaderView: UITableViewHeaderFooterView {
 
   @IBOutlet weak var searchHeaderStackView: UIStackView!
   @IBOutlet weak var SearchPagesButton: UIButton!
   @IBOutlet weak var searchTextField: UITextField!
   var entityType: TMDBEntity!
+  var movieDiscover: MovieDiscoverProtocol?
   weak var viewModel: SearchResultsTableViewModeling! {
     didSet {
+      configurePlaceHolderText()
       setupSearchTextField()
-      viewModel!.peoplePageCountTracker().map { (numPages, _) in
+    }
+  }
+  
+  private func configurePlaceHolderText() {
+    if let _ = movieDiscover {
+      viewModel!.resultPageCountTracker().map { (numPages, _) in
         return "Go to (?) of \(numPages) Result Pages"
-        }.signal.observeValues { [weak self] text in
+        }.signal.take(during: self.reactive.lifetime).observe(on: UIScheduler()).observeValues { [weak self] text in
           guard let strongSelf = self else { return }
           strongSelf.searchTextField.placeholder = text
         }
+    } else {
+      viewModel!.peoplePageCountTracker().map { (numPages, _) in
+        return NSAttributedString(string: "Go to (?) of \(numPages) Result Pages")
+        }.signal.take(during: self.reactive.lifetime).observe(on: UIScheduler()).observeValues { [weak self] text in
+          guard let strongSelf = self else { return }
+          strongSelf.searchTextField.attributedPlaceholder = text
+          strongSelf.searchTextField.setNeedsDisplay()
+        }
     }
+    
   }
   
   public func setupSearchTextField() {
@@ -33,8 +50,8 @@ class SearchHeaderView: UIView {
       guard let pageNumber = Int(text!) else { return }
       strongSelf.handleSearch(pageNumber: pageNumber)
     }
-    searchHeaderStackView.removeArrangedSubview(searchTextField)
-    searchTextField.isHidden = true
+//    searchHeaderStackView.removeArrangedSubview(searchTextField)
+//    searchTextField.isHidden = true
   }
     
   private func handleSearch(pageNumber: Int) {
@@ -46,7 +63,11 @@ class SearchHeaderView: UIView {
       return
     }
     searchTextField.layer.borderColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0).cgColor
-    viewModel!.getPopularPeoplePage(pageNumber: pageNumber)
+    if let movieDiscover = movieDiscover {
+      viewModel.getNextMovieResultPage(page: pageNumber, discover: movieDiscover)
+    } else {
+      viewModel.getPopularPeoplePage(pageNumber: pageNumber)
+    }
   }
   
   @IBAction func searchPagesButtonPressed(_ sender: UIButton) {

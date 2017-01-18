@@ -190,51 +190,10 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="results"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <outlet property="searchTextField" destination="jTb-O7-Lb9" id="OSq-oQ-m5i"/>
-                        <outlet property="tableHeaderStackView" destination="Yam-UP-kCF" id="BVx-AG-3pr"/>
-                        <outlet property="tableHeaderView" destination="aHD-hR-A6P" id="xIr-zw-gCH"/>
                         <segue destination="7PJ-sf-e7d" kind="show" identifier="showDetails" id="Ss5-pB-H7J"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HLg-Bl-xtr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view clipsSubviews="YES" contentMode="scaleToFill" id="aHD-hR-A6P">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Yam-UP-kCF">
-                            <rect key="frame" x="8" y="8" width="359" height="62"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-s0-Ifs">
-                                    <rect key="frame" x="126.5" y="0.0" width="106" height="32"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                    <state key="normal" title="Search Pages">
-                                        <color key="titleColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="showSearchButtonPressed:" destination="YLI-Qm-gUo" eventType="touchUpInside" id="ynV-fv-1nE"/>
-                                        <action selector="showSearchResultsButtonPressed:" destination="6EX-ED-DEW" eventType="touchUpInside" id="Dq8-lo-FTW"/>
-                                    </connections>
-                                </button>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="go to page number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="jTb-O7-Lb9">
-                                    <rect key="frame" x="107.5" y="32" width="144" height="30"/>
-                                    <nil key="textColor"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="webSearch" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="YLI-Qm-gUo" id="5tv-7t-aCh"/>
-                                    </connections>
-                                </textField>
-                            </subviews>
-                        </stackView>
-                    </subviews>
-                    <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstItem="Yam-UP-kCF" firstAttribute="leading" secondItem="aHD-hR-A6P" secondAttribute="leading" constant="8" id="4qz-CU-EUN"/>
-                        <constraint firstAttribute="trailing" secondItem="Yam-UP-kCF" secondAttribute="trailing" constant="8" id="Jxl-V4-ViX"/>
-                        <constraint firstItem="Yam-UP-kCF" firstAttribute="top" secondItem="aHD-hR-A6P" secondAttribute="top" constant="8" id="XX9-dZ-v05"/>
-                    </constraints>
-                </view>
             </objects>
             <point key="canvasLocation" x="-460" y="1305"/>
         </scene>
@@ -339,43 +298,6 @@
                     </userDefinedRuntimeAttributes>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <view clipsSubviews="YES" contentMode="scaleToFill" id="bTl-P6-cRf">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="TOV-FA-dtd">
-                            <rect key="frame" x="8" y="8" width="359" height="62"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u36-WD-UVx">
-                                    <rect key="frame" x="126.5" y="0.0" width="106" height="32"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                    <state key="normal" title="Search Pages">
-                                        <color key="titleColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="showSearchButtonPressed:" destination="YLI-Qm-gUo" eventType="touchUpInside" id="8MY-rA-IZo"/>
-                                    </connections>
-                                </button>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="go to page number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zeb-VM-SF5">
-                                    <rect key="frame" x="107.5" y="32" width="144" height="30"/>
-                                    <nil key="textColor"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="YLI-Qm-gUo" id="Xbf-Lm-pgP"/>
-                                    </connections>
-                                </textField>
-                            </subviews>
-                        </stackView>
-                    </subviews>
-                    <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstItem="TOV-FA-dtd" firstAttribute="leading" secondItem="bTl-P6-cRf" secondAttribute="leading" constant="8" id="KzZ-Aa-Lb1"/>
-                        <constraint firstItem="TOV-FA-dtd" firstAttribute="top" secondItem="bTl-P6-cRf" secondAttribute="top" constant="8" id="NIk-xo-ENl"/>
-                        <constraint firstAttribute="trailing" secondItem="TOV-FA-dtd" secondAttribute="trailing" constant="8" id="up2-8V-sWn"/>
-                    </constraints>
-                </view>
             </objects>
             <point key="canvasLocation" x="2090" y="-134"/>
         </scene>

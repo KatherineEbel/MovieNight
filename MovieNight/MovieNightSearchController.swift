@@ -23,7 +23,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   public var entityType: TMDBEntity {
     return _entityType
   }
-  weak var searchHeaderView: SearchHeaderView!
+  var searchHeaderView: SearchHeaderView!
   public weak var movieWatcherViewModel: WatcherViewModelProtocol!
   public weak var viewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
@@ -65,6 +65,10 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     // set datasource using the above producer
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
     tableViewDataSource.configureTableView()
+    if entityType == .actor {
+      let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
+      tableView.register(nib, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
+    }
     // reselect rows when user refreshes tableview
     selectUserRowSelections()
     observeForTableViewReload()
@@ -85,17 +89,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     }
   }
 
-  func configureHeaderView() {
-    guard entityType == .actor else { return }
-    if let headerView = Bundle.main.loadNibNamed("SearchHeaderView", owner: self, options: nil)?[0] as? SearchHeaderView {
-      searchHeaderView = headerView
-      searchHeaderView.entityType = self.entityType
-      searchHeaderView.viewModel = self.viewModel
-    }
-    // get the number of pages to guide user when searching pages
-    tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
-    updateHeaderView()
-  }
 
   func updateHeaderView() {
     guard let headerView = searchHeaderView else { return }
@@ -219,17 +212,17 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     guard entityType == .actor else { return nil }
-    if let headerView = Bundle.main.loadNibNamed("SearchHeaderView", owner: self, options: nil)?[0] as? SearchHeaderView {
-      print("HeaderView loaded!")
-      searchHeaderView = headerView
-      searchHeaderView.entityType = self.entityType
-      searchHeaderView.viewModel = self.viewModel
-      return searchHeaderView
-    }
-    // get the number of pages to guide user when searching pages
-    tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
-    updateHeaderView()
-    return searchHeaderView ?? nil
+    searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "SearchHeaderView") as! SearchHeaderView
+    searchHeaderView.entityType = self.entityType
+    searchHeaderView.viewModel = self.viewModel
+    return searchHeaderView
+//    if let headerView = Bundle.main.loadNibNamed("SearchHeaderView", owner: nil, options: nil)?[0] as? SearchHeaderView {
+//      print("HeaderView loaded!")
+//      searchHeaderView = headerView
+//      return searchHeaderView
+//    } else {
+//      return nil
+//    }
   }
   
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

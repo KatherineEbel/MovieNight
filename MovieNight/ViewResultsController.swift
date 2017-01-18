@@ -10,16 +10,11 @@ import UIKit
 import ReactiveSwift
 
 class ViewResultsController: UITableViewController {
-  
-  @IBOutlet weak var tableHeaderView: UIView!
-  @IBOutlet weak var tableHeaderStackView: UIStackView!
-  @IBOutlet weak var searchTextField: UITextField!
-  
-  
   internal var _entityType: TMDBEntity!
   public var entityType: TMDBEntity {
     return _entityType
   }
+  private var searchHeaderView: SearchHeaderView!
   public weak var tableViewModel: SearchResultsTableViewModeling!
   private var movieDiscover: MovieDiscoverProtocol {
     return watcherViewModel.movieDiscovery.value
@@ -31,11 +26,13 @@ class ViewResultsController: UITableViewController {
     super.viewDidLoad()
     refreshControl?.addTarget(self, action: #selector(ViewResultsController.handleRefresh(refreshControl:)), for: .valueChanged)
     clearsSelectionOnViewWillAppear = false
-    setupSearchTextField()
-    configureHeaderView()
     let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.entities } }
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
     tableViewDataSource.configureTableView()
+    if entityType == .media {
+      let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
+      tableView.register(nib, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
+    }
     tableViewModel.clearMediaData()
     tableViewModel.getNextMovieResultPage(page: tableViewModel.currentMovieResultPage.value, discover: movieDiscover)
   }
@@ -45,37 +42,12 @@ class ViewResultsController: UITableViewController {
       // Dispose of any resources that can be recreated.
   }
   
-  
-  func configureHeaderView() {
-    guard entityType == .media else { return }
-    tableViewModel!.resultPageCountTracker().map {  (numPages, tracker) in
-      return "Go to (?) of \(numPages) Result Pages"
-      }.signal.observeValues { [weak self] text in
-        guard let strongSelf = self else { return }
-        strongSelf.searchTextField.placeholder = text
-      }
-    tableView.contentOffset = CGPoint(x: 0, y: -kTableHeaderViewHeight)
-    updateHeaderView()
-  }
-
   func updateHeaderView() {
-    guard !searchTextField.isEditing else { return }
+    guard let headerView = searchHeaderView else { return }
     var headerRect = CGRect(x: 0, y: -kTableHeaderViewHeight, width: tableView.bounds.width, height: kTableHeaderViewHeight)
     headerRect.origin.y = tableView.contentOffset.y
-    tableHeaderView.frame = headerRect
+    headerView.frame = headerRect
   }
-  
-  func setupSearchTextField() {
-    guard entityType == .media else { return }
-    let search = searchTextField.reactive.continuousTextValues
-    search.take(during: searchTextField.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] value in
-      guard let strongSelf = self else { return }
-      guard let pageNumber = Int(value!) else { return }
-      strongSelf.tableViewModel.getNextMovieResultPage(page: pageNumber, discover: strongSelf.movieDiscover)
-    }
-    searchTextField.isHidden = true
-  }
-  
   
   func handleRefresh(refreshControl: UIRefreshControl) {
     guard (tableViewModel?.resultPageCountTracker().map { $0.page }.value)! > 1 else {
@@ -105,14 +77,19 @@ class ViewResultsController: UITableViewController {
   override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
     // unfocus textfield when user scrolls
     guard entityType == .media else { return }
-    searchTextField.resignFirstResponder()
-    searchTextField.text = ""
+    searchHeaderView.searchTextField.resignFirstResponder()
+    searchHeaderView.searchTextField.text = ""
   }
   
   // MARK: TableViewDelegate
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    return tableHeaderView ?? nil
+    guard entityType == .media else { return nil }
+    searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "SearchHeaderView") as! SearchHeaderView
+    searchHeaderView.entityType = self.entityType
+    searchHeaderView.viewModel = self.tableViewModel
+    searchHeaderView.movieDiscover = self.movieDiscover
+    return searchHeaderView
   }
   
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -134,39 +111,8 @@ class ViewResultsController: UITableViewController {
     }
   }
   
-  @IBAction func showSearchResultsButtonPressed(_ sender: UIButton) {
-    toggleTextField()
-  }
-  
   deinit {
     print("Results controller deinit")
   }
   
-}
-
-extension ViewResultsController: UITextFieldDelegate {
-  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    textField.resignFirstResponder()
-    return true
-  }
-  
-  func textFieldDidEndEditing(_ textField: UITextField) {
-    textField.resignFirstResponder()
-    searchTextField.text = ""
-  }
-  
-  func toggleTextField() {
-      UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
-        [weak self] in
-        guard let strongSelf = self else { return }
-        if strongSelf.searchTextField.isHidden {
-          strongSelf.tableHeaderStackView.addArrangedSubview(strongSelf.searchTextField)
-          strongSelf.searchTextField.isHidden = false
-          strongSelf.searchTextField.becomeFirstResponder()
-        } else {
-          strongSelf.tableHeaderStackView.removeArrangedSubview(strongSelf.searchTextField)
-          strongSelf.searchTextField.isHidden = true
-        }
-      }, completion: nil)
-  }
 }
