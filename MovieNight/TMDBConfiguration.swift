@@ -10,6 +10,7 @@ import Argo
 import Runes
 import Curry
 
+// used to create image paths
 public struct TMDBConfiguration: Decodable {
   let images: TMDBImageConfiguration
   let change_keys: [String]

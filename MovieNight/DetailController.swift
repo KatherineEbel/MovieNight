@@ -10,6 +10,7 @@ import UIKit
 import ReactiveSwift
 import ReactiveCocoa
 
+// this view has a swipeGestureRecognizer to dismiss the view. Swipe right
 class DetailController: UIViewController {
   
   @IBOutlet weak var detailView: UIView!
@@ -46,6 +47,6 @@ class DetailController: UIViewController {
   }
   
   deinit {
-    print("Detail controller deinit : \(viewModel.entity)")
+//    print("Detail controller deinit : \(viewModel.entity)")
   }
 }

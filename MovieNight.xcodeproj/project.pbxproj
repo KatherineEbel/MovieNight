@@ -131,7 +131,7 @@
 				2717F7611DFB237600FFEA5F /* Info.plist */,
 				27234F101E0AE812002BA4C0 /* Model */,
 				44796BB11E00826A0002CF6F /* SubclassedViews */,
-				44796BB01E00825E0002CF6F /* ViewModel+ DataSource */,
+				44796BB01E00825E0002CF6F /* ViewModels+ TableViewDataSource */,
 				27234F111E0AE82A002BA4C0 /* Helpers */,
 			);
 			path = MovieNight;
@@ -174,7 +174,7 @@
 			name = StoryBoards;
 			sourceTree = "<group>";
 		};
-		44796BB01E00825E0002CF6F /* ViewModel+ DataSource */ = {
+		44796BB01E00825E0002CF6F /* ViewModels+ TableViewDataSource */ = {
 			isa = PBXGroup;
 			children = (
 				44796BAE1E006DB80002CF6F /* SearchResultsTableViewModel.swift */,
@@ -183,7 +183,7 @@
 				2709C85E1E01CEF900F21D60 /* WatcherViewModel.swift */,
 				4459F63B1E12141800991A32 /* DetailViewModel.swift */,
 			);
-			name = "ViewModel+ DataSource";
+			name = "ViewModels+ TableViewDataSource";
 			sourceTree = "<group>";
 		};
 		44796BB11E00826A0002CF6F /* SubclassedViews */ = {

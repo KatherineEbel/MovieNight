@@ -24,12 +24,14 @@ class HomeViewController: UIViewController {
   @IBOutlet weak var popupView: PopupView!
   
   var updateActiveWatcherAction: Action<Int,Bool,NoError>!
+  var viewModel: WatcherViewModelProtocol!
+  var alertController = UIAlertController()
+  
+  // prevent memory leaks by cancelling the observers when this controller isn't active
   lazy var triggerForViewDidDisappear: () -> Signal<(),NoError> = {
     [unowned self] in
     return self.reactive.trigger(for: #selector(HomeViewController.viewDidDisappear(_:)))
   }
-  
-  var alertController = UIAlertController()
   
   lazy var updateWatcherNameHandler: (String, @escaping (Bool) -> ()) -> () = {
     [unowned self] name, completion in
@@ -51,7 +53,6 @@ class HomeViewController: UIViewController {
     self.present(self.alertController, animated: true)
   }
   
-  var viewModel: WatcherViewModelProtocol!
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -62,6 +63,8 @@ class HomeViewController: UIViewController {
   }
   
   override func viewWillAppear(_ animated: Bool) {
+    // do bindings in viewWillAppear, since this will retrigger setting bindings
+    // whenever this controller is displayed.
     configureButtonBindings()
     configureWatcherLabels()
     configureObservers()
@@ -118,7 +121,7 @@ class HomeViewController: UIViewController {
   }
   
   func configureObservers() {
-    // change image for when watchers have completed choosing preferences
+    // change image for when watchers have completed choosing preferences (checked or unchecked bubble)
     viewModel.watchers.signal.take(until: triggerForViewDidDisappear()).observeValues { [weak self] watchers in
       guard let strongSelf = self else { return }
       let (readyImage, undecidedImage) = (UIImage(named: ImageAssetName.ready.rawValue )!, UIImage(named: ImageAssetName.undecided.rawValue)!)
@@ -126,6 +129,8 @@ class HomeViewController: UIViewController {
         strongSelf.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
         strongSelf.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
     }
+    // if the users updated name is valid or they choose to keep current name, then an checkmark or x popup will display
+    // to indicate success or failure.
     updateActiveWatcherAction.values.take(until: triggerForViewDidDisappear()).observeValues { [weak self] value in
       guard let strongSelf = self else { return }
       strongSelf.popupView.success = MutableProperty(value)
@@ -140,7 +145,7 @@ class HomeViewController: UIViewController {
     let resetAction = UIAlertAction(title: MovieNightControllerAlert.reset.rawValue, style: .destructive) {
       [unowned self] _ in
       DispatchQueue.main.async {
-        self.viewModel.clearAllPreferences()
+        self.viewModel.clearAllChoices()
       }
     }
     let cancelAction = UIAlertAction(title: MovieNightControllerAlert.cancel.rawValue, style: .cancel, handler: nil)

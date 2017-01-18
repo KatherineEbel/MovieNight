@@ -53,14 +53,14 @@ extension SwinjectStoryboard {
     }
     defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "actors") { resolver, controller in
       controller._entityType = .actor
-      controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
+      controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "GenreNav"){ _, _ in
     }
     defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "genres") { resolver, controller in
       controller._entityType = .movieGenre
-      controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
+      controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     
@@ -68,7 +68,7 @@ extension SwinjectStoryboard {
     }
     defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "ratings") { resolver, controller in
       controller._entityType = .rating
-      controller.viewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
+      controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
       controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(DetailController.self) { resolver, controller in

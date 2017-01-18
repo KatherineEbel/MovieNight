@@ -23,12 +23,12 @@ protocol WatcherViewModelProtocol: class {
   var activeWatcherReady: Property<Bool> { get }
   var movieDiscovery: Property<MovieDiscoverProtocol> { get }
   func setActiveWatcherName(name: String) -> Bool
-  func addWalker(watcher: MovieWatcherProtocol) -> Bool
-  func getPreferenceForActiveWatcher(preferenceType: TMDBEntity) -> Property<[TMDBEntityProtocol]?>
- func getStatusForActiveWatcherPreference(preferenceType: TMDBEntity) -> Property<(statusMessage: String, statusColor: UIColor)>
-  func activeWatcherAdd(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
-  func activeWatcherRemove(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
-  func clearAllPreferences()
+  func addWatcher(watcher: MovieWatcherProtocol) -> Bool
+  func getChoicesForActiveWatcher(choiceType: TMDBEntity) -> Property<[TMDBEntityProtocol]?>
+ func getStatusForActiveWatcherChoice(choiceType: TMDBEntity) -> Property<(statusMessage: String, statusColor: UIColor)>
+  func activeWatcherAdd(choice: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
+  func activeWatcherRemove(choice: TMDBEntityProtocol, with type: TMDBEntity) -> Bool
+  func clearAllChoices()
   func updateActiveWatcher(index: Int)
   func watcher1Ready() -> Property<Bool>
   func watcher2Ready() -> Property<Bool>
@@ -40,6 +40,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
   var watchers: Property<[MovieWatcherProtocol]?> {
     return Property(_watchers)
   }
+  // tracks which watcher is active
   private let _activeWatcherIndex = MutableProperty(0)
   var activeWatcherIndex: Property<Int> {
     return Property(_activeWatcherIndex)
@@ -57,8 +58,9 @@ public class WatcherViewModel: WatcherViewModelProtocol {
       .flatten(.latest)
   }
   var movieDiscovery: Property<MovieDiscoverProtocol> {
-    let watcher1Preferences = watchers.value?[0].moviePreference.preferences
-    let watcher2Preferences = watchers.value?[1].moviePreference.preferences
+    // combined unique values for watcher 1 and watcher 2, to make a movieDiscover request.
+    let watcher1Preferences = watchers.value?[0].moviePreference.choices
+    let watcher2Preferences = watchers.value?[1].moviePreference.choices
     return watcher1Preferences!.combineLatest(with: watcher2Preferences!).map { preference1, preference2 -> MovieDiscoverProtocol in
       let actorsIDs = Set([preference1[.actor]!.map { $0.id }, preference2[.actor]!.map { $0.id }].flatMap {$0})
       let genreIDs = Set([preference1[.movieGenre]!.map { $0.id }, preference2[.movieGenre]!.map { $0.id }].flatMap {$0})
@@ -72,6 +74,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     self._watchers = MutableProperty(watchers)
   }
   
+  // watchers are ready if their name is valid and their preferences are set.
   func watcher1Ready() -> Property<Bool> {
     return watchers.value!.first!.isReady.map { $0.0 && $0.1 }
   }
@@ -80,22 +83,23 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return watchers.value!.last!.isReady.map { $0.0 && $0.1 }
   }
   
-  func getPreferenceForActiveWatcher(preferenceType: TMDBEntity) -> Property<[TMDBEntityProtocol]?> {
-    switch preferenceType {
-      case .movieGenre: return activeWatcher.value.moviePreference.preferences.map { $0[.movieGenre] }
-      case .rating: return activeWatcher.value.moviePreference.preferences.map { $0[.rating] }
-      default: return activeWatcher.value.moviePreference.preferences.map { $0[.actor] } 
+  func getChoicesForActiveWatcher(choiceType: TMDBEntity) -> Property<[TMDBEntityProtocol]?> {
+    switch choiceType {
+      case .movieGenre: return activeWatcher.value.moviePreference.choices.map { $0[.movieGenre] }
+      case .rating: return activeWatcher.value.moviePreference.choices.map { $0[.rating] }
+      default: return activeWatcher.value.moviePreference.choices.map { $0[.actor] }
     }
   }
   
-  func getStatusForActiveWatcherPreference(preferenceType: TMDBEntity) -> Property<(statusMessage: String, statusColor: UIColor)> {
+  // given an entity type will return tuple of ready/not ready color and a message with current count for preference
+  func getStatusForActiveWatcherChoice(choiceType: TMDBEntity) -> Property<(statusMessage: String, statusColor: UIColor)> {
     let readyColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0)
     let notReadyColor = UIColor.red
     var statusText: String = ""
     var statusColor = notReadyColor
-    let preferenceCount = activeWatcher.value.moviePreference.preferences.map { $0[preferenceType]!.count }
-    return preferenceCount.map { count -> (String, UIColor) in
-      switch preferenceType {
+    let currentCount = activeWatcher.value.moviePreference.choices.map { $0[choiceType]!.count }
+    return currentCount.map { count -> (String, UIColor) in
+      switch choiceType {
         case .rating:
           statusText = "\(count)/1"
           statusColor = count == 1 ? readyColor : notReadyColor
@@ -113,7 +117,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return activeWatcher.value.setName(value: name)
   }
   
-  func addWalker(watcher: MovieWatcherProtocol) -> Bool {
+  func addWatcher(watcher: MovieWatcherProtocol) -> Bool {
     guard let count = watchers.value?.count, count < 2 else {
       return false
     }
@@ -121,20 +125,19 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return true
   }
   
-  func activeWatcherAdd(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool {
-    return activeWatcher.value.moviePreference.add(preference: preference, with: type)
+  func activeWatcherAdd(choice: TMDBEntityProtocol, with type: TMDBEntity) -> Bool {
+    return activeWatcher.value.moviePreference.add(choice: choice, with: type)
   }
   
-  func activeWatcherRemove(preference: TMDBEntityProtocol, with type: TMDBEntity) -> Bool {
-    return activeWatcher.value.moviePreference.remove(preference: preference, with: type)
+  func activeWatcherRemove(choice: TMDBEntityProtocol, with type: TMDBEntity) -> Bool {
+    return activeWatcher.value.moviePreference.remove(choice: choice, with: type)
   }
   
   func updateActiveWatcher(index: Int) {
     _activeWatcherIndex.swap(index)
   }
   
-  
-  func clearAllPreferences() {
+  func clearAllChoices() {
     // enumerate through both watchers and reset back to initial settings
     _watchers.value = _watchers.value?.enumerated().map { (index,watcher) in
       let copy = watcher

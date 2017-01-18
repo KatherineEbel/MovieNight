@@ -13,9 +13,9 @@ import Result
 
 
 public protocol MovieNightSearchControllerProtocol {
+  // entityType needed for fetching the correct properties from viewModel
   var entityType: TMDBEntity { get }
 }
-
 
 
 class MovieNightSearchController: UITableViewController, UITextFieldDelegate, MovieNightSearchControllerProtocol {
@@ -24,20 +24,22 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     return _entityType
   }
   var searchHeaderView: SearchHeaderView!
+  var viewUpdateScheduler = UIScheduler()
+  var alertController = UIAlertController()
   public weak var movieWatcherViewModel: WatcherViewModelProtocol!
-  public weak var viewModel: SearchResultsTableViewModeling?
+  public weak var tableViewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
-  private var selectedRows: MutableProperty<Set<IndexPath>> = MutableProperty(Set<IndexPath>())
+  private var selectedRows: MutableProperty<Set<IndexPath>> = MutableProperty(Set<IndexPath>()) // allows user to see what their current selections are if they navigate away and come back.
   private var cellModelProducer: SignalProducer<[TMDBEntityProtocol], NoError>? {
-    guard let viewModel = viewModel else { return nil }
+    guard let tableViewModel = tableViewModel else { return nil }
     switch entityType {
-      case .movieGenre: return viewModel.modelData.producer.map { $0[.movieGenre]!.flatMap { $0.entities } }
-      case .rating: return viewModel.modelData.producer.map { $0[.rating]!.flatMap { $0.entities } }
-      default: return viewModel.modelData.producer.map { $0[.actor]!.flatMap { $0.entities } }
+      case .movieGenre: return tableViewModel.modelData.producer.map { $0[.movieGenre]!.flatMap { $0.entities } }
+      case .rating: return tableViewModel.modelData.producer.map { $0[.rating]!.flatMap { $0.entities } }
+      default: return tableViewModel.modelData.producer.map { $0[.actor]!.flatMap { $0.entities } }
     }
   }
   private var needInitialFetch: Bool {
-    return viewModel!.modelData.map { [weak self] data -> Bool in
+    return tableViewModel!.modelData.map { [weak self] data -> Bool in
       guard let strongSelf = self else { return false }
       return data[strongSelf.entityType]!.flatMap { $0.entities }.isEmpty
     }.value
@@ -53,7 +55,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   override func viewDidLoad() {
     super.viewDidLoad()
     // crash if no viewModel, and also make sure safe to force unwrap viewModel property
-    guard viewModel != nil && movieWatcherViewModel != nil else {
+    guard tableViewModel != nil && movieWatcherViewModel != nil else {
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
     }
@@ -66,8 +68,8 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
     tableViewDataSource.configureTableView()
     if entityType == .actor {
-      let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
-      tableView.register(nib, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
+      let nib = UINib(nibName: Identifiers.searchHeaderView.rawValue, bundle: nil)
+      tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
     }
     // reselect rows when user refreshes tableview
     selectUserRowSelections()
@@ -81,15 +83,15 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     // fetch data if viewModel hasn't already fetched self.entity's cellModels
     if needInitialFetch {
       switch entityType {
-        case .actor: viewModel?.getPopularPeoplePage(pageNumber: viewModel!.currentPeopleResultPage.value + 1)
-        case .movieGenre: viewModel?.getGenres()
-        case .rating: viewModel?.getRatings()
+        case .actor: tableViewModel?.getPopularPeoplePage(pageNumber: tableViewModel!.currentPeopleResultPage.value + 1)
+        case .movieGenre: tableViewModel?.getGenres()
+        case .rating: tableViewModel?.getRatings()
         default: break
       }
     }
   }
 
-
+  // keep the searchHeader pinned to the top
   func updateHeaderView() {
     guard let headerView = searchHeaderView else { return }
     // make the searchfield scroll with the tableview
@@ -119,13 +121,11 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   private func configureErrorSignal() {
     // if viewModel receives error when fetching cellModel data, show error message
-    viewModel!.errorMessage.signal.take(during: self.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
+    tableViewModel!.errorMessage.signal.observe(on: viewUpdateScheduler).take(during: self.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
       guard let strongSelf = self else { return }
       if let message = message {
-        DispatchQueue.main.async {
-          strongSelf.alertForError(message: message)
-          strongSelf.refreshControl?.endRefreshing()
-        }
+        strongSelf.alertForError(message: message)
+        strongSelf.refreshControl?.endRefreshing()
       }
     }
   }
@@ -136,15 +136,15 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     guard self.entityType.isPageable else { return }
     switch self.entityType {
       case .actor:
-        guard (viewModel!.peoplePageCountTracker().map { $0.page }).value > 1 else { return }
+        guard (tableViewModel!.peoplePageCountTracker().map { $0.page }).value > 1 else { return }
         if let indexPaths = tableView.indexPathsForSelectedRows {
           selectedRows.value = Set(indexPaths)
         }
         refreshControl.beginRefreshing()
-        viewModel!.getPopularPeoplePage(pageNumber: viewModel!.currentPeopleResultPage.value)
+        tableViewModel!.getPopularPeoplePage(pageNumber: tableViewModel!.currentPeopleResultPage.value)
       default: break
     }
-    self.tableView.refreshControl?.attributedTitle = viewModel!.peoplePageCountTracker().map { $0.tracker }.value
+    self.tableView.refreshControl?.attributedTitle = tableViewModel!.peoplePageCountTracker().map { $0.tracker }.value
     // observe when network activity ends to end refreshing
     UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [unowned self] value in
       if let value = value as? Bool {
@@ -154,7 +154,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       }
     }
       .take(during: self.reactive.lifetime)
-      .start(on: UIScheduler()).start()
+      .start(on: viewUpdateScheduler).start()
   }
   
   private func observeForTableViewReload() {
@@ -168,7 +168,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   }
   
   private func alertForError(message: String) {
-    let alertController = UIAlertController(title: MovieNightControllerAlert.somethingWentWrong.rawValue, message: message, preferredStyle: .alert)
+    alertController = UIAlertController(title: MovieNightControllerAlert.somethingWentWrong.rawValue, message: message, preferredStyle: .alert)
     let okAction = UIAlertAction(title: MovieNightControllerAlert.ok.rawValue, style: .default, handler: nil)
     alertController.addAction(okAction)
     present(alertController, animated: true, completion: nil)
@@ -179,9 +179,9 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   // will already be highlighted
   private func selectUserRowSelections() {
     guard let currentPreferences = movieWatcherViewModel
-      .getPreferenceForActiveWatcher(preferenceType: entityType).value else { return }
+      .getChoicesForActiveWatcher(choiceType: entityType).value else { return }
     let titles = currentPreferences.map { $0.title }
-    guard let indexPaths = viewModel?.indexesForTitles(ofEntityType: entityType, titles: titles) else { return }
+    guard let indexPaths = tableViewModel?.indexesForTitles(ofEntityType: entityType, titles: titles) else { return }
     indexPaths.forEach { [unowned self] indexPath in
       self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: .bottom)
       self.tableView(self.tableView, didSelectRowAt: indexPath)
@@ -197,14 +197,14 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   func configureTabBar() {
     // tried binding properties to tabBar, but only worked using producer
-    let preferenceStatus = movieWatcherViewModel.getStatusForActiveWatcherPreference(preferenceType: entityType)
+    let preferenceStatus = movieWatcherViewModel.getStatusForActiveWatcherChoice(choiceType: entityType)
     preferenceStatus.producer.on { [weak self] status in
       guard let strongSelf = self else { return }
       strongSelf.navigationController?.tabBarItem.badgeColor = status.statusColor
       strongSelf.navigationController?.tabBarItem.badgeValue = status.statusMessage
     }
       .take(during: self.reactive.lifetime)
-      .observe(on: UIScheduler()).start()
+      .observe(on: viewUpdateScheduler).start()
   }
   
   
@@ -212,17 +212,10 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     guard entityType == .actor else { return nil }
-    searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "SearchHeaderView") as! SearchHeaderView
+    searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: Identifiers.searchHeaderView.rawValue) as! SearchHeaderView
     searchHeaderView.entityType = self.entityType
-    searchHeaderView.viewModel = self.viewModel
+    searchHeaderView.viewModel = self.tableViewModel
     return searchHeaderView
-//    if let headerView = Bundle.main.loadNibNamed("SearchHeaderView", owner: nil, options: nil)?[0] as? SearchHeaderView {
-//      print("HeaderView loaded!")
-//      searchHeaderView = headerView
-//      return searchHeaderView
-//    } else {
-//      return nil
-//    }
   }
   
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -230,27 +223,27 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let entities = viewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
+    let entities = tableViewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
     if let preference = entities?[indexPath.row] {
       // activeWatcherAdd returns a bool. Not currently using value, but might be useful when adding
       // diff features
-      _ = movieWatcherViewModel.activeWatcherAdd(preference: preference, with: self.entityType)
+      _ = movieWatcherViewModel.activeWatcherAdd(choice: preference, with: self.entityType)
     }
   }
   
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-    let entities = viewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
-    // fetch the model data for the type that matches the controller's entity
+    // fetch the model data for the type that matches the controller's entity type
+    let entities = tableViewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
     if let preference = entities?[indexPath.row] {
       // activeWatcherRemove returns a bool. Not currently using value, but might be useful when adding
       // diff features
-      _ = movieWatcherViewModel.activeWatcherRemove(preference: preference, with: self.entityType)
+      _ = movieWatcherViewModel.activeWatcherRemove(choice: preference, with: self.entityType)
     }
     
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-    let entities = viewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
+    let entities = tableViewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
     // view details for the specified entity (only actors and ratings have details)
     if let entity = entities?[indexPath.row] {
       performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
@@ -280,10 +273,11 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   @IBAction func preferencesComplete(_ sender: UIBarButtonItem) {
     // isReady property is a tuple of bools assigned to nameValid and moviePreference.isSet
     let ready = movieWatcherViewModel.activeWatcher.value.isReady.map { $0.0 && $0.1 }.value
+    // segue to homeController if users selections are complete, or alert if preferences not complete. (Save button should not be enabled if preference not set.
     ready ? self.navigationController?.tabBarController?.dismiss(animated: true, completion: nil) : alertForError(message: MovieNightControllerAlert.preferencesNotComplete.rawValue)
   }
   
   deinit {
-    print("\(entityType) controller deinit")
+//    print("\(entityType) controller deinit")
   }
 }

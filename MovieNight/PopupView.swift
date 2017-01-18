@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveSwift
 
+// pops up to show successful change of name for user
 class PopupView: UIView {
   var success: MutableProperty<Bool> = MutableProperty(false) {
     didSet {

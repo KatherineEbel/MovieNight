@@ -26,6 +26,7 @@ public enum Identifiers: String {
   case networkActivityKey = "isNetworkActivityIndicatorVisible"
   case preferenceCellNibName = "PreferenceCell"
   case movieResultCellNibName = "MovieResultCell"
+  case searchHeaderView = "SearchHeaderView"
   case showDetailsSegue = "showDetails"
   case choosePreferencesSegue = "choosePreferences"
 }
@@ -37,7 +38,7 @@ enum MovieNightControllerAlert: String {
   case somethingNotRight = "Sorry! Something's not quite right."
   case updateName = "Update Name"
   case updateNameMessage = "Update your name?"
-  case keepDefaultName = "Keep default name"
+  case keepDefaultName = "Keep current name"
   case clearSelectionsMessage = "Proceeding, will clear all selected preferences"
   case clearSelectionsConfirmation = "Are you sure you want to continue?"
   case ready = "Ready"

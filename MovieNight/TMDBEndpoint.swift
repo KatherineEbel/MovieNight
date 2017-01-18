@@ -100,6 +100,7 @@ public enum TMDBEndpoint: URLRequestConvertible {
     }
   }
   
+  // encodes the url request with given parameters for each endpoint
   public func asURLRequest() throws -> URLRequest {
     let result: (path: String, parameters: Parameters?) = { 
       switch self {
@@ -120,6 +121,8 @@ public enum TMDBEndpoint: URLRequestConvertible {
 }
 
 extension TMDBEndpoint {
+  // if config hasn't already been fetched and saved to user defaults, then fetch, else just
+  // decode the config in user defaults
   public static var movieNightConfig: TMDBConfiguration? {
     let configuration = UserDefaults.standard.object(forKey: "configuration")
     if let configuration = configuration,

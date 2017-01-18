@@ -11,6 +11,7 @@ import ReactiveSwift
 import ReactiveCocoa
 import Result
 
+// standard cell
 class PreferenceCell: UITableViewCell {
   internal var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
@@ -23,6 +24,7 @@ class PreferenceCell: UITableViewCell {
   @IBOutlet weak var selectionImage: UIImageView!
   
   override func setSelected(_ selected: Bool, animated: Bool) {
+    // change to a different image when cell is selected
     super.setSelected(selected, animated: animated)
     let selectedImage = UIImage(named: ImageAssetName.cellSelected.rawValue)!
     let unselectedImage = UIImage(named: ImageAssetName.cellUnselected.rawValue)!

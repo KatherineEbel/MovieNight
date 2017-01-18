@@ -15,11 +15,11 @@ class ViewResultsController: UITableViewController {
     return _entityType
   }
   private var searchHeaderView: SearchHeaderView!
-  public weak var tableViewModel: SearchResultsTableViewModeling!
+  internal weak var tableViewModel: SearchResultsTableViewModeling!
   private var movieDiscover: MovieDiscoverProtocol {
     return watcherViewModel.movieDiscovery.value
   }
-  public weak var watcherViewModel: WatcherViewModelProtocol!
+  internal weak var watcherViewModel: WatcherViewModelProtocol!
   private var tableViewDataSource: MNightTableviewDataSource!
   
   override func viewDidLoad() {
@@ -85,7 +85,7 @@ class ViewResultsController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     guard entityType == .media else { return nil }
-    searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: "SearchHeaderView") as! SearchHeaderView
+    searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: Identifiers.searchHeaderView.rawValue) as! SearchHeaderView
     searchHeaderView.entityType = self.entityType
     searchHeaderView.viewModel = self.tableViewModel
     searchHeaderView.movieDiscover = self.movieDiscover
@@ -93,10 +93,12 @@ class ViewResultsController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    // should be no height and no header if not .media type
     return entityType == .media ? kTableHeaderViewHeight : 0
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    // show the detail controller when the accessory for a row is tapped
     let entities = tableViewModel!.modelData.value[self.entityType]!.flatMap { $0.entities }
     let entity = entities[indexPath.row] as TMDBEntityProtocol
     performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
