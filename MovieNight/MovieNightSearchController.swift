@@ -24,7 +24,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     return _entityType
   }
   var searchHeaderView: SearchHeaderView!
-  var viewUpdateScheduler = UIScheduler()
   var alertController = UIAlertController()
   public weak var movieWatcherViewModel: WatcherViewModelProtocol!
   public weak var tableViewModel: SearchResultsTableViewModeling?
@@ -121,7 +120,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   private func configureErrorSignal() {
     // if viewModel receives error when fetching cellModel data, show error message
-    tableViewModel!.errorMessage.signal.observe(on: viewUpdateScheduler).take(during: self.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
+    tableViewModel!.errorMessage.signal.observe(on: kUIScheduler).take(during: self.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
       guard let strongSelf = self else { return }
       if let message = message {
         strongSelf.alertForError(message: message)
@@ -154,7 +153,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       }
     }
       .take(during: self.reactive.lifetime)
-      .start(on: viewUpdateScheduler).start()
+      .start(on: kUIScheduler).start()
   }
   
   private func observeForTableViewReload() {
@@ -204,7 +203,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       strongSelf.navigationController?.tabBarItem.badgeValue = status.statusMessage
     }
       .take(during: self.reactive.lifetime)
-      .observe(on: viewUpdateScheduler).start()
+      .observe(on: kUIScheduler).start()
   }
   
   

@@ -29,11 +29,11 @@ class ViewResultsController: UITableViewController {
     let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.entities } }
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
     tableViewDataSource.configureTableView()
+    tableViewModel.clearMediaData()
     if entityType == .media {
       let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
-      tableView.register(nib, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
+      tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
     }
-    tableViewModel.clearMediaData()
     tableViewModel.getNextMovieResultPage(page: tableViewModel.currentMovieResultPage.value, discover: movieDiscover)
   }
 
@@ -66,7 +66,7 @@ class ViewResultsController: UITableViewController {
       }
     }
     .take(during: self.reactive.lifetime)
-    .start(on: UIScheduler()).start()
+    .start(on: kUIScheduler).start()
   }
   
   override func scrollViewDidScroll(_ scrollView: UIScrollView) {

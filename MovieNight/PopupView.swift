@@ -15,13 +15,12 @@ class PopupView: UIView {
     didSet {
       self.successImageView.reactive.image <~ success.map { success in
         success ? UIImage(named: "ok")! : UIImage(named: "failed")!
-      }
+        }.producer.take(first: 1)
     }
   }
   @IBOutlet weak var successImageView: UIImageView!
   
   required init?(coder aDecoder: NSCoder) {
-    print("Popup initialized")
     super.init(coder: aDecoder)
     self.alpha = 0
   }
@@ -43,6 +42,7 @@ class PopupView: UIView {
   }
   
   deinit {
-    print("Popup deinit")
+//    print("Popup deinit")
+    // deinit not called since this is in the rootViewController of initial viewController
   }
 }

@@ -82,7 +82,7 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
       guard let strongSelf = self else { return }
       strongSelf._cellModels.value = strongSelf.dataToCellModels(data: value)
       strongSelf.tableView!.reloadData()
-    }.observe(on: UIScheduler())
+    }.observe(on: kUIScheduler)
     .start()
   }
   

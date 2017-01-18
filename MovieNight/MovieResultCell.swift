@@ -21,7 +21,7 @@ class MovieResultCell: UITableViewCell {
           guard let strongSelf = self else { return }
           strongSelf.posterImageView.image = image.resizedImage(withBounds: strongSelf.contentView.bounds.size)
           strongSelf.layoutIfNeeded()
-      }.observe(on: UIScheduler()).start()
+      }.observe(on: kUIScheduler).start()
     }
   }
 }

@@ -9,38 +9,28 @@
 import UIKit
 import ReactiveSwift
 
+// used for searchable endpoints to go to a specific page of the results
 class SearchHeaderView: UITableViewHeaderFooterView {
-
-  @IBOutlet weak var searchHeaderStackView: UIStackView!
-  @IBOutlet weak var SearchPagesButton: UIButton!
   @IBOutlet weak var searchTextField: UITextField!
   var entityType: TMDBEntity!
   var movieDiscover: MovieDiscoverProtocol?
   weak var viewModel: SearchResultsTableViewModeling! {
     didSet {
-      configurePlaceHolderText()
       setupSearchTextField()
+      configurePlaceHolderText()
     }
   }
   
   private func configurePlaceHolderText() {
     if let _ = movieDiscover {
-      viewModel!.resultPageCountTracker().map { (numPages, _) in
-        return "Go to (?) of \(numPages) Result Pages"
-        }.signal.take(during: self.reactive.lifetime).observe(on: UIScheduler()).observeValues { [weak self] text in
-          guard let strongSelf = self else { return }
-          strongSelf.searchTextField.placeholder = text
-        }
+      searchTextField.attributedPlaceholder = viewModel!.resultPageCountTracker().map { (numPages, _) in
+        return NSAttributedString(string:"Go to (?) of \(numPages) Result Pages")
+      }.value
     } else {
-      viewModel!.peoplePageCountTracker().map { (numPages, _) in
+      searchTextField.attributedPlaceholder = viewModel!.peoplePageCountTracker().map { (numPages, _) in
         return NSAttributedString(string: "Go to (?) of \(numPages) Result Pages")
-        }.signal.take(during: self.reactive.lifetime).observe(on: UIScheduler()).observeValues { [weak self] text in
-          guard let strongSelf = self else { return }
-          strongSelf.searchTextField.attributedPlaceholder = text
-          strongSelf.searchTextField.setNeedsDisplay()
-        }
+      }.value
     }
-    
   }
   
   public func setupSearchTextField() {
@@ -50,8 +40,6 @@ class SearchHeaderView: UITableViewHeaderFooterView {
       guard let pageNumber = Int(text!) else { return }
       strongSelf.handleSearch(pageNumber: pageNumber)
     }
-//    searchHeaderStackView.removeArrangedSubview(searchTextField)
-//    searchTextField.isHidden = true
   }
     
   private func handleSearch(pageNumber: Int) {
@@ -69,11 +57,6 @@ class SearchHeaderView: UITableViewHeaderFooterView {
       viewModel.getPopularPeoplePage(pageNumber: pageNumber)
     }
   }
-  
-  @IBAction func searchPagesButtonPressed(_ sender: UIButton) {
-    toggleTextField()
-  }
-
 }
 
 extension SearchHeaderView: UITextFieldDelegate {
@@ -82,23 +65,12 @@ extension SearchHeaderView: UITextFieldDelegate {
     return true
   }
   
+  func textFieldDidBeginEditing(_ textField: UITextField) {
+    searchTextField.layer.borderColor = UIColor.clear.cgColor
+  }
+  
   func textFieldDidEndEditing(_ textField: UITextField) {
     textField.resignFirstResponder()
     searchTextField.text = ""
-  }
-  
-  func toggleTextField() {
-      UIView.animate(withDuration: 0.5, delay: 0.3, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: [.curveEaseInOut], animations: {
-        [weak self] in
-        guard let strongSelf = self else { return }
-        if strongSelf.searchTextField.isHidden {
-          strongSelf.searchHeaderStackView.addArrangedSubview(strongSelf.searchTextField)
-          strongSelf.searchTextField.isHidden = false
-          strongSelf.searchTextField.becomeFirstResponder()
-        } else {
-          strongSelf.searchHeaderStackView.removeArrangedSubview(strongSelf.searchTextField)
-          strongSelf.searchTextField.isHidden = true
-        }
-      }, completion: nil)
   }
 }

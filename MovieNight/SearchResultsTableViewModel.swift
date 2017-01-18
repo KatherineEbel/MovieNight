@@ -119,7 +119,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     client.searchMovieDiscover(page: currentMovieResultPage.value, discover: discover)
       .take(first: 1)
       .map { $0 }
-      .observe(on: UIScheduler())
+      .observe(on: kUIScheduler)
       .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
@@ -137,7 +137,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     client.searchPopularPeople(pageNumber: pageNumber)
       .take(first: 1)
       .map { $0 }
-      .observe(on: UIScheduler())
+      .observe(on: kUIScheduler)
       .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
@@ -158,7 +158,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .map { response in
         return response.genres
       }
-      .observe(on: UIScheduler())
+      .observe(on: kUIScheduler)
       .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
@@ -177,7 +177,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       .map { response in
           return response
       }
-      .observe(on: UIScheduler())
+      .observe(on: kUIScheduler)
       .on(event: { [unowned self] event in
         switch event {
           case .value(let value):

@@ -88,12 +88,12 @@ class HomeViewController: UIViewController {
   func configureButtonBindings() {
     // action to be performed when user presses one of the watcher buttons (could have just been IBAction but
     // wanted to use for practice with ReactiveSwift framework
-    updateActiveWatcherAction = Action { input in
-      return SignalProducer<Bool, NoError> { [weak self] (observer, disposable) in
-        guard let innerStrongSelf = self else { return }
-        innerStrongSelf.viewModel.updateActiveWatcher(index: input)
-        let watcherName = innerStrongSelf.viewModel.activeWatcher.value.name
-        innerStrongSelf.updateWatcherNameHandler(watcherName) { success in
+    updateActiveWatcherAction = Action { [weak self] input in
+      guard let strongSelf = self else { return SignalProducer.empty }
+      return SignalProducer<Bool, NoError> {  (observer, disposable) in
+        strongSelf.viewModel.updateActiveWatcher(index: input)
+        let watcherName = strongSelf.viewModel.activeWatcher.value.name
+        strongSelf.updateWatcherNameHandler(watcherName) { success in
           observer.send(value: success)
           observer.sendCompleted()
         }
@@ -122,13 +122,12 @@ class HomeViewController: UIViewController {
   
   func configureObservers() {
     // change image for when watchers have completed choosing preferences (checked or unchecked bubble)
-    viewModel.watchers.signal.take(until: triggerForViewDidDisappear()).observeValues { [weak self] watchers in
-      guard let strongSelf = self else { return }
+    let watcherStatuses = Property.combineLatest(viewModel.watcher1Ready(), viewModel.watcher2Ready())
+    watcherStatuses.producer.take(until: triggerForViewDidDisappear()).observe(on: kUIScheduler).on(value: { [weak self] (firstReady, secondReady) in
       let (readyImage, undecidedImage) = (UIImage(named: ImageAssetName.ready.rawValue )!, UIImage(named: ImageAssetName.undecided.rawValue)!)
-      let (watcher1Ready, watcher2Ready) = (strongSelf.viewModel.watcher1Ready(), strongSelf.viewModel.watcher2Ready())
-        strongSelf.watcher1Button.setBackgroundImage(watcher1Ready.value ? readyImage : undecidedImage, for: .normal)
-        strongSelf.watcher2Button.setBackgroundImage(watcher2Ready.value ? readyImage : undecidedImage, for: .normal)
-    }
+      self?.watcher1Button.setBackgroundImage(firstReady ? readyImage : undecidedImage, for: .normal)
+      self?.watcher2Button.setBackgroundImage(secondReady ? readyImage : undecidedImage, for: .normal)
+    }).start()
     // if the users updated name is valid or they choose to keep current name, then an checkmark or x popup will display
     // to indicate success or failure.
     updateActiveWatcherAction.values.take(until: triggerForViewDidDisappear()).observeValues { [weak self] value in
