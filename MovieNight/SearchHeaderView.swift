@@ -57,6 +57,10 @@ class SearchHeaderView: UITableViewHeaderFooterView {
       viewModel.getPopularPeoplePage(pageNumber: pageNumber)
     }
   }
+  
+  deinit {
+    searchTextField.attributedPlaceholder = NSAttributedString(string: "Go to Page")
+  }
 }
 
 extension SearchHeaderView: UITextFieldDelegate {

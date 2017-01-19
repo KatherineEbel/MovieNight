@@ -6,6 +6,7 @@
 //  Copyright © 2016 Katherine Ebel. All rights reserved.
 //
 
+// Detail viewmodel only needs an entity type so it can display a name/title and a description of that entity.
 public protocol DetailViewModelProtocol {
   var entity: TMDBEntityProtocol? { get set }
 }

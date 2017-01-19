@@ -11,30 +11,24 @@ import ReactiveSwift
 import Result
 import Argo
 
-//protocol MNightTableviewDataSource: UITableViewDataSource {
-//  
-//}
-
 class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   private var _cellModels = MutableProperty<[SearchResultsTableViewCellModeling]>([])
   private var network: MovieNightNetworkProtocol!
-  weak var tableView: UITableView?
-  let sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>!
-  var nibName: String
+  private weak var tableView: UITableView?
+  private let sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>!
+  public var nibName: String
   public var cellModels: Property<[SearchResultsTableViewCellModeling]> {
     return Property(_cellModels)
   }
   
   var cellIdentifier: String {
     switch self.nibName {
-      case "PreferenceCell": return "preferenceCell"
-      case "MovieResultCell": return "movieResultCell"
-      default: break
+      case Identifiers.movieResultCellNibName.rawValue: return Identifiers.movieResultCellIdentifier.rawValue
+      default: return Identifiers.preferenceCellIdentifier.rawValue
     }
-    return "Unknown"
   }
   
-  init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>, nibName: String) {
+  public init(tableView: UITableView, sourceSignal: SignalProducer<[TMDBEntityProtocol], NoError>, nibName: String) {
     self.tableView = tableView
     self.sourceSignal = sourceSignal
     self.nibName = nibName
@@ -50,31 +44,28 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     switch cellIdentifier {
-      case "movieResultCell":
-        let cell = tableView.dequeueReusableCell(withIdentifier: "movieResultCell", for: indexPath) as! MovieResultCell
+      case Identifiers.movieResultCellIdentifier.rawValue:
+        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.movieResultCellIdentifier.rawValue, for: indexPath) as! MovieResultCell
         cell.viewModel = cellModels.value[indexPath.row]
         return cell
       default:
-        let cell = tableView.dequeueReusableCell(withIdentifier: "preferenceCell", for: indexPath) as! PreferenceCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.preferenceCellIdentifier.rawValue, for: indexPath) as! PreferenceCell
         cell.viewModel = cellModels.value[indexPath.row]
         return cell
     }
   }
   
-  func dataToCellModels(data: [TMDBEntityProtocol]) -> [SearchResultsTableViewCellModeling] {
+  private func dataToCellModels(data: [TMDBEntityProtocol]) -> [SearchResultsTableViewCellModeling] {
     return data.flatMap { SearchResultsTableViewCellModel(model: $0)  as SearchResultsTableViewCellModeling }
   }
   
   
-  func configureTableView() {
+  public func configureTableView() {
     guard let tableView = tableView else { return }
     tableView.dataSource = self
-    if cellIdentifier == "preferenceCell" {
+    if cellIdentifier == Identifiers.preferenceCellIdentifier.rawValue {
       tableView.rowHeight = 60
     } else {
-      // FIXME: remove after final tableview decided for movie result cells
-//      tableView.rowHeight = UITableViewAutomaticDimension
-//      tableView.estimatedRowHeight = 200
       tableView.rowHeight = 470
     }
     tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: cellIdentifier)
@@ -88,6 +79,6 @@ class MNightTableviewDataSource: NSObject, UITableViewDataSource {
   
   deinit {
     _cellModels.value = []
-    print("Data source deinit")
+//    print("Data source deinit")
   }
 }

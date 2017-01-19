@@ -56,6 +56,7 @@ public final class TMDBClient: TMDBClientPrototcol {
     self.network = network
   }
   
+  // gets result of either the the actors or an error message
   public func searchPopularPeople(pageNumber: Int) -> SignalProducer<TMDBResponseEntity.PopularPeople, TMDBEndpointError> {
     return network.requestJSON(search: .popularPeople(page: pageNumber))
       .retry(upTo: 2)
@@ -70,6 +71,7 @@ public final class TMDBClient: TMDBClientPrototcol {
       }.take(first: 1)
   }
   
+  // gets result of movie genres or an error message
   public func searchMovieGenres() -> SignalProducer<TMDBResponseEntity.MovieGenreResponse, TMDBEndpointError> {
     return network.requestJSON(search: .movieGenres)
       .retry(upTo: 2)
@@ -82,6 +84,7 @@ public final class TMDBClient: TMDBClientPrototcol {
     }.take(first: 1)
   }
   
+  // gets result of us rating certifications or error message
   public func searchUSRatings() -> SignalProducer<TMDBResponseEntity.USCertifications, TMDBEndpointError> {
     return network.requestJSON(search: .ratings)
       .attemptMap { json in
@@ -93,6 +96,7 @@ public final class TMDBClient: TMDBClientPrototcol {
     }.take(first: 1)
   }
   
+  // gets page number for movie discover or error message
   public func searchMovieDiscover(page: Int, discover: MovieDiscoverProtocol) -> SignalProducer<TMDBResponseEntity.MovieDiscover, TMDBEndpointError> {
     return network.requestJSON(search: .movieDiscover(page: page, discover: discover))
       .attemptMap { json in

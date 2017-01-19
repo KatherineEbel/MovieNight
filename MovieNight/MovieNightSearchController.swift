@@ -169,6 +169,12 @@ class MovieNightSearchController: UITableViewController,MovieNightSearchControll
       _ = strongSelf.selectedRows.value.map { [] row in
         strongSelf.tableView.selectRow(at: row, animated: true, scrollPosition: .none)
       }
+      let numRows = strongSelf.tableView.numberOfRows(inSection: 0)
+      if numRows > 20 {
+        // scroll user to newest rows
+        let indexpath = IndexPath(item: numRows - 1, section: 0)
+        strongSelf.tableView.scrollToRow(at: indexpath, at: .top, animated: true)
+      }
     }
   }
   
@@ -208,6 +214,7 @@ class MovieNightSearchController: UITableViewController,MovieNightSearchControll
   
   func configureTabBar() {
     // tried binding properties to tabBar, but only worked using producer
+    // keep tabBar badges in sync with active watcher choice status
     let preferenceStatus = movieWatcherViewModel.getStatusForActiveWatcherChoice(choiceType: entityType)
     preferenceStatus.producer.on { [weak self] status in
       guard let strongSelf = self else { return }
@@ -222,6 +229,8 @@ class MovieNightSearchController: UITableViewController,MovieNightSearchControll
   // MARK: TableViewDelegate
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    // only return a search for actor types since they are the only ones that
+    // have multiple pages
     guard entityType == .actor else { return nil }
     searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: Identifiers.searchHeaderView.rawValue) as! SearchHeaderView
     searchHeaderView.entityType = self.entityType
@@ -234,6 +243,7 @@ class MovieNightSearchController: UITableViewController,MovieNightSearchControll
   }
   
   override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    // cell determines based on data whether it has an accessory button
     let entities = tableViewModel!.modelData.value[self.entityType]!.flatMap { $0.entities }
     // view details for the specified entity (only actors and ratings have details)
     let entity = entities[indexPath.row]

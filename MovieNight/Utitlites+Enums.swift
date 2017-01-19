@@ -18,6 +18,7 @@ public enum ImageAssetName: String {
   case ready = "bubble-filled"
   case cellSelected = "circle-checked"
   case cellUnselected = "circle-empty"
+  case tmdbLogoGreen = "tmdb-logo-green"
 }
   enum SelectionImage: String {
     case selected = "circle-checked"
@@ -27,7 +28,9 @@ public enum ImageAssetName: String {
 public enum Identifiers: String {
   case networkActivityKey = "isNetworkActivityIndicatorVisible"
   case preferenceCellNibName = "PreferenceCell"
+  case preferenceCellIdentifier = "preferenceCell"
   case movieResultCellNibName = "MovieResultCell"
+  case movieResultCellIdentifier = "movieResultCell"
   case searchHeaderView = "SearchHeaderView"
   case showDetailsSegue = "showDetails"
   case choosePreferencesSegue = "choosePreferences"
@@ -62,6 +65,7 @@ public func allPairs<T>(inSet set: Set<T>) -> [Array<T>] {
     return result
 }
 
+// resize image keeping aspect ratio
 extension UIImage {
   func resizedImage(withBounds bounds: CGSize) -> UIImage {
     let horizontalRatio = bounds.width / size.width

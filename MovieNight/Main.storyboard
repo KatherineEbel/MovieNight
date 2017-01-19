@@ -80,7 +80,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aZg-ws-2cX">
-                                <rect key="frame" x="10" y="543" width="355" height="60"/>
+                                <rect key="frame" x="10" y="523" width="355" height="60"/>
                                 <color key="backgroundColor" red="0.031372549020000001" green="0.10980392160000001" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="1xC-qs-orz"/>
@@ -119,9 +119,9 @@
                             <constraint firstAttribute="trailingMargin" secondItem="ueq-a6-6Vd" secondAttribute="trailing" constant="8" id="WaK-Po-M3n"/>
                             <constraint firstItem="ueq-a6-6Vd" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" constant="8" id="Wo0-eH-vUW"/>
                             <constraint firstItem="o4v-du-iKg" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="e0a-3P-LxO"/>
+                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="aZg-ws-2cX" secondAttribute="bottom" constant="20" id="gHc-O2-r2k"/>
                             <constraint firstItem="ueq-a6-6Vd" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" constant="100" id="ofN-iJ-ydN"/>
                             <constraint firstAttribute="trailing" secondItem="o4v-du-iKg" secondAttribute="trailing" id="pGr-Lb-WIu"/>
-                            <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="aZg-ws-2cX" secondAttribute="bottom" id="tAY-MC-jUW"/>
                             <constraint firstItem="aZg-ws-2cX" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" constant="10" id="tyk-ze-GN6"/>
                             <constraint firstItem="wXo-wf-yPD" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="xaC-1g-xXC"/>
                             <constraint firstAttribute="trailing" secondItem="wXo-wf-yPD" secondAttribute="trailing" id="xdI-bb-gVf"/>
@@ -164,6 +164,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="separatorColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="movieResultCell" id="I5r-fO-0iq" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
@@ -195,7 +196,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HLg-Bl-xtr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-460" y="1305"/>
+            <point key="canvasLocation" x="-460" y="840"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ncK-1c-A9Y">
@@ -582,6 +583,6 @@
         <image name="ok" width="120" height="120"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QgT-nU-sMx"/>
+        <segue reference="Ss5-pB-H7J"/>
     </inferredMetricsTieBreakers>
 </document>

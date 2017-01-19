@@ -19,7 +19,7 @@ public protocol PagedResponseProtocol: Decodable {
   var totalPages: Int { get }
 }
 
-// Defines a response from TMDB
+// Defines a response from TMDB responses are broken down into individual entities
 public struct TMDBResponseEntity {
   public struct PopularPeople: Decodable {
     let page: Int

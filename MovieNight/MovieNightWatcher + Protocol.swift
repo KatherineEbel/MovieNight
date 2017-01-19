@@ -23,6 +23,7 @@ public class MovieNightWatcher: MovieWatcherProtocol {
     return _name.map { $0.characters.count >= 2 }
   }
   
+  // determines if watcher is ready to calculate results
   public var isReady: Property<(Bool, Bool)> {
     return nameValid.combineLatest(with: moviePreference.isSet)
   }

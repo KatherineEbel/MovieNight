@@ -24,11 +24,13 @@ public final class SearchResultsTableViewCellModel: SearchResultsTableViewCellMo
     self._data = MutableProperty(model)
   }
   
+  // sets the image for the cell
   public func getThumbnailImage() -> SignalProducer<UIImage, NoError>? {
     guard let size = TMDBEndpoint.posterThumbNailSize, let path = data.value.imagePath
     else {
       return nil
     }
+    // flatMap error, so error message not displayed, will just have placeholder
     return network.requestImage(search: .image(size: size, imagePath: path))
       .flatMapError { _ in SignalProducer<UIImage, NoError>.empty }.take(first: 1)
   }

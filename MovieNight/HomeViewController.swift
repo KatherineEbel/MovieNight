@@ -29,7 +29,7 @@ class HomeViewController: UIViewController {
   var errorAlert: UIAlertController?
   var clearPreferencesAlert: UIAlertController?
   // prevent memory leaks by cancelling the observers when this controller isn't active
-  lazy var triggerForViewDidDisappear: () -> Signal<(),NoError> = {
+  lazy var triggerForViewDidDisappear: (() -> Signal<(),NoError>) = {
     [unowned self] in
     return self.reactive.trigger(for: #selector(HomeViewController.viewDidDisappear(_:)))
   }
@@ -58,6 +58,7 @@ class HomeViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    viewResultsButton.layer.cornerRadius = 10.0
     guard viewModel != nil else {
       alertForError(message: MovieNightControllerAlert.propertyInjectionFailure.rawValue)
       fatalError(MovieNightControllerAlert.propertyInjectionFailure.rawValue)
@@ -67,16 +68,19 @@ class HomeViewController: UIViewController {
   override func viewWillAppear(_ animated: Bool) {
     // do bindings in viewWillAppear, since this will retrigger setting bindings
     // whenever this controller is displayed.
+    _ = triggerForViewDidDisappear().take(until: triggerForViewDidDisappear())
     configureButtonBindings()
     configureWatcherLabels()
     configureObservers()
   }
   
   override func viewDidDisappear(_ animated: Bool) {
+    // clean up observers
     updateActiveWatcherAction = nil
     updateWatcherNameAlert = nil
     errorAlert = nil
     clearPreferencesAlert = nil
+    
   }
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()

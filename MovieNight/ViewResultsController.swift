@@ -33,8 +33,11 @@ class ViewResultsController: UITableViewController {
     clearsSelectionOnViewWillAppear = false
     self.navigationItem.title = movieDiscover.title
     configureDataSource()
-    configureErrorSignal()
     setupNetworkObserver()
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    configureErrorSignal()
     fetchNextResultPage()
   }
 
@@ -93,7 +96,6 @@ class ViewResultsController: UITableViewController {
   private func configureDataSource() {
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: Identifiers.movieResultCellNibName.rawValue)
     tableViewDataSource.configureTableView()
-    tableViewModel.clearMediaData()
     if entityType == .media {
       let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
       tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
@@ -119,7 +121,7 @@ class ViewResultsController: UITableViewController {
     }
     // check to make sure another alert is not already being displayed
     if self.presentedViewController == nil {
-      self.navigationController?.tabBarController?.present(alertController, animated: true, completion: nil)
+      self.navigationController?.present(alertController, animated: true, completion: nil)
     }
   }
   
@@ -158,6 +160,7 @@ class ViewResultsController: UITableViewController {
   }
   
   deinit {
+    tableViewModel.clearMediaData()
     print("Results controller deinit")
   }
   

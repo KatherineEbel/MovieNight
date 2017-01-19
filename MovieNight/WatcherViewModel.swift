@@ -34,6 +34,7 @@ protocol WatcherViewModelProtocol: class {
   func watcher2Ready() -> Property<Bool>
 }
 
+// this viewModel is used by all controllers to keep UI's in sync with watcher current data
 public class WatcherViewModel: WatcherViewModelProtocol {
   private var _watchers: MutableProperty<[MovieWatcherProtocol]?>
   var resultValues: SignalProducer<(actorIDs: Set<Int>, genreIDs: Set<Int>, rating: String)?, NoError>!
@@ -58,7 +59,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
       .flatten(.latest)
   }
   var movieDiscovery: Property<MovieDiscoverProtocol> {
-    // combined unique values for watcher 1 and watcher 2, to make a movieDiscover request.
+    // combined unique values for watcher 1 and watcher 2, to make a movieDiscover request. Use set to indicate all values are unique
     let watcher1Preferences = watchers.value?[0].moviePreference.choices
     let watcher2Preferences = watchers.value?[1].moviePreference.choices
     return watcher1Preferences!.combineLatest(with: watcher2Preferences!).map { preference1, preference2  -> MovieDiscoverProtocol in
@@ -84,6 +85,7 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return watchers.value!.last!.isReady.map { $0.0 && $0.1 }
   }
   
+  // returns an array of choices watcher's current choices given the passed in entityType
   func getChoicesForActiveWatcher(choiceType: TMDBEntity) -> Property<[TMDBEntityProtocol]?> {
     switch choiceType {
       case .movieGenre: return activeWatcher.value.moviePreference.choices.map { $0[.movieGenre] }
@@ -114,10 +116,12 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     }
   }
   
+  // sets the active watchers name
   func setActiveWatcherName(name: String) -> Bool {
     return activeWatcher.value.setName(value: name)
   }
   
+  // adds a watcher as long as there are not already 2
   func addWatcher(watcher: MovieWatcherProtocol) -> Bool {
     guard let count = watchers.value?.count, count < 2 else {
       return false
@@ -126,18 +130,22 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     return true
   }
   
+  // adds a choice if it has not already been chosen
   func activeWatcherAdd(choice: TMDBEntityProtocol, with type: TMDBEntity) -> Bool {
     return activeWatcher.value.moviePreference.add(choice: choice, with: type)
   }
   
+  // removes a choice if it exists in watchers current choices
   func activeWatcherRemove(choice: TMDBEntityProtocol, with type: TMDBEntity) -> Bool {
     return activeWatcher.value.moviePreference.remove(choice: choice, with: type)
   }
   
+  // changes activeWatcher index to the value passed in
   func updateActiveWatcher(index: Int) {
     _activeWatcherIndex.swap(index)
   }
   
+  // clears out all current choices for both watchers and resets name to default value
   func clearAllChoices() {
     // enumerate through both watchers and reset back to initial settings
     _watchers.value = _watchers.value?.enumerated().map { (index,watcher) in

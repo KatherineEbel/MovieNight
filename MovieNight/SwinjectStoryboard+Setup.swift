@@ -10,6 +10,7 @@ import SwinjectStoryboard
 import ReactiveSwift
 import Result
 
+// this registers all services that are needed for property injections. Most viewModel properties are injected here.
 extension SwinjectStoryboard {
   class func setup() {
     // Register Models

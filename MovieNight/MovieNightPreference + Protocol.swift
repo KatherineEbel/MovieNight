@@ -32,6 +32,7 @@ public class MovieNightPreference: MoviePreferenceProtocol {
     return Property(_choices)
   }
   
+  // must include at least 1 actor choice/genre choice, and max 1 rating preference
   public var isSet: Property<Bool> {
     return choices.map { [unowned self] choices in
       choices[.actor]!.count > 0 &&
@@ -43,7 +44,8 @@ public class MovieNightPreference: MoviePreferenceProtocol {
   public var maxGenrePreferences = MAX_GENRE_PREFERENCES
   public var maxRatingPreferences = MAX_RATING_PREFERENCES
   
-  public init() { print("Movie preference init") }
+  public init() {}
+  // adds choice if not already present
   public func add(choice: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool {
     if let entities = _choices.value[entityType] {
       let shouldAdd = !entities.contains(where: {$0.id == choice.id})
@@ -71,6 +73,7 @@ public class MovieNightPreference: MoviePreferenceProtocol {
     }
   }
   
+  // removes choice if  present
   public func remove(choice: TMDBEntityProtocol, with entityType: TMDBEntity) -> Bool {
     guard let entities = _choices.value[entityType] else { return false }
     if let index = entities.index(where: {$0.id == choice.id}) {
@@ -81,6 +84,7 @@ public class MovieNightPreference: MoviePreferenceProtocol {
     }
   }
   
+  // clears all of the watchers choices
   public func clearAll() {
     _choices.value[.actor]?.removeAll()
     _choices.value[.movieGenre]?.removeAll()

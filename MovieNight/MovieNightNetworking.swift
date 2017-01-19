@@ -16,6 +16,7 @@ public protocol MovieNightNetworkProtocol {
 }
 
 public final class MovieNightNetwork: MovieNightNetworkProtocol {
+  // returns a SignalProducer with the image or error if there is one
   public func requestImage(search: TMDBEndpoint) -> SignalProducer<UIImage, TMDBEndpointError> {
     return SignalProducer { observer, disposable in
       Alamofire.request(search).validate().responseData { response in
@@ -25,7 +26,7 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
               observer.send(value: image)
               observer.sendCompleted()
             } else {
-              let defaultImage = UIImage(named: "mov-clapper")!
+              let defaultImage = UIImage(named: ImageAssetName.tmdbLogoGreen.rawValue)!
               observer.send(value: defaultImage)
               observer.sendCompleted()
             }
@@ -39,6 +40,8 @@ public final class MovieNightNetwork: MovieNightNetworkProtocol {
   private let queue = DispatchQueue(label: "MovieNight.MovieNightNetworking.Queue")
   static let networking = MovieNightNetwork()
   public init() {}
+  
+  // returns a SignalProducer with the JSON or error if there is one (Any)
   public func requestJSON(search: TMDBEndpoint) -> SignalProducer<Any, TMDBEndpointError> {
     return SignalProducer {  observer, disposable in
       Alamofire.request(search)

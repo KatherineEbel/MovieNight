@@ -58,6 +58,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     self.client = client
   }
   
+  // gets the total number of actor result pages and a string to display for user
   public func peoplePageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)> {
     return currentPeopleResultPage.map { [unowned self] pageNumber in
       let result = NSAttributedString(string: "Fetching \(pageNumber) out of \(self.peoplePageCount) result pages")
@@ -65,6 +66,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     }
   }
   
+  // gets the total number of media(movie discover) result pages and a string to display for user
   public func resultPageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)> {
     return currentMovieResultPage.map { [unowned self] pageNumber in
       let result = NSAttributedString(string: "Fetching \(pageNumber) out of \(self.movieResultPageCount) result pages")
@@ -72,15 +74,19 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     }
   }
   
+  // returns true if page already exists for given entity in model data so page
+  // won't be reloaded
   public func isPageCached(pageNumber: Int, entityType: TMDBEntity) -> Bool {
     guard let data = modelData.value[entityType] else { return false }
     return data.contains { $0.page == pageNumber }
   }
   
+  // if returns true if page is in range of total pages available to search, and page is not already cached.
   public func validatePageSearch(pageNumber: Int, entityType: TMDBEntity) -> Bool {
     let (actorCount, movieCount) = (peoplePageCountTracker().value.page, resultPageCountTracker().value.page)
     let pageInRange: Bool = {
       switch entityType {
+        // if count and page number are 0 and 1 respectively, this is the first search, so they are valid. If not go by total number of pages available from api
         case .actor:
           if actorCount == 0 && pageNumber == 1 {
             return true
@@ -99,6 +105,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     return !isPageCached(pageNumber: pageNumber, entityType: entityType) && pageInRange
   }
   
+  // gets the corresponding index from model data for the given titles. all titles should be unique
   public func indexesForTitles(ofEntityType type: TMDBEntity, titles: [String]) -> Set<IndexPath>? {
     guard let entities = modelData.value[type]?.flatMap({ $0.entities }) else { return nil }
     return entities.enumerated().reduce(Set<IndexPath>()) { (result, nextResult: (idx: Int, selection: TMDBEntityProtocol)) in
@@ -110,10 +117,8 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     }
   }
   
-  public func clearMediaData() {
-    _modelData.value[.media]!.removeAll()
-  }
   
+  // gets the next movie result page for the passed in page number and movie discover
   public func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol) {
     guard validatePageSearch(pageNumber: page, entityType: .media) else { return }
     client.searchMovieDiscover(page: currentMovieResultPage.value, discover: discover)
@@ -132,6 +137,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }).start()
   }
 
+  // gets the next actor result page for the passed in page number
   public func getPopularPeoplePage(pageNumber: Int) {
     guard validatePageSearch(pageNumber: pageNumber, entityType: .actor) else { return }
     client.searchPopularPeople(pageNumber: pageNumber)
@@ -150,6 +156,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
     }).start()
   }
   
+  // gets the genres if they haven't already been loaded
   public func getGenres() {
     guard let genres = modelData.value[.movieGenre] else { return }
     guard genres.isEmpty else { return }
@@ -169,6 +176,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
       }).start()
   }
   
+  // gets ratings if they haven't already been loaded
   public func getRatings() {
     guard let ratings = modelData.value[.rating] else { return }
     guard ratings.isEmpty else { return }
@@ -186,5 +194,10 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
           default: break
         }
       }).start()
+  }
+  
+  // empties all media data, so user can start with a clean slate for new movie discover
+  public func clearMediaData() {
+    _modelData.value[.media]!.removeAll()
   }
 }
