@@ -28,14 +28,13 @@
                             </connections>
                         </textField>
                     </subviews>
-                    <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.031372549019607843" green="0.10980392156862745" blue="0.14117647058823529" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="oXz-fL-dsC" firstAttribute="centerX" secondItem="LX1-qD-fO8" secondAttribute="centerX" id="9DS-b1-VLC"/>
                         <constraint firstItem="oXz-fL-dsC" firstAttribute="centerY" secondItem="LX1-qD-fO8" secondAttribute="centerY" id="dd9-c4-fhi"/>
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="LX1-qD-fO8" secondAttribute="bottom" id="brG-cx-jse"/>
                 <constraint firstAttribute="trailing" secondItem="LX1-qD-fO8" secondAttribute="trailing" id="d39-26-46J"/>

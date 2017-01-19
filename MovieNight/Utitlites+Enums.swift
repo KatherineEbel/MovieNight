@@ -10,7 +10,7 @@ import UIKit
 import ReactiveSwift
 
 // MovieNightSearchController constant
-let kTableHeaderViewHeight: CGFloat = 80.0
+let kTableHeaderViewHeight: CGFloat = 60.0
 let kUIScheduler = UIScheduler()
 
 public enum ImageAssetName: String {

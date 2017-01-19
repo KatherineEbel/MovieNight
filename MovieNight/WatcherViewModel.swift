@@ -61,12 +61,13 @@ public class WatcherViewModel: WatcherViewModelProtocol {
     // combined unique values for watcher 1 and watcher 2, to make a movieDiscover request.
     let watcher1Preferences = watchers.value?[0].moviePreference.choices
     let watcher2Preferences = watchers.value?[1].moviePreference.choices
-    return watcher1Preferences!.combineLatest(with: watcher2Preferences!).map { preference1, preference2 -> MovieDiscoverProtocol in
+    return watcher1Preferences!.combineLatest(with: watcher2Preferences!).map { preference1, preference2  -> MovieDiscoverProtocol in
       let actorsIDs = Set([preference1[.actor]!.map { $0.id }, preference2[.actor]!.map { $0.id }].flatMap {$0})
       let genreIDs = Set([preference1[.movieGenre]!.map { $0.id }, preference2[.movieGenre]!.map { $0.id }].flatMap {$0})
       let maxRating = preference1[.rating]!.first!.id > preference2[.rating]!.first!.id ?
         preference2[.rating]!.first!.title : preference1[.rating]!.first!.title
-      return MovieDiscover(actorIDs: actorsIDs, genreIDs: genreIDs, maxRating: maxRating)
+      let title = self.watchers.map { "Picks for \($0!.first!.name) & \($0!.last!.name)" }.value
+      return MovieDiscover(title: title, actorIDs: actorsIDs, genreIDs: genreIDs, maxRating: maxRating)
     }
   }
   

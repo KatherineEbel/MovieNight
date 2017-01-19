@@ -15,6 +15,7 @@ import Result
 class PreferenceCell: UITableViewCell {
   internal var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
+      // bind the name label to the viewModel data.title property 
       nameLabel.reactive.text <~ viewModel!.data.producer
         .take(until: self.reactive.prepareForReuse).map { $0.title }
       self.accessoryType = viewModel!.data.value.details != nil ? .detailButton : .none

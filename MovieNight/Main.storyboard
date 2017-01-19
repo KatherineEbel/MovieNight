@@ -80,7 +80,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aZg-ws-2cX">
-                                <rect key="frame" x="0.0" y="543" width="375" height="60"/>
+                                <rect key="frame" x="10" y="543" width="355" height="60"/>
                                 <color key="backgroundColor" red="0.031372549020000001" green="0.10980392160000001" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="1xC-qs-orz"/>
@@ -114,7 +114,7 @@
                             <constraint firstAttribute="bottom" secondItem="wXo-wf-yPD" secondAttribute="bottom" id="1HN-h8-y9p"/>
                             <constraint firstItem="wXo-wf-yPD" firstAttribute="top" secondItem="nh5-yf-HcR" secondAttribute="top" id="1an-Yj-paq"/>
                             <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="o4v-du-iKg" secondAttribute="bottom" id="KGU-Bg-wdx"/>
-                            <constraint firstAttribute="trailing" secondItem="aZg-ws-2cX" secondAttribute="trailing" id="OVl-XO-gZI"/>
+                            <constraint firstAttribute="trailing" secondItem="aZg-ws-2cX" secondAttribute="trailing" constant="10" id="OVl-XO-gZI"/>
                             <constraint firstItem="o4v-du-iKg" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" id="TCt-Wn-JTB"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ueq-a6-6Vd" secondAttribute="trailing" constant="8" id="WaK-Po-M3n"/>
                             <constraint firstItem="ueq-a6-6Vd" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leadingMargin" constant="8" id="Wo0-eH-vUW"/>
@@ -122,13 +122,13 @@
                             <constraint firstItem="ueq-a6-6Vd" firstAttribute="top" secondItem="XwO-cH-ASW" secondAttribute="bottom" constant="100" id="ofN-iJ-ydN"/>
                             <constraint firstAttribute="trailing" secondItem="o4v-du-iKg" secondAttribute="trailing" id="pGr-Lb-WIu"/>
                             <constraint firstItem="PSb-cF-5J6" firstAttribute="top" secondItem="aZg-ws-2cX" secondAttribute="bottom" id="tAY-MC-jUW"/>
-                            <constraint firstItem="aZg-ws-2cX" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="tyk-ze-GN6"/>
+                            <constraint firstItem="aZg-ws-2cX" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" constant="10" id="tyk-ze-GN6"/>
                             <constraint firstItem="wXo-wf-yPD" firstAttribute="leading" secondItem="nh5-yf-HcR" secondAttribute="leading" id="xaC-1g-xXC"/>
                             <constraint firstAttribute="trailing" secondItem="wXo-wf-yPD" secondAttribute="trailing" id="xdI-bb-gVf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Movie Night" id="VDa-Od-Dmx">
-                        <barButtonItem key="backBarButtonItem" title="Home" id="nSB-Oa-5En"/>
+                        <barButtonItem key="backBarButtonItem" title="      " id="nSB-Oa-5En"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="2Rl-vv-a3X">
                             <connections>
                                 <action selector="clearPreferencesButtonPressed:" destination="fdR-h3-PA3" id="7H0-os-pSd"/>
@@ -582,6 +582,6 @@
         <image name="ok" width="120" height="120"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ss5-pB-H7J"/>
+        <segue reference="QgT-nU-sMx"/>
     </inferredMetricsTieBreakers>
 </document>

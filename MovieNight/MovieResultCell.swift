@@ -15,6 +15,7 @@ class MovieResultCell: UITableViewCell {
   
   var viewModel: SearchResultsTableViewCellModeling? {
     didSet {
+      // get image associated with media entity
       viewModel!.getThumbnailImage()?
         .take(until: self.reactive.prepareForReuse)
         .on { [weak self] image in

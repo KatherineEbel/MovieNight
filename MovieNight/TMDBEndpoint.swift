@@ -64,6 +64,7 @@ public enum TMDBEndpoint: URLRequestConvertible {
       return TMDBEndpoint.baseURLString
     }
   }
+  
   enum ParamKeys:String {
     case api_key
     case language
@@ -73,6 +74,17 @@ public enum TMDBEndpoint: URLRequestConvertible {
     case certificationlte = "certification.lte"
     case with_cast
     case with_genres
+  }
+  
+  var path: String {
+    switch self {
+      case .configuration: return "configuration"
+      case .popularPeople: return "person/popular"
+      case .movieGenres: return "genre/movie/list"
+      case .ratings: return "certification/movie/list"
+      case .movieDiscover: return "discover/movie"
+      case .image(size: let size, imagePath: let path): return "\(size)\(path)"
+    }
   }
   
   var params: [String: Any]? {
@@ -102,16 +114,7 @@ public enum TMDBEndpoint: URLRequestConvertible {
   
   // encodes the url request with given parameters for each endpoint
   public func asURLRequest() throws -> URLRequest {
-    let result: (path: String, parameters: Parameters?) = { 
-      switch self {
-        case .configuration: return ("configuration", params)
-        case .popularPeople: return ("person/popular", params)
-        case .movieGenres: return ("genre/movie/list", params)
-        case .ratings: return ("certification/movie/list", params)
-        case .movieDiscover: return ("discover/movie", params)
-        case .image(size: let size, imagePath: let path): return  ("\(size)\(path)", params)
-      }
-    }()
+    let result: (path: String, parameters: Parameters?) = (path, params)
     let url = try urlString!.asURL()
     let urlRequest = URLRequest(url: url.appendingPathComponent(result.path))
     let encoded = try URLEncoding.default.encode(urlRequest, with: result.parameters)

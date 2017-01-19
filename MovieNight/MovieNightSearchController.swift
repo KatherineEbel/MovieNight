@@ -24,7 +24,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     return _entityType
   }
   var searchHeaderView: SearchHeaderView!
-  var alertController = UIAlertController()
+  var alertController: UIAlertController?
   public weak var movieWatcherViewModel: WatcherViewModelProtocol!
   public weak var tableViewModel: SearchResultsTableViewModeling?
   private var tableViewDataSource: MNightTableviewDataSource!
@@ -62,7 +62,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     self.clearsSelectionOnViewWillAppear = false
     self.navigationItem.setHidesBackButton(true, animated: false)
     // data source takes TMDBEntityProtocol types, so map viewModel data to required type
-    configureErrorSignal()
     // set datasource using the above producer
     tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
     tableViewDataSource.configureTableView()
@@ -75,6 +74,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     observeForTableViewReload()
     configureNavBarForActiveWatcher()
     configureTabBar()
+    configureErrorSignal()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -88,6 +88,9 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
         default: break
       }
     }
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
   }
 
   // keep the searchHeader pinned to the top
@@ -120,12 +123,11 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   
   private func configureErrorSignal() {
     // if viewModel receives error when fetching cellModel data, show error message
-    tableViewModel!.errorMessage.signal.observe(on: kUIScheduler).take(during: self.reactive.lifetime).throttle(0.5, on: QueueScheduler.main).observeValues { [weak self] message in
+    tableViewModel!.errorMessage.signal.observe(on: kUIScheduler).observeValues { [weak self] message in
       guard let strongSelf = self else { return }
-      if let message = message {
-        strongSelf.alertForError(message: message)
-        strongSelf.refreshControl?.endRefreshing()
-      }
+      guard let message = message else { return }
+      strongSelf.alertForError(message: message)
+      strongSelf.refreshControl?.endRefreshing()
     }
   }
 
@@ -167,10 +169,16 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   }
   
   private func alertForError(message: String) {
-    alertController = UIAlertController(title: MovieNightControllerAlert.somethingWentWrong.rawValue, message: message, preferredStyle: .alert)
+    alertController = alertController ?? UIAlertController(title: MovieNightControllerAlert.somethingWentWrong.rawValue, message: message, preferredStyle: .alert)
+    guard let alertController = alertController else { return }
     let okAction = UIAlertAction(title: MovieNightControllerAlert.ok.rawValue, style: .default, handler: nil)
-    alertController.addAction(okAction)
-    present(alertController, animated: true, completion: nil)
+    if alertController.actions.isEmpty {
+      alertController.addAction(okAction)
+    }
+    // check to make sure another alert is not already being displayed
+    if self.presentedViewController == nil {
+      self.navigationController?.tabBarController?.present(alertController, animated: true, completion: nil)
+    }
   }
 
   
@@ -277,6 +285,7 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
   }
   
   deinit {
+    alertController = nil
 //    print("\(entityType) controller deinit")
   }
 }

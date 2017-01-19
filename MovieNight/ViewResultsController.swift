@@ -26,21 +26,16 @@ class ViewResultsController: UITableViewController {
     super.viewDidLoad()
     refreshControl?.addTarget(self, action: #selector(ViewResultsController.handleRefresh(refreshControl:)), for: .valueChanged)
     clearsSelectionOnViewWillAppear = false
-    let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.entities } }
-    tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
-    tableViewDataSource.configureTableView()
-    tableViewModel.clearMediaData()
-    if entityType == .media {
-      let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
-      tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
-    }
-    tableViewModel.getNextMovieResultPage(page: tableViewModel.currentMovieResultPage.value, discover: movieDiscover)
+    configureTableView()
+    self.navigationItem.title = movieDiscover.title
+    fetchNextResultPage()
   }
 
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
       // Dispose of any resources that can be recreated.
   }
+  
   
   func updateHeaderView() {
     guard let headerView = searchHeaderView else { return }
@@ -49,13 +44,17 @@ class ViewResultsController: UITableViewController {
     headerView.frame = headerRect
   }
   
+  func fetchNextResultPage() {
+    tableViewModel?.getNextMovieResultPage(page: self.tableViewModel.currentMovieResultPage.value ,discover: movieDiscover)
+  }
+  
   func handleRefresh(refreshControl: UIRefreshControl) {
     guard (tableViewModel?.resultPageCountTracker().map { $0.page }.value)! > 1 else {
       return
     }
     self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker().map { $0.tracker }.value
     refreshControl.beginRefreshing()
-    tableViewModel?.getNextMovieResultPage(page: self.tableViewModel.currentMovieResultPage.value ,discover: movieDiscover)
+    fetchNextResultPage()
     // observe when network activity ends to end refreshing
     UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
       guard let strongSelf = self else { return }
@@ -81,11 +80,23 @@ class ViewResultsController: UITableViewController {
     searchHeaderView.searchTextField.text = ""
   }
   
+  func configureTableView() {
+    let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.entities } }
+    tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
+    tableViewDataSource.configureTableView()
+    tableViewModel.clearMediaData()
+    if entityType == .media {
+      let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
+      tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
+    }
+  }
+  
   // MARK: TableViewDelegate
   
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     guard entityType == .media else { return nil }
     searchHeaderView = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: Identifiers.searchHeaderView.rawValue) as! SearchHeaderView
+    // make sure  header has the correct properties to keep ui in sync
     searchHeaderView.entityType = self.entityType
     searchHeaderView.viewModel = self.tableViewModel
     searchHeaderView.movieDiscover = self.movieDiscover
