@@ -8,6 +8,7 @@
 
 import UIKit
 import ReactiveSwift
+import Result
 
 class ViewResultsController: UITableViewController {
   internal var _entityType: TMDBEntity!
@@ -15,19 +16,25 @@ class ViewResultsController: UITableViewController {
     return _entityType
   }
   private var searchHeaderView: SearchHeaderView!
+  var alertController: UIAlertController?
   internal weak var tableViewModel: SearchResultsTableViewModeling!
+  internal weak var watcherViewModel: WatcherViewModelProtocol!
+  private var tableViewDataSource: MNightTableviewDataSource!
   private var movieDiscover: MovieDiscoverProtocol {
     return watcherViewModel.movieDiscovery.value
   }
-  internal weak var watcherViewModel: WatcherViewModelProtocol!
-  private var tableViewDataSource: MNightTableviewDataSource!
+  private var cellModelProducer: SignalProducer<[TMDBEntityProtocol], NoError>? {
+    return tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.entities } }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     refreshControl?.addTarget(self, action: #selector(ViewResultsController.handleRefresh(refreshControl:)), for: .valueChanged)
     clearsSelectionOnViewWillAppear = false
-    configureTableView()
     self.navigationItem.title = movieDiscover.title
+    configureDataSource()
+    configureErrorSignal()
+    setupNetworkObserver()
     fetchNextResultPage()
   }
 
@@ -48,13 +55,7 @@ class ViewResultsController: UITableViewController {
     tableViewModel?.getNextMovieResultPage(page: self.tableViewModel.currentMovieResultPage.value ,discover: movieDiscover)
   }
   
-  func handleRefresh(refreshControl: UIRefreshControl) {
-    guard (tableViewModel?.resultPageCountTracker().map { $0.page }.value)! > 1 else {
-      return
-    }
-    self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker().map { $0.tracker }.value
-    refreshControl.beginRefreshing()
-    fetchNextResultPage()
+  func setupNetworkObserver() {
     // observe when network activity ends to end refreshing
     UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
       guard let strongSelf = self else { return }
@@ -66,6 +67,15 @@ class ViewResultsController: UITableViewController {
     }
     .take(during: self.reactive.lifetime)
     .start(on: kUIScheduler).start()
+  }
+  
+  func handleRefresh(refreshControl: UIRefreshControl) {
+    guard (tableViewModel?.resultPageCountTracker().map { $0.page }.value)! > 1 else {
+      return
+    }
+    self.tableView.refreshControl?.attributedTitle = tableViewModel?.resultPageCountTracker().map { $0.tracker }.value
+    refreshControl.beginRefreshing()
+    fetchNextResultPage()
   }
   
   override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -80,14 +90,36 @@ class ViewResultsController: UITableViewController {
     searchHeaderView.searchTextField.text = ""
   }
   
-  func configureTableView() {
-    let resultsCellModelProducer = tableViewModel.modelData.producer.map { $0[.media]!.flatMap { $0.entities } }
-    tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: resultsCellModelProducer, nibName: Identifiers.movieResultCellNibName.rawValue)
+  private func configureDataSource() {
+    tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: Identifiers.movieResultCellNibName.rawValue)
     tableViewDataSource.configureTableView()
     tableViewModel.clearMediaData()
     if entityType == .media {
       let nib = UINib(nibName: "SearchHeaderView", bundle: nil)
       tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
+    }
+  }
+  
+  private func configureErrorSignal() {
+    // if viewModel receives error when fetching cellModel data, show error message
+    tableViewModel!.errorMessage.signal.observe(on: kUIScheduler).observeValues { [weak self] message in
+      guard let strongSelf = self else { return }
+      guard let message = message else { return }
+      strongSelf.alertForError(message: message)
+      strongSelf.refreshControl?.endRefreshing()
+    }
+  }
+  
+  private func alertForError(message: String) {
+    alertController = alertController ?? UIAlertController(title: MovieNightControllerAlert.somethingWentWrong.rawValue, message: message, preferredStyle: .alert)
+    guard let alertController = alertController else { return }
+    let okAction = UIAlertAction(title: MovieNightControllerAlert.ok.rawValue, style: .default, handler: nil)
+    if alertController.actions.isEmpty {
+      alertController.addAction(okAction)
+    }
+    // check to make sure another alert is not already being displayed
+    if self.presentedViewController == nil {
+      self.navigationController?.tabBarController?.present(alertController, animated: true, completion: nil)
     }
   }
   
@@ -115,6 +147,7 @@ class ViewResultsController: UITableViewController {
     performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
   }
   
+  // MARK: - Navigation
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == Identifiers.showDetailsSegue.rawValue {
       let detailController = segue.destination as! DetailController

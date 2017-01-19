@@ -18,15 +18,15 @@ public protocol MovieNightSearchControllerProtocol {
 }
 
 
-class MovieNightSearchController: UITableViewController, UITextFieldDelegate, MovieNightSearchControllerProtocol {
+class MovieNightSearchController: UITableViewController,MovieNightSearchControllerProtocol {
   internal var _entityType: TMDBEntity!
   public var entityType: TMDBEntity {
     return _entityType
   }
   var searchHeaderView: SearchHeaderView!
   var alertController: UIAlertController?
-  public weak var movieWatcherViewModel: WatcherViewModelProtocol!
   public weak var tableViewModel: SearchResultsTableViewModeling?
+  public weak var movieWatcherViewModel: WatcherViewModelProtocol!
   private var tableViewDataSource: MNightTableviewDataSource!
   private var selectedRows: MutableProperty<Set<IndexPath>> = MutableProperty(Set<IndexPath>()) // allows user to see what their current selections are if they navigate away and come back.
   private var cellModelProducer: SignalProducer<[TMDBEntityProtocol], NoError>? {
@@ -61,20 +61,13 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     refreshControl?.addTarget(self, action: #selector(MovieNightSearchController.handleRefresh(refreshControl:)), for: .valueChanged)
     self.clearsSelectionOnViewWillAppear = false
     self.navigationItem.setHidesBackButton(true, animated: false)
-    // data source takes TMDBEntityProtocol types, so map viewModel data to required type
-    // set datasource using the above producer
-    tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
-    tableViewDataSource.configureTableView()
-    if entityType == .actor {
-      let nib = UINib(nibName: Identifiers.searchHeaderView.rawValue, bundle: nil)
-      tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
-    }
-    // reselect rows when user refreshes tableview
-    selectUserRowSelections()
+    configureDataSource()
+    configureErrorSignal()
+    setupNetworkObserver()
     observeForTableViewReload()
     configureNavBarForActiveWatcher()
     configureTabBar()
-    configureErrorSignal()
+    selectUserRowSelections()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -89,9 +82,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       }
     }
   }
-  
-  override func viewDidAppear(_ animated: Bool) {
-  }
 
   // keep the searchHeader pinned to the top
   func updateHeaderView() {
@@ -102,35 +92,25 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     headerView.frame = headerRect
   }
   
-  override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    // return if not .actor type
-    guard entityType == .actor else { return }
-    // updateHeader when scrolled
-    updateHeaderView()
+  func setupNetworkObserver() {
+    // observe when network activity ends to end refreshing
+    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [weak self] value in
+      guard let strongSelf = self else { return }
+      if let value = value as? Bool {
+        if value == false {
+          strongSelf.refreshControl?.endRefreshing()
+        }
+      }
+    }
+    .take(during: self.reactive.lifetime)
+    .start(on: kUIScheduler).start()
   }
-  
-  override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-    // unfocus textfield when user scrolls
-    guard entityType == .actor else { return }
-    searchHeaderView.searchTextField.resignFirstResponder()
-  }
-  
   override func didReceiveMemoryWarning() {
       super.didReceiveMemoryWarning()
     print("Memory warning")
       // Dispose of any resources that can be recreated.
   }
   
-  private func configureErrorSignal() {
-    // if viewModel receives error when fetching cellModel data, show error message
-    tableViewModel!.errorMessage.signal.observe(on: kUIScheduler).observeValues { [weak self] message in
-      guard let strongSelf = self else { return }
-      guard let message = message else { return }
-      strongSelf.alertForError(message: message)
-      strongSelf.refreshControl?.endRefreshing()
-    }
-  }
-
   func handleRefresh(refreshControl: UIRefreshControl) {
     // currently actor entities are the only pageable entity managed by this
     // viewController class, consider using this controller for viewResults as well
@@ -146,18 +126,42 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
       default: break
     }
     self.tableView.refreshControl?.attributedTitle = tableViewModel!.peoplePageCountTracker().map { $0.tracker }.value
-    // observe when network activity ends to end refreshing
-    UIApplication.shared.reactive.values(forKeyPath: Identifiers.networkActivityKey.rawValue).on() { [unowned self] value in
-      if let value = value as? Bool {
-        if value == false {
-          self.refreshControl?.endRefreshing()
-        }
-      }
-    }
-      .take(during: self.reactive.lifetime)
-      .start(on: kUIScheduler).start()
   }
   
+  override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    // return if not .actor type
+    guard entityType == .actor else { return }
+    // updateHeader when scrolled
+    updateHeaderView()
+  }
+  
+  override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    // unfocus textfield when user scrolls
+    guard entityType == .actor else { return }
+    searchHeaderView.searchTextField.resignFirstResponder()
+  }
+  
+  func configureDataSource() {
+    tableViewDataSource = MNightTableviewDataSource(tableView: tableView, sourceSignal: cellModelProducer!, nibName: cellNibName)
+    tableViewDataSource.configureTableView()
+    if entityType == .actor {
+      let nib = UINib(nibName: Identifiers.searchHeaderView.rawValue, bundle: nil)
+      tableView.register(nib, forHeaderFooterViewReuseIdentifier: Identifiers.searchHeaderView.rawValue)
+    }
+  }
+  
+  private func configureErrorSignal() {
+    // if viewModel receives error when fetching cellModel data, show error message
+    tableViewModel!.errorMessage.signal.observe(on: kUIScheduler).observeValues { [weak self] message in
+      guard let strongSelf = self else { return }
+      guard let message = message else { return }
+      strongSelf.alertForError(message: message)
+      strongSelf.refreshControl?.endRefreshing()
+    }
+  }
+
+  
+  // unique to  SearchController
   private func observeForTableViewReload() {
     // remember users selections when they refresh the tableview with more people results
     tableView.reactive.trigger(for: #selector(tableView.reloadData)).take(during: self.reactive.lifetime).observeValues { [weak self] in
@@ -229,33 +233,30 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
     return entityType == .actor ? kTableHeaderViewHeight : 0
   }
   
+  override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+    let entities = tableViewModel!.modelData.value[self.entityType]!.flatMap { $0.entities }
+    // view details for the specified entity (only actors and ratings have details)
+    let entity = entities[indexPath.row]
+    performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
+  }
+  
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let entities = tableViewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
-    if let preference = entities?[indexPath.row] {
+    let entities = tableViewModel!.modelData.value[self.entityType]!.flatMap { $0.entities }
+    let preference = entities[indexPath.row]
       // activeWatcherAdd returns a bool. Not currently using value, but might be useful when adding
       // diff features
-      _ = movieWatcherViewModel.activeWatcherAdd(choice: preference, with: self.entityType)
-    }
+    _ = movieWatcherViewModel.activeWatcherAdd(choice: preference, with: self.entityType)
   }
   
   override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
     // fetch the model data for the type that matches the controller's entity type
-    let entities = tableViewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
-    if let preference = entities?[indexPath.row] {
+    let entities = tableViewModel!.modelData.value[self.entityType]!.flatMap { $0.entities }
+    let preference = entities[indexPath.row]
       // activeWatcherRemove returns a bool. Not currently using value, but might be useful when adding
       // diff features
-      _ = movieWatcherViewModel.activeWatcherRemove(choice: preference, with: self.entityType)
-    }
-    
+    _ = movieWatcherViewModel.activeWatcherRemove(choice: preference, with: self.entityType)
   }
   
-  override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-    let entities = tableViewModel?.modelData.value[self.entityType]!.flatMap { $0.entities }
-    // view details for the specified entity (only actors and ratings have details)
-    if let entity = entities?[indexPath.row] {
-      performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
-    }
-  }
   
   // MARK: - Navigation
 
@@ -269,7 +270,6 @@ class MovieNightSearchController: UITableViewController, UITextFieldDelegate, Mo
         case let rating where sender is TMDBEntity.Rating: detailController.viewModel.entity = rating as! TMDBEntity.Rating
         default: break
       }
-      
     }
   }
   
