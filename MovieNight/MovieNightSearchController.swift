@@ -45,8 +45,6 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
       return data[strongSelf.entityType]!.flatMap { $0.entities }.isEmpty
     }.value
   }
-  
-//  override var nibName: String? = "MovieNightSearchController"
 
   private var cellNibName: String {
     switch entityType {
@@ -54,18 +52,6 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
       case .media: return Identifiers.movieResultCellNibName.rawValue
     }
   }
-//  
-//  init() {
-//    super.init(nibName: "MovieNightSearchController", bundle: nil)
-//  }
-//  
-//  override convenience init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-//    self.init()
-//  }
-//  
-//  required init?(coder aDecoder: NSCoder) {
-//    super.init(coder: aDecoder)
-//  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -290,7 +276,16 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
     performSegue(withIdentifier: Identifiers.showDetailsSegue.rawValue, sender: entity)
   }
   
+  override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    if let cell = tableView.cellForRow(at: indexPath) as? PreferenceCell {
+      if let count = tableView.indexPathsForSelectedRows?.count {
+        if count == 5 { return nil }
+      }
+    }
+    return indexPath
+  }
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  
     guard entityType.isSelectable else { return }
     let entities = tableViewModel!.modelData.value[self.entityType]!.flatMap { $0.entities }
     let preference = entities[indexPath.row]
@@ -308,7 +303,6 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
       // diff features
     _ = watcherViewModel.activeWatcherRemove(choice: preference, with: self.entityType)
   }
-  
   
   // MARK: - Navigation
 

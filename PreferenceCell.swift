@@ -21,11 +21,13 @@ class PreferenceCell: UITableViewCell {
       self.accessoryType = viewModel!.data.value.details != nil ? .detailButton : .none
     }
   }
+  var shouldSelect = true
   @IBOutlet weak var nameLabel: UILabel!
   @IBOutlet weak var selectionImage: UIImageView!
   
   override func setSelected(_ selected: Bool, animated: Bool) {
     // change to a different image when cell is selected
+    guard shouldSelect == true else { return }
     super.setSelected(selected, animated: animated)
     let selectedImage = UIImage(named: ImageAssetName.cellSelected.rawValue)!
     let unselectedImage = UIImage(named: ImageAssetName.cellUnselected.rawValue)!
