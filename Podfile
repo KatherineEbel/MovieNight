@@ -6,12 +6,12 @@ target 'MovieNight' do
   use_frameworks!
 
   # Pods for MovieNight
-  plugin 'cocoapods-keys', {
-    :project => 'MovieNight',
-    :keys => [
-      'api_key'
-    ]
-  }
+  #  plugin 'cocoapods-keys', {
+  #  :project => 'MovieNight',
+  #  :keys => [
+  #    'api_key'
+  #  ]
+  #}
   pod 'Argo'
   pod 'Alamofire', '~> 4.0'
   pod 'AlamofireNetworkActivityIndicator', '~> 2.0'
