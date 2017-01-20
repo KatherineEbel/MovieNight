@@ -169,11 +169,11 @@
 			children = (
 				442AA1771E0EA41800D92378 /* MovieResultCell.xib */,
 				44E2E2191E0809E70072BB77 /* PreferenceCell.xib */,
+				44BD27FD1E2E9A3B007951F4 /* SearchHeaderView.xib */,
 				2717F75E1DFB237600FFEA5F /* LaunchScreen.storyboard */,
 				44E2E20C1E0582030072BB77 /* Main.storyboard */,
 				44BD280D1E31C83B007951F4 /* MoviePreference.storyboard */,
 				44BD28091E31BEB5007951F4 /* Detail.storyboard */,
-				44BD27FD1E2E9A3B007951F4 /* SearchHeaderView.xib */,
 			);
 			name = "StoryBoards+ xibs";
 			sourceTree = "<group>";

@@ -277,10 +277,9 @@ class MovieNightSearchController: UITableViewController, MovieNightSearchControl
   }
   
   override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-    if let cell = tableView.cellForRow(at: indexPath) as? PreferenceCell {
-      if let count = tableView.indexPathsForSelectedRows?.count {
-        if count == 5 { return nil }
-      }
+    // prevent user from selecting more than 5 rows
+    if let count = tableView.indexPathsForSelectedRows?.count {
+      if count == 5 { return nil }
     }
     return indexPath
   }

@@ -54,7 +54,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   }
   
   public init(client: TMDBClientPrototcol) {
-    print("Initializing tableviewModel")
     self.client = client
   }
   

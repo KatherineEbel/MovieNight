@@ -9,7 +9,8 @@
 import Foundation
 import Alamofire
 import Argo
-import Keys
+// uncomment line below if using cocoa-pods keys to store api_key
+//import Keys
 
 public enum TMDBEndpointError: Error {
   case incorrectURLString(Error)
@@ -45,7 +46,9 @@ public enum TMDBEndpoint: URLRequestConvertible {
 //  https://image.tmdb.org/t/p/w500/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg
   
   static let baseURLString = "https://api.themoviedb.org/3/"
-  static let api_key = MovienightKeys().api_key()!
+// uncomment line below if using cocoa-pods keys to store api_key
+//  static let api_key = MovienightKeys().api_key()!
+  static let api_key = ""
   static let sortPreference = "popularity.desc"
   static let imageURLString = TMDBEndpoint.movieNightConfig?.images.secure_base_url
   static var posterThumbNailSize: String? {
@@ -118,7 +121,6 @@ public enum TMDBEndpoint: URLRequestConvertible {
     let url = try urlString!.asURL()
     let urlRequest = URLRequest(url: url.appendingPathComponent(result.path))
     let encoded = try URLEncoding.default.encode(urlRequest, with: result.parameters)
-    print(encoded.debugDescription)
     return encoded
   }
   

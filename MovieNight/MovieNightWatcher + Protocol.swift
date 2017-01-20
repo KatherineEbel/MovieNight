@@ -20,7 +20,7 @@ public class MovieNightWatcher: MovieWatcherProtocol {
   private var _moviePreference = MovieNightPreference()
   internal var _name: MutableProperty<String>
   private var _nameValid: Property<Bool>  {
-    return _name.map { $0.characters.count >= 2 }
+    return _name.map { $0.characters.count >= 2 && $0.characters.count <= 10 }
   }
   
   // determines if watcher is ready to calculate results
