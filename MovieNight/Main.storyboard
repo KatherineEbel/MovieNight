@@ -158,7 +158,7 @@
         <!--Your Results-->
         <scene sceneID="ggd-4q-bzl">
             <objects>
-                <tableViewController id="6EX-ED-DEW" customClass="MovieNightSearchPageableController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="6EX-ED-DEW" customClass="MovieNightSearchController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="VoV-eJ-Zn4">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -193,12 +193,12 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="results"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <segue destination="7PJ-sf-e7d" kind="show" identifier="showDetails" id="Ss5-pB-H7J"/>
+                        <segue destination="NU9-Ks-geR" kind="show" identifier="showDetails" id="Ss5-pB-H7J"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HLg-Bl-xtr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-460" y="840"/>
+            <point key="canvasLocation" x="-460" y="770"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ncK-1c-A9Y">
@@ -213,212 +213,14 @@
                         <color key="selectedImageTintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="YFD-OG-ZjM" kind="relationship" relationship="viewControllers" id="Ml7-cJ-pIv"/>
-                        <segue destination="cmQ-Si-u5Q" kind="relationship" relationship="viewControllers" id="T2k-Hz-zoQ"/>
-                        <segue destination="xim-TL-SRP" kind="relationship" relationship="viewControllers" id="9Xk-Up-O1k"/>
+                        <segue destination="ZE8-Ne-RMm" kind="relationship" relationship="viewControllers" id="Ml7-cJ-pIv"/>
+                        <segue destination="GoQ-zJ-cCI" kind="relationship" relationship="viewControllers" id="T2k-Hz-zoQ"/>
+                        <segue destination="Xx1-Lr-w8T" kind="relationship" relationship="viewControllers" id="9Xk-Up-O1k"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yn9-pC-f2r" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="322" y="405"/>
-        </scene>
-        <!--Actor Preferences-->
-        <scene sceneID="Iqu-T6-khk">
-            <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="YLI-Qm-gUo" customClass="MovieNightSearchPageableController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Q7A-up-GIA">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <gestureRecognizers/>
-                        <color key="separatorColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="redraw" selectionStyle="none" indentationWidth="10" shouldIndentWhileEditing="NO" reuseIdentifier="defaultSearchCell" id="NMh-9k-8aW" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NMh-9k-8aW" id="ksI-FL-XNU">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="EZ1-8o-7za">
-                                            <rect key="frame" x="8" y="8" width="359" height="27.5"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="260" verticalHuggingPriority="260" image="empty-circle" highlightedImage="checked-circle" translatesAutoresizingMaskIntoConstraints="NO" id="RZS-ZA-sBO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="27.5" height="27.5"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="RZS-ZA-sBO" secondAttribute="height" multiplier="1:1" id="kMY-Ci-DQn"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xke-gT-z6i">
-                                                    <rect key="frame" x="57.5" y="0.0" width="301.5" height="27.5"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </stackView>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailingMargin" secondItem="EZ1-8o-7za" secondAttribute="trailing" id="KEC-c3-OZu"/>
-                                        <constraint firstItem="EZ1-8o-7za" firstAttribute="centerY" secondItem="ksI-FL-XNU" secondAttribute="centerY" id="PgM-iM-tgQ"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="EZ1-8o-7za" secondAttribute="bottom" id="VHC-cO-uIp"/>
-                                        <constraint firstItem="EZ1-8o-7za" firstAttribute="top" secondItem="ksI-FL-XNU" secondAttribute="topMargin" id="nKu-Ph-Bqh"/>
-                                        <constraint firstItem="EZ1-8o-7za" firstAttribute="leading" secondItem="ksI-FL-XNU" secondAttribute="leadingMargin" id="zL0-47-qhy"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="nameLabel" destination="xke-gT-z6i" id="n4N-ST-wY6"/>
-                                    <segue destination="7PJ-sf-e7d" kind="show" identifier="showDetails" id="QgT-nU-sMx"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="delegate" destination="YLI-Qm-gUo" id="454-8Z-pE6"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Actor Preferences" id="LWL-Mg-Yym">
-                        <barButtonItem key="backBarButtonItem" title="     " id="LRY-4P-NFG"/>
-                        <barButtonItem key="leftBarButtonItem" image="gen-home" id="SD1-v5-3jm">
-                            <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="goHome:" destination="YLI-Qm-gUo" id="qc4-SP-OfM"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="b8R-hG-QQy">
-                            <connections>
-                                <action selector="preferencesComplete:" destination="YLI-Qm-gUo" id="cZZ-rA-0lY"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="CNu-4k-ec5">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <attributedString key="attributedTitle"/>
-                    </refreshControl>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="actors"/>
-                    </userDefinedRuntimeAttributes>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eOy-ko-LnI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2090" y="-134"/>
-        </scene>
-        <!--Entity Name-->
-        <scene sceneID="gmO-P1-Imy">
-            <objects>
-                <viewController id="7PJ-sf-e7d" customClass="DetailController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="39H-ne-GNt"/>
-                        <viewControllerLayoutGuide type="bottom" id="Pa9-1q-yBv"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Lo7-1u-fU8">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-night-bg" translatesAutoresizingMaskIntoConstraints="NO" id="ga7-cv-mqq">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
-                            </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="K24-1n-1B1">
-                                <rect key="frame" x="16" y="20" width="343" height="60.5"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MkI-w2-nEX" userLabel="Detail View">
-                                        <rect key="frame" x="12" y="0.0" width="319" height="60.5"/>
-                                        <subviews>
-                                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Details" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RkR-2j-gRG">
-                                                <rect key="frame" x="20" y="20" width="279" height="20.5"/>
-                                                <gestureRecognizers/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.1764705882" green="0.1843137255" blue="0.20000000000000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="RkR-2j-gRG" secondAttribute="bottom" priority="999" constant="20" id="5Vh-be-SJe"/>
-                                            <constraint firstItem="RkR-2j-gRG" firstAttribute="top" secondItem="MkI-w2-nEX" secondAttribute="top" priority="999" constant="20" id="GvJ-el-PEN"/>
-                                            <constraint firstItem="RkR-2j-gRG" firstAttribute="leading" secondItem="MkI-w2-nEX" secondAttribute="leading" priority="999" constant="20" id="LWW-Mh-GVd"/>
-                                            <constraint firstAttribute="trailing" secondItem="RkR-2j-gRG" secondAttribute="trailing" priority="999" constant="20" id="ZnC-g1-Wv6"/>
-                                        </constraints>
-                                        <connections>
-                                            <outletCollection property="gestureRecognizers" destination="viO-0C-3Ul" appends="YES" id="4h8-Lb-E5Y"/>
-                                        </connections>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="MkI-w2-nEX" firstAttribute="leading" secondItem="K24-1n-1B1" secondAttribute="leading" constant="12" id="Gse-qX-941"/>
-                                    <constraint firstAttribute="trailing" secondItem="MkI-w2-nEX" secondAttribute="trailing" constant="12" id="NmD-df-A3g"/>
-                                </constraints>
-                            </stackView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="K24-1n-1B1" secondAttribute="trailing" id="JMq-b1-I7c"/>
-                            <constraint firstItem="K24-1n-1B1" firstAttribute="leading" secondItem="Lo7-1u-fU8" secondAttribute="leadingMargin" id="bQS-hf-SOS"/>
-                            <constraint firstItem="ga7-cv-mqq" firstAttribute="top" secondItem="Lo7-1u-fU8" secondAttribute="top" id="eHp-ba-XVL"/>
-                            <constraint firstItem="ga7-cv-mqq" firstAttribute="leading" secondItem="Lo7-1u-fU8" secondAttribute="leading" id="qRI-Rg-DzB"/>
-                            <constraint firstItem="K24-1n-1B1" firstAttribute="top" secondItem="39H-ne-GNt" secondAttribute="bottom" constant="20" id="t1D-8L-aCM"/>
-                            <constraint firstItem="Pa9-1q-yBv" firstAttribute="top" secondItem="ga7-cv-mqq" secondAttribute="bottom" id="x8K-Hh-Pcc"/>
-                            <constraint firstAttribute="trailing" secondItem="ga7-cv-mqq" secondAttribute="trailing" id="yCh-RT-i1J"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Entity Name" id="gmt-3K-3G7"/>
-                    <connections>
-                        <outlet property="detailLabel" destination="RkR-2j-gRG" id="3Xf-Az-Xti"/>
-                        <outlet property="detailView" destination="MkI-w2-nEX" id="fKu-I1-mH4"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jzR-Ey-nqE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="right" id="viO-0C-3Ul">
-                    <connections>
-                        <action selector="swipeToDismiss:" destination="7PJ-sf-e7d" id="HHX-Xf-KIy"/>
-                    </connections>
-                </swipeGestureRecognizer>
-            </objects>
-            <point key="canvasLocation" x="2898" y="829"/>
-        </scene>
-        <!--Genre Preferences-->
-        <scene sceneID="aWX-6o-5aR">
-            <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="lYE-rq-Wfz" customClass="MovieNightSearchPageableController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="XC8-hq-8u5">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="preferenceCell" id="Q48-wO-ecf" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q48-wO-ecf" id="k5p-Nl-3rQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="delegate" destination="lYE-rq-Wfz" id="tIS-v7-wO6"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Genre Preferences" id="NT3-nY-tBW">
-                        <barButtonItem key="leftBarButtonItem" image="gen-home" id="yVP-Se-ST2">
-                            <connections>
-                                <action selector="goHome:" destination="lYE-rq-Wfz" id="4iV-97-P9E"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="bdM-du-mbx">
-                            <connections>
-                                <action selector="preferencesComplete:" destination="lYE-rq-Wfz" id="gyP-Qc-Cw7"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="genres"/>
-                    </userDefinedRuntimeAttributes>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3JD-C9-Si8" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2089" y="589"/>
+            <point key="canvasLocation" x="420" y="51"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="tdT-s0-3dQ">
@@ -448,143 +250,48 @@
             </objects>
             <point key="canvasLocation" x="-1354" y="51"/>
         </scene>
-        <!--Actor Preference Navigation Controller Scene-->
-        <scene sceneID="PjN-7a-Gh3">
+        <!--Detail-->
+        <scene sceneID="DFr-1m-wLo">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cmQ-Si-u5Q" userLabel="Actor Preference Navigation Controller Scene" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Actors" image="mov-chair" id="ZmW-V1-7X1"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="LoA-5z-euS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.031372549020000001" green="0.10980392160000001" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="ActorNav"/>
-                    </userDefinedRuntimeAttributes>
-                    <connections>
-                        <segue destination="YLI-Qm-gUo" kind="relationship" relationship="rootViewController" id="2So-0c-EYP"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="53p-ZD-9le" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b6q-jI-sV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardIdentifier="DetailController" storyboardName="Detail" id="NU9-Ks-geR" sceneMemberID="viewController"/>
             </objects>
-            <point key="canvasLocation" x="1142" y="-134"/>
+            <point key="canvasLocation" x="242" y="770"/>
         </scene>
-        <!--Genre Preference Navigation Controller Scene-->
-        <scene sceneID="cHE-i8-mPf">
+        <!--MoviePreference-->
+        <scene sceneID="aJr-kz-Dv1">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="YFD-OG-ZjM" userLabel="Genre Preference Navigation Controller Scene" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Genres" image="mov-drama" id="LAo-VZ-D3h"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="Ljz-Lx-Obu">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.031372549020000001" green="0.10980392160000001" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="24"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="GenreNav"/>
-                    </userDefinedRuntimeAttributes>
-                    <connections>
-                        <segue destination="lYE-rq-Wfz" kind="relationship" relationship="rootViewController" id="W0Z-Z9-pr2"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nLa-Vc-hD3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="MoviePreference" id="ZE8-Ne-RMm" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="iPN-Io-kNG"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PMY-XP-7vo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1143" y="589"/>
+            <point key="canvasLocation" x="1101" y="51"/>
         </scene>
-        <!--Rating Preference Navigation Controller Scene-->
-        <scene sceneID="f2W-l2-tVf">
+        <!--MoviePreference-->
+        <scene sceneID="XpG-PU-OwR">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xim-TL-SRP" userLabel="Rating Preference Navigation Controller Scene" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Rating" image="mov-star" id="3Iu-NG-RfK"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="iLL-yG-KFx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.0039215686269999999" green="0.82352941180000006" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.031372549020000001" green="0.10980392160000001" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="RatingNav"/>
-                    </userDefinedRuntimeAttributes>
-                    <connections>
-                        <segue destination="6bp-y6-VB8" kind="relationship" relationship="rootViewController" id="AwG-f7-rd1"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Jiq-o7-XKq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="MoviePreference" id="GoQ-zJ-cCI" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="i6E-7N-WBn"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vzl-bf-1gm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="796" y="1391"/>
+            <point key="canvasLocation" x="1108" y="-217"/>
         </scene>
-        <!--Rating Preference-->
-        <scene sceneID="hG2-lW-vqh">
+        <!--MoviePreference-->
+        <scene sceneID="nt7-vF-JXd">
             <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="6bp-y6-VB8" customClass="MovieNightSearchPageableController" customModule="MovieNight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="GD8-vC-WDt">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="preferenceCell" id="kOh-Qg-49u" customClass="PreferenceCell" customModule="MovieNight" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kOh-Qg-49u" id="jG6-ro-rUI">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="delegate" destination="6bp-y6-VB8" id="WLx-H4-6eX"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Rating Preference" id="Bqr-yX-MeC">
-                        <barButtonItem key="backBarButtonItem" title="   " id="7yz-eP-rQf"/>
-                        <barButtonItem key="leftBarButtonItem" image="gen-home" id="UtV-RG-u2c">
-                            <connections>
-                                <action selector="goHome:" destination="6bp-y6-VB8" id="THK-lC-1OW"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="Y0Y-uY-mYy">
-                            <connections>
-                                <action selector="preferencesComplete:" destination="6bp-y6-VB8" id="CkQ-ZJ-b23"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="swinjectRegistrationName" value="ratings"/>
-                    </userDefinedRuntimeAttributes>
-                    <connections>
-                        <segue destination="7PJ-sf-e7d" kind="show" identifier="showDetails" id="soq-Go-PsR"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="22G-zU-lxv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="MoviePreference" id="Xx1-Lr-w8T" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="bHA-4U-byd"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Re3-Vs-PTq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1724" y="1392"/>
+            <point key="canvasLocation" x="1105" y="338"/>
         </scene>
     </scenes>
     <resources>
         <image name="bubble-empty-1" width="247" height="195"/>
-        <image name="checked-circle" width="60" height="60"/>
-        <image name="empty-circle" width="64" height="64"/>
-        <image name="gen-home" width="32" height="32"/>
-        <image name="mov-chair" width="32" height="32"/>
-        <image name="mov-drama" width="32" height="32"/>
-        <image name="mov-star" width="32" height="32"/>
         <image name="movie-night-bg" width="751" height="1335"/>
         <image name="ok" width="120" height="120"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="Ss5-pB-H7J"/>
-    </inferredMetricsTieBreakers>
 </document>

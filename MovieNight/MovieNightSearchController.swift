@@ -10,7 +10,12 @@ import UIKit
 import ReactiveSwift
 import Result
 
-class MovieNightSearchPageableController: UITableViewController, MovieNightSearchControllerProtocol {
+public protocol MovieNightSearchControllerProtocol: class {
+  var entityType: TMDBEntity { get }
+}
+
+
+class MovieNightSearchController: UITableViewController, MovieNightSearchControllerProtocol {
   internal var _entityType: TMDBEntity!
   public var entityType: TMDBEntity {
     return _entityType
@@ -41,12 +46,26 @@ class MovieNightSearchPageableController: UITableViewController, MovieNightSearc
     }.value
   }
   
+//  override var nibName: String? = "MovieNightSearchController"
+
   private var cellNibName: String {
     switch entityType {
       case .actor, .movieGenre, .rating: return Identifiers.preferenceCellNibName.rawValue
       case .media: return Identifiers.movieResultCellNibName.rawValue
     }
   }
+//  
+//  init() {
+//    super.init(nibName: "MovieNightSearchController", bundle: nil)
+//  }
+//  
+//  override convenience init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+//    self.init()
+//  }
+//  
+//  required init?(coder aDecoder: NSCoder) {
+//    super.init(coder: aDecoder)
+//  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -322,6 +341,7 @@ class MovieNightSearchPageableController: UITableViewController, MovieNightSearc
   
   deinit {
     alertController = nil
+    if entityType == .media { tableViewModel?.clearMediaData() }
 //    print("\(entityType) controller deinit")
   }
 }

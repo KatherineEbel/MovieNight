@@ -33,13 +33,13 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "appicon@2x.png",
+      "filename" : "movie-night-icon@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "appicon@3x.png",
+      "filename" : "movie-night-icon@3x.png",
       "scale" : "3x"
     }
   ],
