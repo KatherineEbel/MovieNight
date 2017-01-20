@@ -20,7 +20,7 @@ public protocol SearchResultsTableViewModeling: class {
   func validatePageSearch(pageNumber: Int, entityType: TMDBEntity) -> Bool
   func indexesForTitles(ofEntityType type: TMDBEntity, titles: [String]) -> Set<IndexPath>?
   func getPopularPeoplePage(pageNumber: Int)
-  func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol)
+  func getNextMovieResultPage(pageNumber: Int, discover: MovieDiscoverProtocol)
   func peoplePageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)>
   func resultPageCountTracker() -> Property<(page: Int, tracker: NSAttributedString)>
   func getGenres()
@@ -34,7 +34,7 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   private let _errorMessage = MutableProperty<String?>(nil)
   private let client: TMDBClientPrototcol
   private var _currentPeopleResultPage = MutableProperty(0)
-  private var _currentMovieResultPage = MutableProperty(1)
+  private var _currentMovieResultPage = MutableProperty(0)
   private var movieResultPageCount = 0
   private var peoplePageCount = 0
   
@@ -119,18 +119,18 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   
   
   // gets the next movie result page for the passed in page number and movie discover
-  public func getNextMovieResultPage(page: Int, discover: MovieDiscoverProtocol) {
-    guard validatePageSearch(pageNumber: page, entityType: .media) else { return }
-    client.searchMovieDiscover(page: currentMovieResultPage.value, discover: discover)
+  public func getNextMovieResultPage(pageNumber: Int, discover: MovieDiscoverProtocol) {
+    guard validatePageSearch(pageNumber: pageNumber, entityType: .media) else { return }
+    client.searchMovieDiscover(page: pageNumber, discover: discover)
       .take(first: 1)
       .map { $0 }
       .observe(on: kUIScheduler)
       .on(event: { [unowned self] event in
         switch event {
           case .value(let value):
-            self._modelData.value[.media]?.append((page, value.results))
+            self._modelData.value[.media]?.append((pageNumber, value.results))
             self.movieResultPageCount = value.totalPages
-            self._currentMovieResultPage.value += 1
+            self._currentMovieResultPage.value = pageNumber + 1
           case .failed(let error): self._errorMessage.value = error.localizedDescription
           default: break
         }
@@ -199,5 +199,6 @@ public final class SearchResultsTableViewModel: SearchResultsTableViewModeling {
   // empties all media data, so user can start with a clean slate for new movie discover
   public func clearMediaData() {
     _modelData.value[.media]!.removeAll()
+    _currentMovieResultPage.value = 0
   }
 }

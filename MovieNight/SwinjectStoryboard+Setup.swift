@@ -43,7 +43,7 @@ extension SwinjectStoryboard {
     }
     
     // MARK: Inject ViewResultsController
-    defaultContainer.storyboardInitCompleted(ViewResultsController.self, name: "results") { resolver, controller in
+    defaultContainer.storyboardInitCompleted(MovieNightSearchPageableController.self, name: "results") { resolver, controller in
       controller._entityType = .media
       controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)
       controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)
@@ -52,25 +52,25 @@ extension SwinjectStoryboard {
     defaultContainer.storyboardInitCompleted(UITabBarController.self){ _, _ in }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "RatingNav"){ _, _ in
     }
-    defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "actors") { resolver, controller in
+    defaultContainer.storyboardInitCompleted(MovieNightSearchPageableController.self, name: "actors") { resolver, controller in
       controller._entityType = .actor
       controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
-      controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
+      controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "GenreNav"){ _, _ in
     }
-    defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "genres") { resolver, controller in
+    defaultContainer.storyboardInitCompleted(MovieNightSearchPageableController.self, name: "genres") { resolver, controller in
       controller._entityType = .movieGenre
       controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
-      controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
+      controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     
     defaultContainer.storyboardInitCompleted(UINavigationController.self, name: "ActorNav"){ _, _ in
     }
-    defaultContainer.storyboardInitCompleted(MovieNightSearchController.self, name: "ratings") { resolver, controller in
+    defaultContainer.storyboardInitCompleted(MovieNightSearchPageableController.self, name: "ratings") { resolver, controller in
       controller._entityType = .rating
       controller.tableViewModel = resolver.resolve(SearchResultsTableViewModeling.self)!
-      controller.movieWatcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
+      controller.watcherViewModel = resolver.resolve(WatcherViewModelProtocol.self)!
     }
     defaultContainer.storyboardInitCompleted(DetailController.self) { resolver, controller in
       controller.viewModel = resolver.resolve(DetailViewModelProtocol.self)!

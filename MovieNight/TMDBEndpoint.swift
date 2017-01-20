@@ -118,6 +118,7 @@ public enum TMDBEndpoint: URLRequestConvertible {
     let url = try urlString!.asURL()
     let urlRequest = URLRequest(url: url.appendingPathComponent(result.path))
     let encoded = try URLEncoding.default.encode(urlRequest, with: result.parameters)
+    print(encoded.debugDescription)
     return encoded
   }
   

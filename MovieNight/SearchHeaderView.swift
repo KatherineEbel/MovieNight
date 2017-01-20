@@ -52,7 +52,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
     }
     searchTextField.layer.borderColor = TMDBColor.ColorFromRGB(color: .green, withAlpha: 1.0).cgColor
     if let movieDiscover = movieDiscover {
-      viewModel.getNextMovieResultPage(page: pageNumber, discover: movieDiscover)
+      viewModel.getNextMovieResultPage(pageNumber: pageNumber, discover: movieDiscover)
     } else {
       viewModel.getPopularPeoplePage(pageNumber: pageNumber)
     }

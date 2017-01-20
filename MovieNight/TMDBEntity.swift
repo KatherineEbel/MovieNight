@@ -33,6 +33,20 @@ public enum TMDBEntity {
     }
   }
   
+  var isSelectable: Bool {
+    switch self {
+      case .actor, .movieGenre, .rating: return true
+      case .media: return false
+    }
+  }
+  
+  var hasDetails: Bool {
+    switch self {
+      case .actor, .rating, .media: return true
+      case .movieGenre: return false
+    }
+  }
+  
   public struct MovieGenre: Decodable, TMDBEntityProtocol {
     public let id: Int
     let name: String
